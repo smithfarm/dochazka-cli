@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2015, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -92,7 +92,7 @@ throughout the CLI code base.
 
 =item * C<< $current_emp >>
 
-The L<App::Dochazka::Model::Employee> object of the current employee.
+The L<App::Dochazka::Common::Model::Employee> object of the current employee.
 
 =item * C<< $current_priv >>
 

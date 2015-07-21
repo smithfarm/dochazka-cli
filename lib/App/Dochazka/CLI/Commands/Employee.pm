@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2015, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -45,7 +45,7 @@ use App::Dochazka::CLI::Util qw(
     refresh_current_emp 
     rest_error 
 );
-use App::Dochazka::Model::Employee;
+use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
 use Exporter 'import';
 use Web::MREST::CLI::UserAgent qw( send_req );

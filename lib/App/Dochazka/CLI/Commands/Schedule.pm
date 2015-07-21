@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2015, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -41,7 +41,7 @@ use App::CELL qw( $CELL );
 use App::Dochazka::CLI qw( $current_emp $debug_mode );
 use App::Dochazka::CLI::Shared qw( print_schedule_object show_current );
 use App::Dochazka::CLI::Util qw( lookup_employee parse_test rest_error );
-use App::Dochazka::Model::Schedule;
+use App::Dochazka::Common::Model::Schedule;
 use Data::Dumper;
 use Exporter 'import';
 use JSON;
@@ -241,7 +241,7 @@ sub fetch_all_schedules {
     if ( $status->ok ) {
         my $pl = '';
         foreach my $sch_hash ( @{ $status->payload } ) {
-            my $sch_obj = App::Dochazka::Model::Schedule->spawn( %$sch_hash );
+            my $sch_obj = App::Dochazka::Common::Model::Schedule->spawn( %$sch_hash );
             $pl .= print_schedule_object( $sch_obj );
             $pl .= "\n";
         }
@@ -330,7 +330,7 @@ sub schedule_new {
 
     my $status = send_req( 'POST', 'schedule/new', $json );
     if ( $status->ok ) {
-        my $sch_obj = App::Dochazka::Model::Schedule->spawn( %{ $status->payload } );
+        my $sch_obj = App::Dochazka::Common::Model::Schedule->spawn( %{ $status->payload } );
         my $pl = '';
         if ( my $http_status = $status->{'http_status'} ) {
             $pl .= "HTTP status: $http_status\n";
@@ -394,7 +394,7 @@ sub schedulespec {
     }
 
     if ( $status->ok ) {
-        my $sch_obj = App::Dochazka::Model::Schedule->spawn( %{ $status->payload } );
+        my $sch_obj = App::Dochazka::Common::Model::Schedule->spawn( %{ $status->payload } );
         $pl = print_schedule_object( $sch_obj );
         return $CELL->status_ok( "DOCHAZKA_CLI_NORMAL_COMPLETION", payload => $pl );
     }
@@ -434,7 +434,7 @@ EOS
     }
 
     if ( $status->level eq 'OK' and $status->code eq 'DOCHAZKA_CUD_OK' ) {
-        my $sch_obj = App::Dochazka::Model::Schedule->spawn( %{ $status->payload } );
+        my $sch_obj = App::Dochazka::Common::Model::Schedule->spawn( %{ $status->payload } );
         my $pl = print_schedule_object( $sch_obj );
         return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
     }
@@ -472,7 +472,7 @@ EOS
     }
 
     if ( $status->level eq 'OK' and $status->code eq 'DOCHAZKA_CUD_OK' ) {
-        my $sch_obj = App::Dochazka::Model::Schedule->spawn( %{ $status->payload } );
+        my $sch_obj = App::Dochazka::Common::Model::Schedule->spawn( %{ $status->payload } );
         my $pl = print_schedule_object( $sch_obj );
         return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
     }

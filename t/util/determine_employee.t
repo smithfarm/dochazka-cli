@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2015, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -73,14 +73,14 @@ note( 'determine_employee with no argument' );
 $status = determine_employee();
 is( $status->level, 'OK' );
 is( $status->code, 'EMPLOYEE_LOOKUP' ); 
-is( ref( $status->payload ), 'App::Dochazka::Model::Employee' );
+is( ref( $status->payload ), 'App::Dochazka::Common::Model::Employee' );
 is( $status->payload->nick, 'root' );
 
 note( 'determine_employee with nick=demo' );
 $status = determine_employee( 'nick=demo' );
 is( $status->level, 'OK' );
 is( $status->code, 'EMPLOYEE_LOOKUP' ); 
-is( ref( $status->payload ), 'App::Dochazka::Model::Employee' );
+is( ref( $status->payload ), 'App::Dochazka::Common::Model::Employee' );
 is( $status->payload->nick, 'demo' );
 my $demo_eid = $status->payload->eid;
 ok( $demo_eid > 1 );
@@ -89,7 +89,7 @@ note( 'determine_employee with eid=$demo_eid' );
 $status = determine_employee( "eid=$demo_eid" );
 is( $status->level, 'OK' );
 is( $status->code, 'EMPLOYEE_LOOKUP' ); 
-is( ref( $status->payload ), 'App::Dochazka::Model::Employee' );
+is( ref( $status->payload ), 'App::Dochazka::Common::Model::Employee' );
 is( $status->payload->nick, 'demo' );
 is( $status->payload->eid, $demo_eid );
 
@@ -97,7 +97,7 @@ note( 'determine_employee with employee=worker' );
 $status = determine_employee( "employee=worker" );
 is( $status->level, 'OK' );
 is( $status->code, 'EMPLOYEE_LOOKUP' ); 
-is( ref( $status->payload ), 'App::Dochazka::Model::Employee' );
+is( ref( $status->payload ), 'App::Dochazka::Common::Model::Employee' );
 is( $status->payload->nick, 'worker' );
 
 note( 'lookup_employee with no argument' );

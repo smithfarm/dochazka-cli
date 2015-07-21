@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2015, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -51,7 +51,7 @@ use App::Dochazka::CLI qw(
     $prompt_day 
 );
 use App::Dochazka::CLI::TokenMap qw( $regex_map ); 
-use App::Dochazka::Model::Employee;
+use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
 use Date::Calc qw( check_date Add_Delta_Days );
 use Exporter 'import';
@@ -179,7 +179,7 @@ sub authenticate_to_server {
     return $status unless $status->ok;
 
     # authentication OK, initialize package variables
-    $current_emp = App::Dochazka::Model::Employee->spawn( %{ $status->payload->{'current_emp'} } );
+    $current_emp = App::Dochazka::Common::Model::Employee->spawn( %{ $status->payload->{'current_emp'} } );
     $current_priv = $status->payload->{'priv'};
     return $CELL->status_ok( 'DOCHAZKA_CLI_AUTHENTICATION_OK' );
 }
@@ -205,7 +205,7 @@ sub determine_employee {
         : refresh_current_emp();
     return ( $status->ok )
         ? $CELL->status_ok( 'EMPLOYEE_LOOKUP', 
-            payload => App::Dochazka::Model::Employee->spawn( %{ $status->payload } ) )
+            payload => App::Dochazka::Common::Model::Employee->spawn( %{ $status->payload } ) )
         : rest_error( $status, "Employee lookup" );
 }
 
@@ -509,7 +509,7 @@ REST calls are cheap, so look up C<< $current_emp >> again just to make sure.
 sub refresh_current_emp {
     my $status = send_req( 'GET', 'employee/eid/' . $current_emp->eid );
     die "Problem with data integrity (current employee)" unless $status->ok;
-    $current_emp = App::Dochazka::Model::Employee->spawn( %{ $status->payload } );
+    $current_emp = App::Dochazka::Common::Model::Employee->spawn( %{ $status->payload } );
     return $status;
 }
 

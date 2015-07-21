@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2015, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -68,7 +68,7 @@ isnt( $site->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after ini
 #is( $rv->code, 'DOCHAZKA_CLI_AUTHENTICATION_OK' );
 #is( $meta->CURRENT_EMPLOYEE_NICK, 'demo', 'authenticate_to_server nick defaults to demo' );
 #is( $meta->CURRENT_EMPLOYEE_PASSWORD, 'demo', 'authenticate_to_server password defaults to demo' );
-#is( ref( $current_emp ), 'App::Dochazka::Model::Employee', 'authenticate_to_server created Employee object' );
+#is( ref( $current_emp ), 'App::Dochazka::Common::Model::Employee', 'authenticate_to_server created Employee object' );
 #is( $current_emp->nick, 'demo', 'the Employee object has the right nick' );
 #is( $current_priv, 'passerby', 'authenticate_to_server set $current_priv properly' );
 

@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2015, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -39,8 +39,8 @@ use warnings FATAL => 'all';
 
 use App::Dochazka::CLI::Parser qw( process_command );
 use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client );
-use App::Dochazka::Model::Privhistory;
-use App::Dochazka::Model::Schedhistory;
+use App::Dochazka::Common::Model::Privhistory;
+use App::Dochazka::Common::Model::Schedhistory;
 use Data::Dumper;
 use Test::More;
 
@@ -92,8 +92,8 @@ $rv = process_command( $cmd );
 is( ref( $rv ), 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 ok( defined $rv->payload );
-my $ph = App::Dochazka::Model::Privhistory->spawn( %{ $rv->payload } );
-is( ref( $ph ), 'App::Dochazka::Model::Privhistory' );
+my $ph = App::Dochazka::Common::Model::Privhistory->spawn( %{ $rv->payload } );
+is( ref( $ph ), 'App::Dochazka::Common::Model::Privhistory' );
 is( $ph->remark, 'I am the walrus' );
 
 note( 're-fetch the privhistory record' );
@@ -102,8 +102,8 @@ $rv = process_command( $cmd );
 is( ref( $rv ), 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 ok( defined $rv->payload );
-my $ph_compare = App::Dochazka::Model::Privhistory->spawn( %{ $rv->payload } );
-is( ref( $ph_compare ), 'App::Dochazka::Model::Privhistory' );
+my $ph_compare = App::Dochazka::Common::Model::Privhistory->spawn( %{ $rv->payload } );
+is( ref( $ph_compare ), 'App::Dochazka::Common::Model::Privhistory' );
 is( $ph_compare->remark, 'I am the walrus' );
 
 note( 'get the schedhistory record of "worker"' );
@@ -135,8 +135,8 @@ $rv = process_command( $cmd );
 is( ref( $rv ), 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 ok( defined $rv->payload );
-my $sh = App::Dochazka::Model::Schedhistory->spawn( %{ $rv->payload } );
-is( ref( $sh ), 'App::Dochazka::Model::Schedhistory' );
+my $sh = App::Dochazka::Common::Model::Schedhistory->spawn( %{ $rv->payload } );
+is( ref( $sh ), 'App::Dochazka::Common::Model::Schedhistory' );
 is( $sh->remark, 'I am the Pepik' );
 
 note( 're-fetch the schedhistory record' );
@@ -145,8 +145,8 @@ $rv = process_command( $cmd );
 is( ref( $rv ), 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 ok( defined $rv->payload );
-my $sh_compare = App::Dochazka::Model::Schedhistory->spawn( %{ $rv->payload } );
-is( ref( $sh_compare ), 'App::Dochazka::Model::Schedhistory' );
+my $sh_compare = App::Dochazka::Common::Model::Schedhistory->spawn( %{ $rv->payload } );
+is( ref( $sh_compare ), 'App::Dochazka::Common::Model::Schedhistory' );
 is( $sh_compare->remark, 'I am the Pepik' );
 
 done_testing;

@@ -1,5 +1,5 @@
 # ************************************************************************* 
-# Copyright (c) 2014, SUSE LLC
+# Copyright (c) 2014-2015, SUSE LLC
 # 
 # All rights reserved.
 # 
@@ -94,7 +94,7 @@ Use this function to "print" a schedule object (passed an an argument). The
 
 sub print_schedule_object {
     my ( $sch ) = @_;
-    die "AAGH! Not a schedule object" unless ref( $sch ) eq 'App::Dochazka::Model::Schedule';
+    die "AAGH! Not a schedule object" unless ref( $sch ) eq 'App::Dochazka::Common::Model::Schedule';
     my $ps = '';
 
     $ps .= "DISABLED | " if $sch->disabled;
@@ -159,7 +159,7 @@ sub show_current {
         if ( $type eq 'priv' ) {
             $pl .= "The current privilege level of $nick (EID $eid) is " . $status->payload->{'priv'} . "\n";
         } elsif ( $type eq 'schedule' ) {
-            my $sch_obj = App::Dochazka::Model::Schedule->spawn( %{ $status->payload->{'schedule'} } );
+            my $sch_obj = App::Dochazka::Common::Model::Schedule->spawn( %{ $status->payload->{'schedule'} } );
             $pl .= print_schedule_object( $sch_obj );
         } else {
             die "AGH! bad type " . $type || "undefined";
