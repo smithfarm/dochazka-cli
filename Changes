@@ -900,3 +900,7 @@ Revision history for App-Dochazka-CLI
 - require latest version of App::Dochazka for $today
 - change Supervisor: to Reports to: in EMPLOYEE PROFILE output
 
+0.198  2015-07-21 16:13 CEST
+- Define $VERSION only in CLI.pm and Guide.pm
+- Rename App::Dochazka::Common and update copyright statement
+
