@@ -40,25 +40,13 @@ use warnings;
 
 use Exporter qw( import );
 
+our @EXPORT_OK = qw( $regex_map );
 
 
 
 =head1 NAME
 
 App::Dochazka::CLI::TokenMap - Token map
-
-
-
-
-=head1 VERSION
-
-Version 0.197
-
-=cut
-
-our $VERSION = '0.197';
-
-our @EXPORT_OK = qw( $regex_map );
 
 
 

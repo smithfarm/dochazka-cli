@@ -55,16 +55,6 @@ dochazka-cli - Command-line client for Dochazka Attendance & Time Tracking Syste
 
 
 
-=head1 VERSION
-
-Version 0.197
-
-=cut
-
-our $VERSION = '0.197';
-
-
-
 =head1 SYNOPSIS
 
 This is the Dochazka command-line interface (CLI). Options:

@@ -53,16 +53,6 @@ App::Dochazka::CLI::Parser - Parser module
 
 
 
-=head1 VERSION
-
-Version 0.197
-
-=cut
-
-our $VERSION = '0.197';
-
-
-
 =head1 PACKAGE VARIABLES AND EXPORTS
 
 =over

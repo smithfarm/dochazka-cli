@@ -57,17 +57,6 @@ App::Dochazka::CLI::Commands::Schedule - Schedule commands
 
 
 
-=head1 VERSION
-
-Version 0.197
-
-=cut
-
-our $VERSION = '0.197';
-
-
-
-
 =head1 PACKAGE VARIABLES
 
 =cut

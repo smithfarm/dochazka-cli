@@ -48,17 +48,6 @@ App::Dochazka::CLI::Commands::Top - Dispatch targets for top-level commands
 
 
 
-=head1 VERSION
-
-Version 0.197
-
-=cut
-
-our $VERSION = '0.197';
-
-
-
-
 =head1 FUNCTIONS
 
 =cut

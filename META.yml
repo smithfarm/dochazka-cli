@@ -13,7 +13,7 @@ configure_requires:
   Module::Build: '0.37'
   Software::License: '0'
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4212, CPAN::Meta::Converter version 2.142060'
+generated_by: 'Module::Build version 0.4205, CPAN::Meta::Converter version 2.142060'
 license: bsd
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -28,43 +28,33 @@ provides:
     version: '0.197'
   App::Dochazka::CLI::Commands::Activity:
     file: lib/App/Dochazka/CLI/Commands/Activity.pm
-    version: '0.197'
   App::Dochazka::CLI::Commands::Employee:
     file: lib/App/Dochazka/CLI/Commands/Employee.pm
-    version: '0.197'
   App::Dochazka::CLI::Commands::History:
     file: lib/App/Dochazka/CLI/Commands/History.pm
-    version: '0.197'
   App::Dochazka::CLI::Commands::Interval:
     file: lib/App/Dochazka/CLI/Commands/Interval.pm
-    version: '0.197'
   App::Dochazka::CLI::Commands::Misc:
     file: lib/App/Dochazka/CLI/Commands/Misc.pm
-    version: '0.197'
   App::Dochazka::CLI::Commands::Priv:
     file: lib/App/Dochazka/CLI/Commands/Priv.pm
     version: '0.197'
   App::Dochazka::CLI::Commands::Schedule:
     file: lib/App/Dochazka/CLI/Commands/Schedule.pm
-    version: '0.197'
   App::Dochazka::CLI::Guide:
     file: lib/App/Dochazka/CLI/Guide.pm
     version: '0.197'
   App::Dochazka::CLI::Parser:
     file: lib/App/Dochazka/CLI/Parser.pm
-    version: '0.197'
   App::Dochazka::CLI::Shared:
     file: lib/App/Dochazka/CLI/Shared.pm
     version: '0.197'
   App::Dochazka::CLI::Test:
     file: lib/App/Dochazka/CLI/Test.pm
-    version: '0.197'
   App::Dochazka::CLI::TokenMap:
     file: lib/App/Dochazka/CLI/TokenMap.pm
-    version: '0.197'
   App::Dochazka::CLI::Util:
     file: lib/App/Dochazka/CLI/Util.pm
-    version: '0.197'
 requires:
   App::CELL: '0.209'
   App::Dochazka: '0.189'
@@ -82,6 +72,6 @@ requires:
   perl: '5.012'
 resources:
   homepage: https://sourceforge.net/projects/dochazka/
-  license: http://opensource.org/licenses/bsd-license.php
+  license: http://opensource.org/licenses/BSD-3-Clause
   repository: https://sourceforge.net/p/dochazka/code/
 version: '0.197'
