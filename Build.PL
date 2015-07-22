@@ -53,7 +53,7 @@ my $build = Module::Build->new(
         }
     },
     add_to_cleanup       => [ 'App-Dochazka-CLI-*' ],
-    create_makefile_pl   => 'traditional',
+#    create_makefile_pl   => 'traditional',
     recursive_test_files => 1,
 );
 
