@@ -1,6 +1,8 @@
 #!/bin/bash
-CPAN_NAME='App-Dochazka-CLI'
-OBS_NAME='perl-App-Dochazka-CLI'
+# generic release script
+# meant to be run from the distro directory
+CPAN_NAME=$(cat CPAN_NAME)
+OBS_NAME="perl-$CPAN_NAME"
 OBS_DIR="$HOME/home:smithfarm/$OBS_NAME/"
 perl Build.PL
 ./Build distmeta
@@ -9,4 +11,4 @@ perl Build.PL
 cp $CPAN_NAME-*.tar.gz $OBS_DIR
 ./Build distclean
 ( cd $OBS_DIR ; osc service dr ; osc add $CPAN_NAME-*.tar.gz ; osc -A https://api.opensuse.org/ commit )
-( cd $OBS_DIR ; cpan-upload -u SMITHFARM $CPAN_NAME-*.tar.gz )
+#( cd $OBS_DIR ; cpan-upload -u SMITHFARM $CPAN_NAME-*.tar.gz )
