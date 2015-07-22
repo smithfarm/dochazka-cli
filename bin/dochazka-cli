@@ -57,23 +57,24 @@ dochazka-cli - Command-line client for Dochazka Attendance & Time Tracking Syste
 
 =head1 SYNOPSIS
 
-This is the Dochazka command-line interface (CLI). Options:
+Assuming Dochazka REST server is running on port 5000:
 
-    --help      -h      Get help
-    --user      -u      Specify username, e.g. --user=root (defaults to 'demo')
-    --password  -p      Specify password (defaults to 'demo')
-    --sitedir   -s      Specify sitedir (defaults to none)
-    --noauth    -n      Omit authentication
-    --debug     -d      Make parser display debug messages
-
-E.g., assuming Dochazka REST server is running and L<App::Dochazka::REST> has
-been configured properly to access it:
-
-    $ dochazka-cli -u root
+    $ dochazka-cli http://localhost:5000
     Loading configuration files from /usr/lib/perl5/site_perl/5.20.1/auto/share/dist/App-Dochazka-CLI
     Authenticating to server at http://localhost:5000
+    Username: 
     Server is alive
     Dochazka(2015-03-11) root ADMIN>
+
+This is the Dochazka command-line interface (CLI). Options:
+
+    --debug     -d      Make parser display debug messages
+    --help      -h      Get help
+    --noauth    -n      Omit authentication
+    --password  -p      Specify password
+    --sitedir   -s      Specify sitedir
+    --user      -u      Specify username
+    --version   -v      Display App::Dochazka::CLI version number
 
 For more information, see L<http://metacpan.org/pod/App::Dochazka::CLI>.
 
@@ -83,7 +84,7 @@ For more information, see L<http://metacpan.org/pod/App::Dochazka::CLI>.
 This script is used to start the Dochazka command line interface, hereinafter
 referred to as "the CLI".
 
-The CLI is documented in the L<App::Dochazka::CLI> CPAN distribution.
+CLI commands are documented in L<App::Dochazka::CLI::Guide>.
 
 =cut 
 
@@ -91,6 +92,7 @@ local $Data::Dumper::Terse = 1;
 
 my $noauth = 0;
 my $debugparam = 0;
+my $versionparam = 0;
 
 #
 # get prompt
@@ -102,6 +104,11 @@ sub get_prompt {
     } else {
         return "Dochazka($prompt_date) " . $current_emp->nick . " " . uc $current_priv . "> ";
     }
+}
+
+sub printversion {
+    print "App::Dochazka::CLI version $App::Dochazka::CLI::VERSION\n";
+    exit(0);
 }
 
 
@@ -121,18 +128,22 @@ GetOptions(
     'sitedir|s=s' => \$sitedir,
     'noauth|n' => \$noauth,
     'debug|d' => \$debugparam,
+    'version|v' => \$versionparam,
 );
+
 pod2usage(1) if $help;
-if ( $user eq 'root' and not $password ) {
-    # use default root password instead of demo
-    $password = 'immutable';
-}
+
+printversion() if $versionparam;
 
 # determine sitedir
 if ( $sitedir ) {
     # if --sitedir or -s specified on command line, do nothing
 } else {
-    $sitedir = '/etc/dochazka-cli' if -d '/etc/dochazka-cli';
+    if ( -d "$HOME/.dochazka-cli" ) {
+        $sitedir = "$HOME/.dochazka-cli";
+    } elsif ( -d '/etc/dochazka-cli' ) {
+        $sitedir = '/etc/dochazka-cli';
+    }
 }
 
 # initialize CLI client
@@ -146,10 +157,23 @@ if ( ( my $status = init_cli_client( $sitedir ) )->not_ok ) {
 # debug mode
 $debug_mode = $debugparam ? 1 : 0;
 
+# determine server
+if ( ! ( $server = $ARGV[0] ) ) {
+    if ( ! $server = $site->MREST_CLI_URI_BASE ) {
+        $server = 'http://localhost:5000';
+    }
+}
+
 # authenticate unless --noauth given
-unless ( $noauth ) {
-    $user = $site->DOCHAZKA_REST_LOGIN_NICK unless $user;
-    print "Authenticating to server at " . $site->MREST_CLI_URI_BASE . " as user $user\n";
+if ( ! $noauth ) {
+    if ( ! $user ) {
+        if ( ! ( $user = $site->DOCHAZKA_REST_LOGIN_NICK ) ) {
+            print "Username: ";
+            $user = <STDIN>;
+            chomp( $user );
+        }
+    }
+    print "Authenticating to server at $server " as user $user\n";
     if ( ! $password ) {
         print "Password: ";
         $password = <STDIN>;
