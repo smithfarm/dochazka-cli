@@ -37,6 +37,7 @@ use 5.012;
 use strict;
 use warnings FATAL => 'all';
 
+use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI::Parser qw( process_command );
 use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client );
 use App::Dochazka::Common::Model::Privhistory;
@@ -49,6 +50,7 @@ my ( $cmd, $rv );
 note( 'initialize CLI client' );
 $rv = init_cli_client();
 diag( Dumper $rv ) unless $rv->ok;
+isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
 note( 'authenticate to server' );
 $rv = authenticate_to_server( user => 'root', password => 'immutable', quiet => 1 );

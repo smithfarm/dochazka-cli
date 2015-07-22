@@ -40,8 +40,7 @@ use 5.012;
 use strict;
 use warnings FATAL => 'all';
 
-use App::CELL qw( $meta $site );
-use App::Dochazka::CLI qw( $current_emp $current_priv );
+use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI::Util qw( 
     authenticate_to_server 
     determine_employee
@@ -54,8 +53,12 @@ use Test::Fatal;
 
 my ( $status, $rv, $rv_type );
 
-note( 'init and auth' );
-init_cli_client();
+note( 'init_cli_client' );
+$rv = init_cli_client();
+diag( Dumper $rv ) unless $rv->ok;
+isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
+
+note( 'authenticate to server' );
 $rv = authenticate_to_server( user => 'root', password => 'immutable', quiet => 1 );
 $rv_type = ref( $rv );
 if ( $rv_type ne 'App::CELL::Status' or $rv->not_ok ) {

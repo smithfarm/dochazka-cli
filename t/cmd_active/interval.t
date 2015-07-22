@@ -37,6 +37,7 @@ use 5.012;
 use strict;
 use warnings FATAL => 'all';
 
+use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI qw( $prompt_date $prompt_century $prompt_year $prompt_month $prompt_day );
 use App::Dochazka::CLI::Parser qw( process_command );
 use App::Dochazka::CLI::Test qw( delete_interval_test fetch_interval_test );
@@ -48,6 +49,7 @@ my ( $cmd, $rv );
 
 $rv = init_cli_client();
 diag( Dumper $rv ) unless $rv->ok;
+isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
 $rv = authenticate_to_server( user => 'worker', password => 'worker', quiet => 1 );
 if ( $rv->not_ok and $rv->{'http_status'} =~ m/500 Can\'t connect/ ) {
