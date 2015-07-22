@@ -33,37 +33,14 @@
 # -----------------------------------
 # Dochazka-CLI
 # -----------------------------------
-# CLI_Config.pm
+# CLI_MetaConfig.pm
 #
-# Main configuration file
+# Meta configuration file
 # -----------------------------------
 
-# DOCHAZKA_REST_LOGIN_NICK
-#     nick to use when we authenticate ourselves to the App::Dochazka::REST server
-#     when this is set to '' or undef, App::Dochazka::CLI will prompt for it
-set( 'DOCHAZKA_REST_LOGIN_NICK', undef );
-
-# DOCHAZKA_REST_LOGIN_NICK
-#     password to use when we authenticate ourselves to the App::Dochazka::REST server
-#     when this is set to '' or undef, App::Dochazka::CLI will prompt for a password
-#     WARNING: PUTTING YOUR PASSWORD HERE MAY BE CONVENIENT, BUT IS PROBABLY UNSAFE
-set( 'DOCHAZKA_REST_LOGIN_PASSWORD', undef );
-
-# MREST_CLI_COOKIE_JAR
-#     default location of the cookie jar
-set( 'MREST_CLI_COOKIE_JAR', "$ENV{HOME}/.cookies.txt" );
-
-# DOCHAZKA_CLI_LOG_FILE
-#     default location of the log file
-set( 'DOCHAZKA_CLI_LOG_FILE', "$ENV{HOME}/.dochazka-cli.log" );
-
-# MREST_CLI_SUPPRESSED_HEADERS
-#     list of headers to be suppressed in the output
-set ('MREST_CLI_SUPPRESSED_HEADERS', [ qw( 
-    accept content-type content-length cache-control pragma expires
-    server Client-Response-Num Client-Peer Client-Date Set-Cookie Date
-    Vary
-) ] );
+# MREST_CLI_URI_BASE
+#     URI of the App::Dochazka::REST server
+set( 'MREST_CLI_URI_BASE', 'http://localhost:5000' );
 
 
 # -----------------------------------

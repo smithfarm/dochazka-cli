@@ -91,6 +91,7 @@ CLI commands are documented in L<App::Dochazka::CLI::Guide>.
 
 local $Data::Dumper::Terse = 1;
 
+my $server = '';
 my $home = File::HomeDir->my_home;
 my $noauth = 0;
 my $debugparam = 0;
@@ -161,15 +162,21 @@ $debug_mode = $debugparam ? 1 : 0;
 
 # determine server
 if ( ! ( $server = $ARGV[0] ) ) {
-    if ( ! $server = $site->MREST_CLI_URI_BASE ) {
+    if ( $server = $meta->MREST_CLI_URI_BASE ) {
+        print "URI base $server set from site configuration\n";
+    } else {
         $server = 'http://localhost:5000';
+        print "URI base not set; defaulting to $server\n";
+        $meta->set( 'MREST_CLI_URI_BASE', $server );
     }
 }
 
 # authenticate unless --noauth given
 if ( ! $noauth ) {
     if ( ! $user ) {
-        if ( ! ( $user = $site->DOCHAZKA_REST_LOGIN_NICK ) ) {
+        if ( $user = $site->DOCHAZKA_REST_LOGIN_NICK ) {
+            print "Username $user set from site configuration\n";
+        } else {
             print "Username: ";
             $user = <STDIN>;
             chomp( $user );
@@ -177,9 +184,13 @@ if ( ! $noauth ) {
     }
     print "Authenticating to server at $server as user $user\n";
     if ( ! $password ) {
-        print "Password: ";
-        $password = <STDIN>;
-        chomp( $password );
+        if ( $password = $site->DOCHAZKA_REST_LOGIN_PASSWORD ) {
+            print "Password set from site configuration\n";
+        } else {
+            print "Password: ";
+            $password = <STDIN>;
+            chomp( $password );
+        }
     }
     my $status = authenticate_to_server( user => $user, password => $password );
     if ( $status->not_ok ) {

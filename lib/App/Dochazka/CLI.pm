@@ -77,7 +77,7 @@ Dochazka Attendance & Time Tracking system.
 
 In order to work, the CLI must be pointed at a running L<App::Dochazka::REST>
 (i.e., Dochazka REST server) instance by setting the C<< MREST_CLI_URI_BASE >>
-site configuration parameter. 
+meta configuration parameter. 
 
 Detailed documentation covering configuration, deployment, and the commands
 that can be used with the CLI can be found in L<App::Dochazka::CLI::Guide>.

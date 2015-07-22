@@ -102,13 +102,13 @@ server goes via the C<send_req> routine in L<Web::MREST::CLI::UserAgent>. This
 routine takes its connection parameters (address of REST server, nick and
 password) from the following configuration parameters:
 
-    $site->MREST_CLI_URI_BASE
+    $meta->MREST_CLI_URI_BASE
     $meta->CURRENT_EMPLOYEE_NICK
     $meta->CURRENT_EMPLOYEE_PASSWORD
 
-The first parameter, C<MREST_CLI_URI_BASE>, is a site configuration parameter
-so it is assumed to be loaded from a configuration file. The second and third
-are meta parameters and are set by this routine.
+The first parameter, C<MREST_CLI_URI_BASE>, is assumed to be set before this
+routine is called. The second and third are meta parameters and are set by
+this routine.
 
 After setting the meta parameters, the routine causes a GET request for the
 C<employee/self/priv> resource to be send to the server, and uses the response
@@ -143,17 +143,6 @@ sub authenticate_to_server {
 
     $meta->set( 'CURRENT_EMPLOYEE_NICK', $PROPLIST{'user'} );
     $meta->set( 'CURRENT_EMPLOYEE_PASSWORD', $PROPLIST{'password'} );
-
-    ## prompt for password if necessary
-    #if ( ! $PROPLIST{'quiet'} and $PROPLIST{'user'} ne 'demo' and $PROPLIST{'password'} eq 'demo' ) {
-    #    print "Server auth password: ";
-    #    my $input = <STDIN>;
-    #    chomp( $input ); 
-    #    $meta->set( 'CURRENT_EMPLOYEE_PASSWORD', $input );
-    #    #print "Password set to " . $meta->CURRENT_EMPLOYEE_PASSWORD . "\n";
-    #} else {
-    #    $meta->set( 'CURRENT_EMPLOYEE_PASSWORD', $PROPLIST{'password'} );
-    #}
 
     # get info about us
     my $status;
