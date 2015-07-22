@@ -52,11 +52,10 @@
    "provides" : {
       "App::Dochazka::CLI" : {
          "file" : "lib/App/Dochazka/CLI.pm",
-         "version" : "0.197"
+         "version" : "0.198"
       },
       "App::Dochazka::CLI::CommandMap" : {
-         "file" : "lib/App/Dochazka/CLI/CommandMap.pm",
-         "version" : "0.197"
+         "file" : "lib/App/Dochazka/CLI/CommandMap.pm"
       },
       "App::Dochazka::CLI::Commands::Activity" : {
          "file" : "lib/App/Dochazka/CLI/Commands/Activity.pm"
@@ -74,22 +73,20 @@
          "file" : "lib/App/Dochazka/CLI/Commands/Misc.pm"
       },
       "App::Dochazka::CLI::Commands::Priv" : {
-         "file" : "lib/App/Dochazka/CLI/Commands/Priv.pm",
-         "version" : "0.197"
+         "file" : "lib/App/Dochazka/CLI/Commands/Priv.pm"
       },
       "App::Dochazka::CLI::Commands::Schedule" : {
          "file" : "lib/App/Dochazka/CLI/Commands/Schedule.pm"
       },
       "App::Dochazka::CLI::Guide" : {
          "file" : "lib/App/Dochazka/CLI/Guide.pm",
-         "version" : "0.197"
+         "version" : "0.198"
       },
       "App::Dochazka::CLI::Parser" : {
          "file" : "lib/App/Dochazka/CLI/Parser.pm"
       },
       "App::Dochazka::CLI::Shared" : {
-         "file" : "lib/App/Dochazka/CLI/Shared.pm",
-         "version" : "0.197"
+         "file" : "lib/App/Dochazka/CLI/Shared.pm"
       },
       "App::Dochazka::CLI::Test" : {
          "file" : "lib/App/Dochazka/CLI/Test.pm"
@@ -111,5 +108,5 @@
          "url" : "https://sourceforge.net/p/dochazka/code/"
       }
    },
-   "version" : "0.197"
+   "version" : "0.198"
 }
