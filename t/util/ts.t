@@ -40,7 +40,7 @@ use 5.012;
 use strict;
 use warnings FATAL => 'all';
 
-use App::Dochazka qw( $t $today $tomorrow $yesterday );
+use App::Dochazka::Common qw( $t $today $tomorrow $yesterday );
 use App::Dochazka::CLI qw( $prompt_date $prompt_year $prompt_month $prompt_day );
 use App::Dochazka::CLI::Util qw( 
     init_prompt

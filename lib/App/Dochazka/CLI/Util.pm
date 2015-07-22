@@ -39,7 +39,7 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
-use App::Dochazka qw( $t $today $tomorrow $yesterday init_timepiece );
+use App::Dochazka::Common qw( $t $today $tomorrow $yesterday init_timepiece );
 use App::Dochazka::CLI qw( 
     $current_emp 
     $current_priv 
