@@ -35,6 +35,7 @@ my $build = Module::Build->new(
         'App::CELL'          => 0.209,
         'App::Dochazka'      => 0.189,
         'Date::Calc'         => 0,
+        'File::HomeDir'      => 0,
         'HTTP::Cookies'      => 0,
         'HTTP::Request'      => 0,
         'Getopt::Long'       => 2.32,

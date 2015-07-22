@@ -43,6 +43,7 @@ use App::Dochazka::CLI::Parser qw( process_command );
 use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client init_prompt );
 use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
+use File::HomeDir;
 use Getopt::Long 2.32;
 use Pod::Usage;
 use Term::ReadLine;
@@ -90,6 +91,7 @@ CLI commands are documented in L<App::Dochazka::CLI::Guide>.
 
 local $Data::Dumper::Terse = 1;
 
+my $home = File::HomeDir->my_home;
 my $noauth = 0;
 my $debugparam = 0;
 my $versionparam = 0;
@@ -139,8 +141,8 @@ printversion() if $versionparam;
 if ( $sitedir ) {
     # if --sitedir or -s specified on command line, do nothing
 } else {
-    if ( -d "$HOME/.dochazka-cli" ) {
-        $sitedir = "$HOME/.dochazka-cli";
+    if ( -d "$home/.dochazka-cli" ) {
+        $sitedir = "$home/.dochazka-cli";
     } elsif ( -d '/etc/dochazka-cli' ) {
         $sitedir = '/etc/dochazka-cli';
     }
@@ -173,7 +175,7 @@ if ( ! $noauth ) {
             chomp( $user );
         }
     }
-    print "Authenticating to server at $server " as user $user\n";
+    print "Authenticating to server at $server as user $user\n";
     if ( ! $password ) {
         print "Password: ";
         $password = <STDIN>;
