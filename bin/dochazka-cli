@@ -46,6 +46,7 @@ use Data::Dumper;
 use File::HomeDir;
 use Getopt::Long 2.32;
 use Pod::Usage;
+use Term::ReadKey;
 use Term::ReadLine;
 
 
@@ -167,30 +168,31 @@ if ( ! ( $server = $ARGV[0] ) ) {
     } else {
         $server = 'http://localhost:5000';
         print "URI base not set; defaulting to $server\n";
-        $meta->set( 'MREST_CLI_URI_BASE', $server );
     }
 }
+
+$meta->set( 'MREST_CLI_URI_BASE', $server );
 
 # authenticate unless --noauth given
 if ( ! $noauth ) {
     if ( ! $user ) {
         if ( $user = $site->DOCHAZKA_REST_LOGIN_NICK ) {
             print "Username $user set from site configuration\n";
+            if ( $password = $site->DOCHAZKA_REST_LOGIN_PASSWORD ) {
+                print "Password set from site configuration\n";
+            }
         } else {
             print "Username: ";
-            $user = <STDIN>;
-            chomp( $user );
+            chomp( $user = <STDIN> );
         }
     }
     print "Authenticating to server at $server as user $user\n";
     if ( ! $password ) {
-        if ( $password = $site->DOCHAZKA_REST_LOGIN_PASSWORD ) {
-            print "Password set from site configuration\n";
-        } else {
-            print "Password: ";
-            $password = <STDIN>;
-            chomp( $password );
-        }
+        ReadMode ('noecho');
+        print "Password: ";
+        chomp( $password = <STDIN> );
+        ReadMode ('restore');
+        print "\n";
     }
     my $status = authenticate_to_server( user => $user, password => $password );
     if ( $status->not_ok ) {
