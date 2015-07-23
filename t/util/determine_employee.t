@@ -56,7 +56,6 @@ my ( $status, $rv, $rv_type );
 note( 'init_cli_client' );
 $rv = init_cli_client();
 diag( Dumper $rv ) unless $rv->ok;
-isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
 note( 'authenticate to server' );
 $rv = authenticate_to_server( user => 'root', password => 'immutable', quiet => 1 );
@@ -71,6 +70,8 @@ if ( $rv_type ne 'App::CELL::Status' or $rv->not_ok ) {
     }
 }
 is( $rv->code, 'DOCHAZKA_CLI_AUTHENTICATION_OK' );
+
+isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
 note( 'determine_employee with no argument' );
 $status = determine_employee();

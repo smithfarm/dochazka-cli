@@ -51,13 +51,14 @@ my ( $status, $rv, $rv_type );
 note( 'init_cli_client' );
 $rv = init_cli_client();
 diag( Dumper $rv ) unless $rv->ok;
-isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
 note( 'authenticate_to_server as root' );
 $rv = authenticate_to_server( user => 'root', password => 'immutable', quiet => 1 );
 if ( $rv->not_ok and $rv->{'http_status'} =~ m/500 Can\'t connect/ ) {
     plan skip_all => "Can't connect to server";
 }
+
+isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
 #note( "authenticate to server with no arguments" );
 #is( $current_emp, undef, '$current_emp is undefined before authentication' );

@@ -50,13 +50,14 @@ my ( $cmd, $rv );
 note( 'initialize CLI client' );
 $rv = init_cli_client();
 diag( Dumper $rv ) unless $rv->ok;
-isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
 note( 'authenticate to server' );
 $rv = authenticate_to_server( user => 'root', password => 'immutable', quiet => 1 );
 if ( $rv->not_ok and $rv->{'http_status'} =~ m/500 Can\'t connect/ ) {
     plan skip_all => "Can't connect to server";
 }
+
+isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
 note( '****************************************************************************' );
 note( 'In t/001-init.t we created an employee "worker" with privlevel "active"' );
