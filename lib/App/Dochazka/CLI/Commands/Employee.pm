@@ -143,8 +143,8 @@ sub employee_ldap {
     return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
 
     # determine nick
-    my $nick
-    if ( $spec = $th->{'EMPLOYEE_SPEC'} ) {
+    my $nick;
+    if ( my $spec = $th->{'EMPLOYEE_SPEC'} ) {
         # other; just take whatever is after the '='
         ( $nick ) = $spec =~ m/=(.+)$/;
     } else {
