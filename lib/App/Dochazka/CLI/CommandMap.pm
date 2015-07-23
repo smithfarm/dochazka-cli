@@ -41,6 +41,7 @@ use warnings;
 use App::CELL qw( $CELL );
 use App::Dochazka::CLI::Commands::Activity qw( activity_all );
 use App::Dochazka::CLI::Commands::Employee qw( 
+    employee_ldap
     employee_list
     employee_profile
     employee_team
@@ -311,6 +312,10 @@ our $dispatch_map = {
     "PUT EMPLOYEE NICK _TERM" => \&_method_employee_nick_term,
     "POST EMPLOYEE NICK _TERM" => \&_method_employee_nick_term,
     "DELETE EMPLOYEE NICK _TERM" => \&_method_employee_nick_term,
+    "GET EMPLOYEE NICK _TERM LDAP" => \&_method_employee_nick_term_ldap,
+    "PUT EMPLOYEE NICK _TERM LDAP" => \&_method_employee_nick_term_ldap,
+    "POST EMPLOYEE NICK _TERM LDAP" => \&_method_employee_nick_term_ldap,
+    "DELETE EMPLOYEE NICK _TERM LDAP" => \&_method_employee_nick_term_ldap,
     "GET EMPLOYEE NICK _TERM _JSON" => \&_method_employee_nick_term_json,
     "PUT EMPLOYEE NICK _TERM _JSON" => \&_method_employee_nick_term_json,
     "POST EMPLOYEE NICK _TERM _JSON" => \&_method_employee_nick_term_json,
@@ -567,11 +572,13 @@ our $dispatch_map = {
 
     # Employee commands
     "EMPLOYEE" => \&employee_profile,
+    "EMPLOYEE LDAP" => \&employee_ldap,
     "EMPLOYEE LIST" => \&employee_list,
     "EMPLOYEE LIST _TERM" => \&employee_list,
     "EMPLOYEE PROFILE" => \&employee_profile,
     "EMPLOYEE SHOW" => \&employee_profile,
     "EMPLOYEE_SPEC" => \&employee_profile,
+    "EMPLOYEE_SPEC LDAP" => \&employee_ldap,
     "EMPLOYEE_SPEC PROFILE" => \&employee_profile,
     "EMPLOYEE_SPEC SHOW" => \&employee_profile,
     "EMPLOYEE SEC_ID _TERM" => \&set_employee_self_sec_id,
