@@ -117,6 +117,7 @@ our $regex_map = {
 #    JANUARY   => '(jan\S*)',
 #    JULY      => '(jul\S*)',
 #    JUNE      => '(jun\S*)',
+    LDAP      => '(lda\S*)',
     LID       => '(lid\S*)',
     LIST      => '(lis\S*)',
     LOCK      => '(loc\S*)',
