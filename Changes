@@ -920,3 +920,12 @@ Revision history for App-Dochazka-CLI
   stored in config if username not taken from config
 - Do not generate Makefile.PL anymore
 
+0.201  2015-07-23 18:47 CEST
+- t/: adapt to current state
+- Util.pm: use GET employee/.../minimal in determine_employee()
+- TokenMap.pm: add LDAP token
+- Commands/RestTest/Employee.pm: implement employee/nick/:nick/ldap resource
+- Commands/Employee.pm: implement employee_ldap()
+- CommandMap.pm: enable LDAP commands
+- Commands/Employee.pm: display supervisor nick instead of EID
+
