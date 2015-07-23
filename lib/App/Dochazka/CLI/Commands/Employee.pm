@@ -106,32 +106,68 @@ sub employee_profile {
     my $emp = $status->payload;
 
     # determine supervisor
-    my $supervisor_nick;
+    my $supervisor = App::Dochazka::Common::Model::Employee->spawn();
     if ( my $supervisor_eid = $emp->supervisor ) {
-        $status = lookup_employee( key => "eid=$supervisor_eid", minimal => 1 );
-        if ( $status->ok and $status->payload and $status->payload->{'nick'} ) {
-            $supervisor_nick = $status->payload->{'nick'};
+        $status = determine_employee( "EMPL=$supervisor_eid" );
+        if ( $status->ok ) {
+            $supervisor = $status->payload;
+        } else {
+            $log->warn( "Failed to look up supervisor by EID $supervisor_eid; error was " . $status->text );
         }
     }
 
-    # GET priv/eid/:eid
-    $status = send_req( 'GET', 'priv/eid/' . $emp->eid );
-    return rest_error( $status, "Determine employee privlevel" ) unless $status->ok;
-    my $priv = $status->payload->{'priv'};
-
-    my $message;
-    $message = "\nEmployee profile\n================\n\n";
+    my $message = "\n";
     $message .= "Full name:    " . ( $emp->fullname ? $emp->fullname : "(not set)" ) . "\n";
     $message .= "Nick:         " . $emp->nick . "\n";
+    $message .= "Email:        " . ( $emp->email || "(not set)" ) . "\n";
     $message .= "Secondary ID: " . ( $emp->sec_id ? $emp->sec_id : "(not set)" ) . "\n";
     $message .= "Dochazka EID: " . $emp->eid . "\n";
-    $message .= "Password*:    (" . ( $emp->passhash ? "set" : "not set" ) . ")\n";
-    $message .= "Privlevel:    $priv\n";
-    $message .= "Reports to:   " . ( $supervisor_nick ? $supervisor_nick : "(not set)" ) . "\n";
-    $message .= "\n";
-    $message .= "* Internal password stored in the Dochazka database - \n";
-    $message .= "  irrelevant if external authentication in use.\n";
+    $message .= "Reports to:   " . ( $supervisor->nick || "(not set)" ) . "\n";
 
+    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $message );
+}
+
+
+=head3 employee_ldap
+
+    EMPLOYEE LDAP
+    EMPLOYEE_SPEC LDAP
+
+=cut
+
+sub employee_ldap {
+    print "Entering " . __PACKAGE__ . "::employee_ldap\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    # determine nick
+    my $nick
+    if ( $spec = $th->{'EMPLOYEE_SPEC'} ) {
+        # other; just take whatever is after the '='
+        ( $nick ) = $spec =~ m/=(.+)$/;
+    } else {
+        # self; get $nick from $current_emp
+        $nick = $current_emp->nick;
+    }
+
+    # send the request 
+    my $status = send_req( 'GET', "employee/nick/$nick/ldap" );
+    return $status unless $status->ok;
+
+    # success: spawn and populate object
+    my $emp = App::Dochazka::Common::Model::Employee->spawn(
+        @{ $status->payload }
+    );
+
+    my $message = "\n";
+    $message .= "Full name:    " . ( $emp->fullname ? $emp->fullname : "(not set)" ) . "\n";
+    $message .= "Nick:         " . $emp->nick . "\n";
+    $message .= "Email:        " . ( $emp->email || "(not set)" ) . "\n";
+    $message .= "Secondary ID: " . ( $emp->sec_id ? $emp->sec_id : "(not set)" ) . "\n";
+    $message .= "Dochazka EID: " . $emp->eid . "\n";
+    
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $message );
 }
 
