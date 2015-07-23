@@ -194,6 +194,15 @@ sub _method_employee_nick_term {
     return [ $method, "employee/nick/$nick", '' ];
 }
 
+# $METHOD employee nick $NICK ldap
+sub _method_employee_nick_term_ldap {
+    my ( $ts, $th ) = @_;
+    my $method = $ts->[0];
+    my $nick = $th->{_TERM};
+
+    return [ $method, "employee/nick/$nick/ldap", '' ];
+}
+
 # $METHOD employee nick $nick $JSON
 sub _method_employee_nick_term_json {
     my ( $ts, $th ) = @_;
