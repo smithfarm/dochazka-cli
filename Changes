@@ -911,3 +911,12 @@ Revision history for App-Dochazka-CLI
     - add --version option and take optional URL as argument
     - prompt for username and password if not supplied
 
+0.200  2015-07-23 08:54 CEST
+- Util.pm: modify lookup_employee() to take hash of properties ...
+- t/: make sure config is loaded in test suite
+- Util.pm and t/: Rename App::Dochazka to App::Dochazka::Common
+- Build.PL: rename App::Dochazka to App::Dochazka::Common
+- bin/dochazka-cli: do not display password as it is typed and ignore password
+  stored in config if username not taken from config
+- Do not generate Makefile.PL anymore
+
