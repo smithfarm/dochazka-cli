@@ -179,7 +179,7 @@ sub determine_employee {
     my $s_key = shift;
 
     my $status = ( $s_key )
-        ? lookup_employee( key => $s_key )
+        ? lookup_employee( key => $s_key, minimal => 1 )
         : refresh_current_emp();
     return ( $status->ok )
         ? $CELL->status_ok( 'EMPLOYEE_LOOKUP', 
