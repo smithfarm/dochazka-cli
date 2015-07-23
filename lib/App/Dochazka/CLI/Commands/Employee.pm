@@ -66,6 +66,7 @@ App::Dochazka::CLI::Commands::Employee - Employee commands
 =cut
 
 our @EXPORT_OK = qw( 
+    employee_ldap
     employee_list
     employee_profile
     employee_team
