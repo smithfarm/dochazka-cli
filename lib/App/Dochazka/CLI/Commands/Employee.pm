@@ -41,6 +41,7 @@ use App::CELL qw( $CELL $log );
 use App::Dochazka::CLI qw( $current_emp $debug_mode );
 use App::Dochazka::CLI::Util qw( 
     determine_employee
+    lookup_employee
     parse_test 
     refresh_current_emp 
     rest_error 
@@ -107,9 +108,9 @@ sub employee_profile {
     # determine supervisor
     my $supervisor_nick;
     if ( my $supervisor_eid = $emp->supervisor ) {
-        $status = determine_employee( "EMPL=$supervisor_eid" );
-        if ( $status->ok and $status->payload ) {
-            $supervisor_nick = $status->payload->nick;
+        $status = lookup_employee( key => "eid=$supervisor_eid", minimal => 1 );
+        if ( $status->ok and $status->payload and $status->payload->{'nick'} ) {
+            $supervisor_nick = $status->payload->{'nick'};
         }
     }
 
