@@ -92,8 +92,7 @@ $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'ERR' );
 is( $rv->code, 'REST_ERROR' );
-like( $rv->payload, qr/DISPATCH_KEEP_TO_YOURSELF/ );
-is( $rv->{'http_status'}, '403 Forbidden' );
+is( $rv->{'http_status'}, '404 Not Found' );
 
 # EMPLOYEE SET SEC_ID _TERM
 $cmd = "EMPLOYEE SET SEC_ID foobar";
