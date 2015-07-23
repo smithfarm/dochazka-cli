@@ -179,7 +179,7 @@ sub determine_employee {
     my $s_key = shift;
 
     my $status = ( $s_key )
-        ? lookup_employee( $s_key )
+        ? lookup_employee( key => $s_key )
         : refresh_current_emp();
     return ( $status->ok )
         ? $CELL->status_ok( 'EMPLOYEE_LOOKUP', 
@@ -197,29 +197,35 @@ EMPLOYEE_SPEC may be "nick=...", "sec_id=...", "eid=...", or simply
 =cut
 
 sub lookup_employee {
-    my ( $s_key ) = validate_pos( @_, { type => SCALAR } );
-    print "Entering " . __PACKAGE__ . "::lookup_employee with search key " . Dumper( $s_key )
+    my %ARGS = validate( @_, 
+        {
+            key => { type => SCALAR },
+            minimal => { default => 0 },     
+        }
+    );
+    print "Entering " . __PACKAGE__ . "::lookup_employee with search key " . Dumper( $ARGS{key} )
         if $debug_mode;
 
-    die( "AH! Not an EMPLOYEE_SPEC" ) unless $s_key =~ m/=/;
+    die( "AH! Not an EMPLOYEE_SPEC" ) unless $ARGS{key} =~ m/=/;
 
-    my ( $key_spec, $key ) = $s_key =~ m/^(.*)\=(.*)$/;
+    my ( $key_spec, $key ) = $ARGS{key} =~ m/^(.*)\=(.*)$/;
+    my $minimal = $ARGS{minimal} ? '/minimal' : '';
 
     my $status;
     if ( $key_spec =~ m/^emp/i ) {
-        $status = send_req( 'GET', "employee/nick/$key" );
+        $status = send_req( 'GET', "employee/nick/$key$minimal" );
         if ( $status->not_ok and ( $status->{'http_code'} == 404 or $status->{'http_code'} == 403 ) ) {
-            $status = send_req( 'GET', "employee/sec_id/$key" );
+            $status = send_req( 'GET', "employee/sec_id/$key$minimal" );
             if ( $status->not_ok and $status->{'http_code'} != 500 and looks_like_number( $key ) ) {
-                $status = send_req( 'GET', "employee/eid/$key" );
+                $status = send_req( 'GET', "employee/eid/$key$minimal" );
             }
         }
     } elsif ( $key_spec =~ m/^nic/i ) {
-        $status = send_req( 'GET', "employee/nick/$key" );
+        $status = send_req( 'GET', "employee/nick/$key$minimal" );
     } elsif ( $key_spec =~ m/^sec/i ) {
-        $status = send_req( 'GET', "employee/sec_id/$key" );
+        $status = send_req( 'GET', "employee/sec_id/$key$minimal" );
     } elsif ( $key_spec =~ m/^eid/i ) {
-        $status = send_req( 'GET', "employee/eid/$key" );
+        $status = send_req( 'GET', "employee/eid/$key$minimal" );
     } else {
         die "AAAHAAAHHH!!! Invalid employee lookup key " . ( defined( $key_spec ) ? $key_spec : "undefined" )
     }

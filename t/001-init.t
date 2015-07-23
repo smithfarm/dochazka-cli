@@ -38,10 +38,13 @@ use 5.012;
 use strict;
 use warnings FATAL => 'all';
 
+use App::Dochazka::CLI qw( $debug_mode );
 use App::Dochazka::CLI::Parser qw( process_command );
 use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client );
 use Data::Dumper;
 use Test::More;
+
+$debug_mode = 1;
 
 sub create_employees_carefully {
     my ( $nick, $privlevel, $fullname ) = @_;

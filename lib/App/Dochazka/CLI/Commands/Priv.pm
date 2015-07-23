@@ -38,9 +38,9 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL );
-use App::Dochazka::CLI qw( $current_emp $debug_mode );
+use App::Dochazka::CLI qw( $debug_mode );
 use App::Dochazka::CLI::Shared qw( show_current );
-use App::Dochazka::CLI::Util qw( lookup_employee parse_test rest_error );
+use App::Dochazka::CLI::Util qw( parse_test );
 use Data::Dumper;
 use Exporter 'import';
 use Web::MREST::CLI::UserAgent qw( send_req );

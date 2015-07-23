@@ -50,7 +50,7 @@ use Web::MREST::CLI::UserAgent qw( send_req );
 
 =head1 NAME
 
-App::Dochazka::CLI::Commands::Activity - Activity commands
+App::Dochazka::CLI::Commands::History - History commands
 
 
 
@@ -426,7 +426,7 @@ sub _process_employee_spec {
     if ( $emp_spec->can('eid') ) {
         $status = $CELL->status_ok( 'DUMMY', payload => $emp_spec->TO_JSON );
     } elsif ( ref( $emp_spec ) eq '' ) {
-        $status = lookup_employee( $emp_spec );
+        $status = lookup_employee( key => $emp_spec );
         return rest_error( $status, "Employee lookup" ) unless $status->ok;
     } else {
         die "AGHHAH! bad employee specifier";

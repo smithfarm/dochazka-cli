@@ -133,7 +133,7 @@ sub show_current {
         $nick = $emp_spec->nick;
         $resource = "$type/self";
     } elsif ( ref( $emp_spec ) eq '' ) {
-        $status = lookup_employee( $emp_spec );
+        $status = lookup_employee( key => $emp_spec );
         return rest_error( $status, "Employee lookup" ) unless $status->ok;
         $eid = $status->payload->{'eid'};
         $nick = $status->payload->{'nick'};

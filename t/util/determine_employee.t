@@ -104,40 +104,40 @@ is( ref( $status->payload ), 'App::Dochazka::Common::Model::Employee' );
 is( $status->payload->nick, 'worker' );
 
 note( 'lookup_employee with no argument' );
-like( exception { lookup_employee(); }, qr/0 parameters were passed to App::Dochazka::CLI::Util::lookup_employee but 1 was expected/, 'dies with expected message' );
+like( exception { lookup_employee(); }, qr/Mandatory parameter 'key' missing/, 'dies with expected message' );
 
 note( 'lookup_employee with bogus argument Perl Encyclopedia' );
-like( exception { lookup_employee( 'Perl Encyclopedia' ); }, qr/AH! Not an EMPLOYEE_SPEC/, 'dies with expected message' );
+like( exception { lookup_employee( key => 'Perl Encyclopedia' ); }, qr/AH! Not an EMPLOYEE_SPEC/, 'dies with expected message' );
 
 note( 'lookup_employee with bogus argument Perl=Encyclopedia' );
-like( exception { lookup_employee( 'Perl=Encyclopedia' ); }, qr/AAAHAAAHHH!!! Invalid employee lookup key Perl/, 'dies with expected message' );
+like( exception { lookup_employee( key => 'Perl=Encyclopedia' ); }, qr/AAAHAAAHHH!!! Invalid employee lookup key Perl/, 'dies with expected message' );
 
-note( 'lookup_employee with proper argument EMPLOYEE=perlencyclopedia' );
+note( 'determine_employee with proper argument EMPLOYEE=perlencyclopedia' );
 $status = determine_employee( 'EMPLOYEE=perlencyclopedia' );
 is( ref( $status ), 'App::CELL::Status' );
 
-note( 'lookup_employee with proper argument empl=perlencyclopedia' );
+note( 'determine_employee with proper argument empl=perlencyclopedia' );
 $status = determine_employee( 'empl=perlencyclopedia' );
 is( ref( $status ), 'App::CELL::Status' );
 
-note( 'lookup_employee with proper argument NICK=perlencyclopedia' );
+note( 'determine_employee with proper argument NICK=perlencyclopedia' );
 $status = determine_employee( 'NICK=perlencyclopedia' );
 is( ref( $status ), 'App::CELL::Status' );
 
-note( 'lookup_employee with proper argument nickers=perlencyclopedia' );
+note( 'determine_employee with proper argument nickers=perlencyclopedia' );
 $status = determine_employee( 'nickers=perlencyclopedia' );
 is( ref( $status ), 'App::CELL::Status' );
 
-note( 'lookup_employee with proper argument sec_id=perlencyclopedia' );
+note( 'determine_employee with proper argument sec_id=perlencyclopedia' );
 $status = determine_employee( 'sec_id=perlencyclopedia' );
 is( ref( $status ), 'App::CELL::Status' );
 
-note( 'lookup_employee with proper argument eid=perlencyclopedia' );
+note( 'determine_employee with proper argument eid=perlencyclopedia' );
 $status = determine_employee( 'eid=perlencyclopedia' );
 is( ref( $status ), 'App::CELL::Status' );
 
 note( 'lookup_employee with bogus argument eip=Encyclopedia' );
-like( exception { lookup_employee( 'eip=Encyclopedia' ); }, qr/AAAHAAAHHH!!! Invalid employee lookup key eip/, 'dies with expected message' );
+like( exception { lookup_employee( key => 'eip=Encyclopedia' ); }, qr/AAAHAAAHHH!!! Invalid employee lookup key eip/, 'dies with expected message' );
 
 
 
