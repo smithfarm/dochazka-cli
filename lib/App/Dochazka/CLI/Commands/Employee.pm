@@ -38,7 +38,7 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL $log );
-use App::Dochazka::CLI qw( $current_emp $debug_mode );
+use App::Dochazka::CLI qw( $current_emp $current_priv $debug_mode );
 use App::Dochazka::CLI::Util qw( 
     determine_employee
     lookup_employee
@@ -159,16 +159,28 @@ sub employee_ldap {
 
     # success: spawn and populate object
     my $emp = App::Dochazka::Common::Model::Employee->spawn(
-        @{ $status->payload }
+        %{ $status->payload }
     );
 
     my $message = "\n";
-    $message .= "Full name:    " . ( $emp->fullname ? $emp->fullname : "(not set)" ) . "\n";
-    $message .= "Nick:         " . $emp->nick . "\n";
-    $message .= "Email:        " . ( $emp->email || "(not set)" ) . "\n";
-    $message .= "Secondary ID: " . ( $emp->sec_id ? $emp->sec_id : "(not set)" ) . "\n";
-    $message .= "Dochazka EID: " . $emp->eid . "\n";
+    $message .= "Nick:              " . $emp->nick . "\n";
+    $message .= "LDAP full name:    " . ( $emp->fullname ? $emp->fullname : "(not set)" ) . "\n";
+    $message .= "LDAP email:        " . ( $emp->email || "(not set)" ) . "\n";
+    $message .= "LDAP secondary ID: " . ( $emp->sec_id ? $emp->sec_id : "(not set)" ) . "\n";
     
+    if ( $current_priv eq 'admin' ) {
+        # determine if employee already exists in Dochazka database
+        my $status = send_req( 'GET', "employee/nick/" . $emp->nick . "/minimal" );
+        if ( $status->level eq 'OK' and $status->code eq 'DOCHAZKA_EMPLOYEE_MINIMAL' ) {
+            my $nick = $status->payload->{'nick'};
+            my $eid = $status->payload->{'eid'};
+            $message .= "\nEmployee $nick already exists in Dochazka with EID $eid\n";
+        } else {
+            my $nick = $emp->nick;
+            $message .= "\nEmployee $nick is missing in Dochazka; to import, do \"EMPL=$nick LDAP IMPORT\"\n";
+        }
+    }
+
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $message );
 }
 
