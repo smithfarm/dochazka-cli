@@ -67,6 +67,7 @@ App::Dochazka::CLI::Commands::Employee - Employee commands
 
 our @EXPORT_OK = qw( 
     employee_ldap
+    employee_ldap_import
     employee_list
     employee_profile
     employee_team
@@ -185,6 +186,32 @@ sub employee_ldap {
 }
 
 
+=head3 employee_ldap_import
+
+    EMPLOYEE_SPEC LDAP IMPORT
+
+=cut
+
+sub employee_ldap_import {
+    print "Entering " . __PACKAGE__ . "::employee_ldap_import\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    # determine nick
+    my ( $nick ) = $th->{'EMPLOYEE_SPEC'} =~ m/=(.+)$/;
+
+    # send the request
+    my $status = send_req( 'PUT', "employee/nick/$nick/ldap" );
+    if ( $status->level eq 'OK' and $status->code eq 'DOCHAZKA_CUD_OK' ) {
+        return employee_profile( $ts, $th );
+    } else {
+        return $status;
+    }
+}
+
+    
 =head3 employee_list
 
 EMPLOYEE LIST

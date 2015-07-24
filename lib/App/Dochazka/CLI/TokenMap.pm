@@ -111,6 +111,7 @@ our $regex_map = {
     HISTORY   => '(his\S*)',
     HTML      => '(htm\S*)',
     IID       => '(iid\S*)',
+    IMPORT    => '(imp\S*)',
 #    INACTIVE  => '(ina\S*)',
     INSERT    => '(ins\S*)',
     INTERVAL  => '(int\S*)',

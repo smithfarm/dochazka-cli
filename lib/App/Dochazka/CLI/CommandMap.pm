@@ -42,6 +42,7 @@ use App::CELL qw( $CELL );
 use App::Dochazka::CLI::Commands::Activity qw( activity_all );
 use App::Dochazka::CLI::Commands::Employee qw( 
     employee_ldap
+    employee_ldap_import
     employee_list
     employee_profile
     employee_team
@@ -579,6 +580,7 @@ our $dispatch_map = {
     "EMPLOYEE SHOW" => \&employee_profile,
     "EMPLOYEE_SPEC" => \&employee_profile,
     "EMPLOYEE_SPEC LDAP" => \&employee_ldap,
+    "EMPLOYEE_SPEC LDAP IMPORT" => \&employee_ldap_import,
     "EMPLOYEE_SPEC PROFILE" => \&employee_profile,
     "EMPLOYEE_SPEC SHOW" => \&employee_profile,
     "EMPLOYEE SEC_ID _TERM" => \&set_employee_self_sec_id,
