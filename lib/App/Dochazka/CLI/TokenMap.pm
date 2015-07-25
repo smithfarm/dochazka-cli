@@ -162,6 +162,7 @@ our $regex_map = {
     SITE      => '(sit\S*)',
 #    SUNDAY    => '(sun\S*)',  RESERVED BY _DOW
     SUMMARY   => '(sum\S*)',
+    SUPERVISOR => '(sup\S*)',
     TEAM      => '(tea\S*)',
     TEXT      => '(tex\S*)',
 #    THURSDAY    => '(thu\S*)',  RESERVED BY _DOW
