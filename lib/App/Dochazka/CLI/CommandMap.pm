@@ -52,6 +52,7 @@ use App::Dochazka::CLI::Commands::Employee qw(
     set_employee_other_fullname 
     set_employee_self_password
     set_employee_other_password 
+    set_employee_supervisor
 );
 use App::Dochazka::CLI::Commands::History qw(
     add_priv_history
@@ -591,6 +592,8 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC SET SEC_ID _TERM" => \&set_employee_other_sec_id,
     "EMPLOYEE_SPEC FULLNAME" => \&set_employee_other_fullname,
     "EMPLOYEE_SPEC SET FULLNAME" => \&set_employee_other_fullname,
+    "EMPLOYEE_SPEC SUPERVISOR _TERM" => \&set_employee_supervisor,
+    "EMPLOYEE_SPEC SET SUPERVISOR _TERM" => \&set_employee_supervisor,
     "EMPLOYEE PASSWORD" => \&set_employee_self_password,
     "EMPLOYEE SET PASSWORD" => \&set_employee_self_password,
     "EMPLOYEE_SPEC PASSWORD" => \&set_employee_other_password,
