@@ -937,3 +937,6 @@ Revision history for App-Dochazka-CLI
 - t/: put config load test in the right place
 - Commands/Employee.pm: export employee_ldap() function
 
+0.203  TBA
+- config/CLI_Config.pm: suppress more headers
+
