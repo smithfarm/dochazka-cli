@@ -45,49 +45,54 @@ use Test::More;
 
 my ( $cmd, $rv );
 
+note( 'initialize CLI client' );
 $rv = init_cli_client();
 diag( Dumper $rv ) unless $rv->ok;
 
+note( 'authenticate to server' );
 $rv = authenticate_to_server( user => 'demo', password => 'demo', quiet => 1 );
 if ( $rv->not_ok and $rv->{'http_status'} =~ m/500 Can\'t connect/ ) {
     plan skip_all => "Can't connect to server";
 }
 
+note( 'sanity check' );
 isnt( $meta->MREST_CLI_URI_BASE, undef, 'MREST_CLI_URI_BASE is defined after initialization' );
 
+note( 'EMPLOYEE command' );
 $cmd = "EMPLOYEE";
 $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+demo/ );
 like( $rv->payload, qr/Dochazka EID:\s+\d+/ );
-like( $rv->payload, qr/Privlevel:\s+passerby/ );
+#like( $rv->payload, qr/Privlevel:\s+passerby/ );
 
+note( 'EMPLOYEE PROFILE command' );
 $cmd = "EMPLOYEE PROFILE";
 $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+demo/ );
 like( $rv->payload, qr/Dochazka EID:\s+\d+/ );
-like( $rv->payload, qr/Privlevel:\s+passerby/ );
+#like( $rv->payload, qr/Privlevel:\s+passerby/ );
 
-# EMPLOYEE_SPEC on self always works
+note( 'EMPLOYEE_SPEC on self always works' );
 $cmd = "EMPLOYEE=demo PROFILE";
 $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+demo/ );
 like( $rv->payload, qr/Dochazka EID:\s+\d+/ );
-like( $rv->payload, qr/Privlevel:\s+passerby/ );
+#like( $rv->payload, qr/Privlevel:\s+passerby/ );
 
-# EMPLOYEE_SPEC on a different employee => 403
+note( 'EMPLOYEE_SPEC on a different employee => 403' );
 $cmd = "EMPLOYEE=absent PROFILE";
 $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'ERR' );
 is( $rv->{'http_status'}, '403 Forbidden' );
 
-# EMPLOYEE_SPEC on non-existent employee => 403
+note( 'EMPLOYEE_SPEC on non-existent employee => 403' );
 $cmd = "EMPLOYEE=999999 PROFILE";
 $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
