@@ -62,7 +62,9 @@ set( 'DOCHAZKA_CLI_LOG_FILE', "$ENV{HOME}/.dochazka-cli.log" );
 set ('MREST_CLI_SUPPRESSED_HEADERS', [ qw( 
     accept content-type content-length cache-control pragma expires
     server Client-Response-Num Client-Peer Client-Date Set-Cookie Date
-    Vary
+    Vary Client-SSL-Cert-Subject Client-SSL-Cipher X-Web-Machine-Trace
+    Client-SSL-Socket-Class Client-SSL-Cert-Issuer Connection
+    Strict-Transport-Security
 ) ] );
 
 
