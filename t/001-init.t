@@ -53,12 +53,7 @@ sub create_employees_carefully {
     $cmd = "EMPLOYEE=$nick PROFILE";
     $rv = process_command( $cmd );
     is( ref( $rv ), 'App::CELL::Status' );
-    if ( $rv->level eq 'OK' and $rv->code eq 'DOCHAZKA_CLI_NORMAL_COMPLETION' ) {
-        unless ( $rv->payload =~ m/Privlevel:\s+$privlevel/ ) {
-            diag "Employee \'$nick\' exists but has the wrong privlevel - fix it manually";
-            BAIL_OUT(0);
-        }
-    } else {
+    unless ( $rv->level eq 'OK' and $rv->code eq 'DOCHAZKA_CLI_NORMAL_COMPLETION' ) {
 
         # create employee $nick and assign privlevel $privlevel
         $cmd = "PUT employee nick $nick { \"fullname\" : \"$fullname\", \"password\" : \"$nick\" }";
