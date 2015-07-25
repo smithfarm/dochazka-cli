@@ -177,6 +177,8 @@ the C<$current_emp> object.
 
 sub determine_employee {
     my $s_key = shift;
+    $log->debug( "Entering " . __PACKAGE__ . "::determine_employee with \$s_key ->" .
+        ( defined( $s_key ) ? $s_key : "undef" ) . "<-" );
 
     my $status = ( $s_key )
         ? lookup_employee( key => $s_key, minimal => 1 )
