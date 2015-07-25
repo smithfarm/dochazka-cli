@@ -61,7 +61,7 @@ ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+absent/ );
 like( $rv->payload, qr/Dochazka EID:\s+\d+/ );
-like( $rv->payload, qr/Privlevel:\s+inactive/ );
+#like( $rv->payload, qr/Privlevel:\s+inactive/ );
 
 # EMPLOYEE_SPEC on self always works
 $cmd = "EMPLOYEE=absent PROFILE";
@@ -70,14 +70,16 @@ ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+absent/ );
 like( $rv->payload, qr/Dochazka EID:\s+\d+/ );
-like( $rv->payload, qr/Privlevel:\s+inactive/ );
+#like( $rv->payload, qr/Privlevel:\s+inactive/ );
 
-# EMPLOYEE_SPEC on a different employee => 403
+# EMPLOYEE_SPEC on a different employee => also works
 $cmd = "EMPLOYEE=demo PROFILE";
 $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
-is( $rv->level, 'ERR' );
-is( $rv->{'http_status'}, '403 Forbidden' );
+is( $rv->level, 'OK' );
+like( $rv->payload, qr/Nick:\s+demo/ );
+like( $rv->payload, qr/Dochazka EID:\s+\d+/ );
+#like( $rv->payload, qr/Privlevel:\s+passerby/ );
 
 # EMPLOYEE_SPEC on non-existent employee => 403
 $cmd = "EMPLOYEE=999999 PROFILE";

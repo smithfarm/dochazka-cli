@@ -71,7 +71,7 @@ is( $rv->level, 'OK' );
 is( $rv->code, 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
 like( $rv->payload, qr/Nick:\s+root/ );
 like( $rv->payload, qr/Dochazka EID:\s+1/ );
-like( $rv->payload, qr/Privlevel:\s+admin/ );
+#like( $rv->payload, qr/Privlevel:\s+admin/ );
 
 $cmd = "EMPLOYEE PROFILE";
 $rv = process_command( $cmd );
@@ -80,7 +80,7 @@ is( $rv->level, 'OK' );
 is( $rv->code, 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
 like( $rv->payload, qr/Nick:\s+root/ );
 like( $rv->payload, qr/Dochazka EID:\s+1/ );
-like( $rv->payload, qr/Privlevel:\s+admin/ );
+#like( $rv->payload, qr/Privlevel:\s+admin/ );
 
 note( 'EMPLOYEE_SPEC on self always works' );
 $cmd = "EMPLOYEE=root PROFILE";
@@ -89,7 +89,7 @@ ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+root/ );
 like( $rv->payload, qr/Dochazka EID:\s+1/ );
-like( $rv->payload, qr/Privlevel:\s+admin/ );
+#like( $rv->payload, qr/Privlevel:\s+admin/ );
 
 note( 'EMPLOYEE_SPEC on a different employee => also works, because root is an admin' );
 $cmd = "EMPLOYEE=demo SHOW";
@@ -98,7 +98,7 @@ ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+demo/ );
 like( $rv->payload, qr/Dochazka EID:\s+2/ );
-like( $rv->payload, qr/Privlevel:\s+passerby/ );
+#like( $rv->payload, qr/Privlevel:\s+passerby/ );
 
 note( 'EMPLOYEE_SPEC on worker' );
 $cmd = "EMPLOYEE=worker PROFILE";
@@ -108,7 +108,7 @@ is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+worker/ );
 my ( $worker_eid ) = $rv->payload =~ m/Dochazka EID:\s+(\d+)/;
 like( $rv->payload, qr/Dochazka EID:\s+$worker_eid/ );
-like( $rv->payload, qr/Privlevel:\s+active/ );
+#like( $rv->payload, qr/Privlevel:\s+active/ );
 
 note( 'EMPLOYEE_SPEC on worker, using EID instead of nick' );
 $cmd = "EMPLOYEE=$worker_eid PROFILE";
@@ -117,7 +117,7 @@ ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+worker/ );
 like( $rv->payload, qr/Dochazka EID:\s+$worker_eid/ );
-like( $rv->payload, qr/Privlevel:\s+active/ );
+#like( $rv->payload, qr/Privlevel:\s+active/ );
 
 note( 'EMPLOYEE_SPEC on non-existent employee' );
 $cmd = "EMPLOYEE=99999 PROFILE";
@@ -210,7 +210,7 @@ like( $rv->payload, qr/Nick:\s+worker/ );
 my ( $worker_sec_id) = $rv->payload =~ m/Secondary ID:\s+(\S+)/;
 like( $rv->payload, qr/Dochazka EID:\s+$worker_eid/ );
 like( $rv->payload, qr/Secondary ID:\s+$worker_sec_id/ );
-like( $rv->payload, qr/Privlevel:\s+active/ );
+#like( $rv->payload, qr/Privlevel:\s+active/ );
 
 note( 'sec_id= on worker' );
 $cmd = "sec_id=$worker_sec_id PROFILE";
@@ -220,7 +220,7 @@ is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+worker/ );
 like( $rv->payload, qr/Dochazka EID:\s+$worker_eid/ );
 like( $rv->payload, qr/Secondary ID:\s+$worker_sec_id/ );
-like( $rv->payload, qr/Privlevel:\s+active/ );
+#like( $rv->payload, qr/Privlevel:\s+active/ );
 
 note( 'eid= on worker' );
 $cmd = "eid=$worker_eid PROFILE";
@@ -230,7 +230,7 @@ is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+worker/ );
 like( $rv->payload, qr/Dochazka EID:\s+$worker_eid/ );
 like( $rv->payload, qr/Secondary ID:\s+$worker_sec_id/ );
-like( $rv->payload, qr/Privlevel:\s+active/ );
+#like( $rv->payload, qr/Privlevel:\s+active/ );
 
 note( 'eid= on root' );
 $cmd = "eid=1 PROFILE";
@@ -239,7 +239,7 @@ ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 like( $rv->payload, qr/Nick:\s+root/ );
 like( $rv->payload, qr/Dochazka EID:\s+1/ );
-like( $rv->payload, qr/Privlevel:\s+admin/ );
+#like( $rv->payload, qr/Privlevel:\s+admin/ );
 
 #==========================================
 # EMPLOYEE SET FULLNAME 
