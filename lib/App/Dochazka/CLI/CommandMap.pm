@@ -75,7 +75,7 @@ use App::Dochazka::CLI::Commands::Misc qw(
     change_prompt_date 
 );
 use App::Dochazka::CLI::Commands::Priv qw(
-    show_current_priv
+    show_priv_as_at
 );
 use App::Dochazka::CLI::Commands::Schedule qw( 
     add_memsched_entry 
@@ -88,7 +88,7 @@ use App::Dochazka::CLI::Commands::Schedule qw(
     schedulespec
     schedulespec_remark
     schedulespec_scode
-    show_current_schedule
+    show_schedule_as_at
 );
 use Data::Dumper;
 use Exporter qw( import );
@@ -689,16 +689,20 @@ our $dispatch_map = {
     # Lock commands
 
     # Priv commands
-    "PRIV" => \&show_current_priv,
-    "EMPLOYEE_SPEC PRIV" => \&show_current_priv,
+    "PRIV" => \&show_priv_as_at,
+    "PRIV _DATE" => \&show_priv_as_at,
+    "EMPLOYEE_SPEC PRIV" => \&show_priv_as_at,
+    "EMPLOYEE_SPEC PRIV _DATE" => \&show_priv_as_at,
 
     # Prompt date commands
     "PROMPT _DATE" => \&change_prompt_date,
     "PROMPT DATE _DATE" => \&change_prompt_date,
 
     # Schedule commands
-    "SCHEDULE" => \&show_current_schedule,
-    "EMPLOYEE_SPEC SCHEDULE" => \&show_current_schedule,
+    "SCHEDULE" => \&show_schedule_as_at,
+    "SCHEDULE _DATE" => \&show_schedule_as_at,
+    "EMPLOYEE_SPEC SCHEDULE" => \&show_schedule_as_at,
+    "EMPLOYEE_SPEC SCHEDULE _DATE" => \&show_schedule_as_at,
     "SCHEDULE _DOW _TIME _DOW1 _TIME1" => \&add_memsched_entry,
     "SCHEDULE _DOW _TIME _HYPHEN _DOW1 _TIME1" => \&add_memsched_entry,
     "SCHEDULE _DOW _TIMERANGE" => \&add_memsched_entry,
