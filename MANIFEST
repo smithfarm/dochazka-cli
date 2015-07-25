@@ -34,7 +34,6 @@ META.json
 META.yml
 README
 README.md
-release.sh
 t/001-init.t
 t/cmd_active/activity.t
 t/cmd_active/employee.t
