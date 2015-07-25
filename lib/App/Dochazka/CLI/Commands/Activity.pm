@@ -78,7 +78,7 @@ The functions in this module are called from the parser when it recognizes a com
 =cut
 
 sub activity_all {
-    print "Entering " . __PACKAGE__ . "::activity_all\n";
+    print "Entering " . __PACKAGE__ . "::activity_all\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
