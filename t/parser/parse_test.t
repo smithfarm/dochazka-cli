@@ -715,11 +715,11 @@ do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_new
 
 $cmd = "PRIV";
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Priv::show_current_priv' );
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Priv::show_priv_as_at' );
 
 $cmd = "EMPLOYEE=porg PRIV";
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Priv::show_current_priv' );
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Priv::show_priv_as_at' );
 
 
 #================================
@@ -738,7 +738,7 @@ is_deeply( $r, {
             },
     'nc' => "SCHEDULE"
 } );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Schedule::show_current_schedule' );
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Schedule::show_schedule_as_at' );
 
 $cmd = "EMPLOYEE=orc63 SCHEDULE";
 $r = parse( $cmd );
@@ -754,7 +754,7 @@ is_deeply( $r, {
             },
     'nc' => "EMPLOYEE_SPEC SCHEDULE"
 } );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Schedule::show_current_schedule' );
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Schedule::show_schedule_as_at' );
 
 $cmd = "SCHEDULE MON 33:33 TUE 23:00";
 $r = parse( $cmd );

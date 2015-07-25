@@ -39,7 +39,7 @@ use warnings;
 
 use App::CELL qw( $CELL );
 use App::Dochazka::CLI qw( $debug_mode );
-use App::Dochazka::CLI::Shared qw( print_schedule_object show_current );
+use App::Dochazka::CLI::Shared qw( print_schedule_object show_as_at );
 use App::Dochazka::CLI::Util qw( parse_test );
 use App::Dochazka::Common::Model::Schedule;
 use Data::Dumper;
@@ -74,7 +74,7 @@ our @EXPORT_OK = qw(
     schedulespec
     schedulespec_remark
     schedulespec_scode
-    show_current_schedule
+    show_schedule_as_at
 );
 
 # in-memory storage for working schedule
@@ -116,21 +116,23 @@ The functions in this module are called from the parser when it recognizes a com
 The routines in this section are called as command handlers.
 
 
-=head3 show_current_schedule 
+=head3 show_schedule_as_at
 
     SCHEDULE
     EMPLOYEE_SPEC SCHEDULE
+    SCHEDULE _DATE
+    EMPLOYEE_SPEC SCHEDULE _DATE
 
 =cut
 
-sub show_current_schedule {
-    print "Entering " . __PACKAGE__ . "::show_current_schedule\n" if $debug_mode;
+sub show_schedule_as_at {
+    print "Entering " . __PACKAGE__ . "::show_schedule_as_at\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
     return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
 
-    return show_current( 'schedule', $th );
+    return show_as_at( 'schedule', $th );
 }
 
 

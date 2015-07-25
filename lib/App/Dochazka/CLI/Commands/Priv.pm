@@ -39,7 +39,7 @@ use warnings;
 
 use App::CELL qw( $CELL );
 use App::Dochazka::CLI qw( $debug_mode );
-use App::Dochazka::CLI::Shared qw( show_current );
+use App::Dochazka::CLI::Shared qw( show_as_at );
 use App::Dochazka::CLI::Util qw( parse_test );
 use Data::Dumper;
 use Exporter 'import';
@@ -60,7 +60,7 @@ App::Dochazka::CLI::Commands::Priv - Priv commands
 =cut
 
 our @EXPORT_OK = qw(
-    show_current_priv
+    show_priv_as_at
 );
 
 
@@ -77,21 +77,23 @@ Functions called from the parser
 
 
 
-=head3 show_current_priv 
+=head3 show_priv_as_at
 
     PRIV
     EMPLOYEE_SPEC PRIV
+    PRIV _DATE
+    EMPLOYEE_SPEC PRIV _DATE
 
 =cut
 
-sub show_current_priv {
-    print "Entering " . __PACKAGE__ . "::show_current_priv\n" if $debug_mode;
+sub show_priv_as_at {
+    print "Entering " . __PACKAGE__ . "::show_priv_as_at\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
     return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
 
-    return show_current( 'priv', $th );
+    return show_as_at( 'priv', $th );
 }
 
 
