@@ -933,7 +933,8 @@ Revision history for App-Dochazka-CLI
 - release scripting modifications
 - cleanup: Commands/Activity.pm: display "Entering (etc.)" only in debug mode.
 - Implement EMPLOYEE_SPEC LDAP IMPORT command
-- Commands/Employee.pm: report to admins whether LDAP user is also a Dochazka user
+- Commands/Employee.pm: report to admins whether LDAP user is also a Dochazka
+  user
 - t/: put config load test in the right place
 - Commands/Employee.pm: export employee_ldap() function
 
@@ -947,4 +948,13 @@ Revision history for App-Dochazka-CLI
 - TokenMap.pm: add SUPERVISOR token
 - Build.PL: update repository and bugtracker resources
 - config/CLI_Config.pm: suppress more headers
+
+0.204  2015-07-25 23:33 CEST
+- Util.pm: in lookup_employee(), do not go on to sec_id check when nick check
+  returns 403
+- Shared.pm: rename show_current() to show_as_at() to generalize it
+- Commands/: rename current routines to as_at in Priv.pm and Schedule.pm
+- CommandMap.pm: rename current routines to as_at and add PRIV and SCHEDULE
+  commands with _DATE parameter
+- Util.pm: expose determine_employee() argument in debug log
 
