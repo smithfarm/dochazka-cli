@@ -48,8 +48,8 @@ my $build = Module::Build->new(
     },
     meta_merge => {
         resources => {
-            homepage => 'https://sourceforge.net/projects/dochazka/',
-            repository => 'https://sourceforge.net/p/dochazka/code/',
+            repository => 'https://github.com/smithfarm/dochazka-cli',
+            bugtracker => 'https://github.com/smithfarm/dochazka-cli/issues',
         }
     },
     add_to_cleanup       => [ 'App-Dochazka-CLI-*' ],
