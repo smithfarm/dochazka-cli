@@ -61,7 +61,7 @@ App::Dochazka::CLI::Shared - Shared routines
 
 our @EXPORT_OK = qw(
     print_schedule_object
-    show_current
+    show_as_at
 );
 
 
@@ -82,13 +82,15 @@ Use this function to "print" a schedule object (passed an an argument). The
 =cut
 
 sub print_schedule_object {
-    my ( $sch ) = @_;
+    my ( $sch, %ARGS ) = @_;
     die "AAGH! Not a schedule object" unless ref( $sch ) eq 'App::Dochazka::Common::Model::Schedule';
     my $ps = '';
 
+    $ps .= ' 'x$ARGS{'indent'} if exists( $ARGS{'indent'} );
     $ps .= "DISABLED | " if $sch->disabled;
     $ps .= "Schedule ID (SID): " . $sch->sid . "\n";
     if ( my $scode = $sch->scode ) {
+        $ps .= ' 'x$ARGS{'indent'} if exists( $ARGS{'indent'} );
         $ps .= "DISABLED | " if $sch->disabled;
         $ps .= "Schedule code (scode): " . $scode . "\n";
     }
@@ -96,6 +98,7 @@ sub print_schedule_object {
     # decode the schedule
     my $sch_array = decode_json( $sch->schedule );
     foreach my $entry ( @$sch_array ) {
+        $ps .= ' 'x$ARGS{'indent'} if exists( $ARGS{'indent'} );
         $ps .= "DISABLED | " if $sch->disabled;
         # each entry is a hash with properties low_dow, low_time, high_dow, high_time
         $ps .= "[ " . $entry->{'low_dow'} . " " . $entry->{'low_time'} . ", " .
@@ -104,6 +107,7 @@ sub print_schedule_object {
 
     # remark
     if ( my $remark = $sch->remark ) {
+        $ps .= ' 'x$ARGS{'indent'} if exists( $ARGS{'indent'} );
         $ps .= "DISABLED | " if $sch->disabled;
         $ps .= "Remark: " . $sch->remark  . "\n";
     }
@@ -112,21 +116,25 @@ sub print_schedule_object {
 }
 
 
-=head2 show_current
+=head2 show_as_at
 
-Given $type (either "priv" or "schedule") and $ts hashref, return
-status object.
+Given $type (either "priv" or "schedule") and $th hashref from the command
+parser, return status object.
 
 =cut
 
-sub show_current {
-    print "Entering " . __PACKAGE__ . "::show_current\n" if $debug_mode;
+sub show_as_at {
+    print "Entering " . __PACKAGE__ . "::show_as_at\n" if $debug_mode;
     my ( $type, $th ) = @_;
 
     my $emp_spec = ( $th->{'EMPLOYEE_SPEC'} )
         ? $th->{'EMPLOYEE_SPEC'}
         : $current_emp;
     
+    my $date = ( $th->{'_DATE'} )
+        ? $th->{'_DATE'} . ' 12:00'
+        : '';
+
     my ( $eid, $nick, $status, $resource );
     if ( $emp_spec->can('eid') ) {
         $eid = $emp_spec->eid;
@@ -142,14 +150,21 @@ sub show_current {
         die "AGHHAH! bad employee specifier";
     }
 
+    if ( $date ) {
+        $resource .= "/$date";
+    } else {
+        $date = "now";
+    }
+
     $status = send_req( 'GET', $resource );
     if ( $status->ok ) {
         my $pl = '';
         if ( $type eq 'priv' ) {
-            $pl .= "The current privilege level of $nick (EID $eid) is " . $status->payload->{'priv'} . "\n";
+            $pl .= "Privilege level of $nick (EID $eid) as of $date: " . $status->payload->{'priv'} . "\n";
         } elsif ( $type eq 'schedule' ) {
             my $sch_obj = App::Dochazka::Common::Model::Schedule->spawn( %{ $status->payload->{'schedule'} } );
-            $pl .= print_schedule_object( $sch_obj );
+            $pl .= "Schedule of $nick (EID $eid) as of $date:\n";
+            $pl .= print_schedule_object( $sch_obj, indent => 4 );
         } else {
             die "AGH! bad type " . $type || "undefined";
         }
