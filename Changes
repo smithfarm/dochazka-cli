@@ -929,3 +929,11 @@ Revision history for App-Dochazka-CLI
 - CommandMap.pm: enable LDAP commands
 - Commands/Employee.pm: display supervisor nick instead of EID
 
+0.202  2015-07-25 04:09 CEST
+- release scripting modifications
+- cleanup: Commands/Activity.pm: display "Entering (etc.)" only in debug mode.
+- Implement EMPLOYEE_SPEC LDAP IMPORT command
+- Commands/Employee.pm: report to admins whether LDAP user is also a Dochazka user
+- t/: put config load test in the right place
+- Commands/Employee.pm: export employee_ldap() function
+
