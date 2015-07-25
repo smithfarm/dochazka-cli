@@ -436,6 +436,30 @@ EOS
 Functions used by multiple handlers
 
 
+=head3 determine_priv
+
+Given an employee object, return the current priv level of that employee.
+If the employee doesn't exist, the return value will be undef.
+
+=cut
+
+sub determine_priv {
+    my ( $emp ) = @_;
+
+    return undef unless ref( $emp ) eq 'App::Dochazka::REST::Model::Employee';
+    return undef unless $emp->eid and $emp->nick;
+
+    # GET priv/eid/:eid
+    $status = send_req( 'GET', 'priv/eid/' . $emp->eid );
+    if ( $status->not_ok ) {
+        $log->error( "Could not determine priv level of employee -> " . $emp->nick .
+                     "<- because: " . $status->text );
+        return undef;
+    }
+    return $status->payload->{'priv'};
+}
+
+
 =head3 determine_supervisor
 
 Given an employee object, return supervisor employee object.
