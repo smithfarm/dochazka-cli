@@ -22,7 +22,7 @@ name: App-Dochazka-CLI
 provides:
   App::Dochazka::CLI:
     file: lib/App/Dochazka/CLI.pm
-    version: '0.202'
+    version: '0.203'
   App::Dochazka::CLI::CommandMap:
     file: lib/App/Dochazka/CLI/CommandMap.pm
   App::Dochazka::CLI::Commands::Activity:
@@ -41,7 +41,7 @@ provides:
     file: lib/App/Dochazka/CLI/Commands/Schedule.pm
   App::Dochazka::CLI::Guide:
     file: lib/App/Dochazka/CLI/Guide.pm
-    version: '0.202'
+    version: '0.203'
   App::Dochazka::CLI::Parser:
     file: lib/App/Dochazka/CLI/Parser.pm
   App::Dochazka::CLI::Shared:
@@ -69,7 +69,7 @@ requires:
   Web::MREST::CLI::UserAgent: '0'
   perl: '5.012'
 resources:
-  homepage: https://sourceforge.net/projects/dochazka/
+  bugtracker: https://github.com/smithfarm/dochazka-cli/issues
   license: http://opensource.org/licenses/bsd-license.php
-  repository: https://sourceforge.net/p/dochazka/code/
-version: '0.202'
+  repository: https://github.com/smithfarm/dochazka-cli
+version: '0.203'

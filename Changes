@@ -937,6 +937,14 @@ Revision history for App-Dochazka-CLI
 - t/: put config load test in the right place
 - Commands/Employee.pm: export employee_ldap() function
 
-0.203  TBA
+0.203  2015-07-25 19:01 CEST
+- Util.pm: make refresh_current_emp() handle server insanity more robustly
+- Commands/Employee.pm: implement determine_priv() helper function
+- t/: adapt test suite to current state
+- t/cmd_passerby/employee.t: convert comments to note() calls
+- CommandMap/Employee.pm: implement EMPLOYEE_SPEC SUPERVISOR _TERM command
+- CommandMap.pm: add EMPLOYEE_SPEC SUPERVISOR _TERM command
+- TokenMap.pm: add SUPERVISOR token
+- Build.PL: update repository and bugtracker resources
 - config/CLI_Config.pm: suppress more headers
 
