@@ -77,6 +77,7 @@ our @EXPORT_OK = qw(
     set_employee_other_fullname
     set_employee_self_password 
     set_employee_other_password
+    set_employee_supervisor
 );
 
 
@@ -108,15 +109,7 @@ sub employee_profile {
     my $emp = $status->payload;
 
     # determine supervisor
-    my $supervisor = App::Dochazka::Common::Model::Employee->spawn();
-    if ( my $supervisor_eid = $emp->supervisor ) {
-        $status = determine_employee( "EMPL=$supervisor_eid" );
-        if ( $status->ok ) {
-            $supervisor = $status->payload;
-        } else {
-            $log->warn( "Failed to look up supervisor by EID $supervisor_eid; error was " . $status->text );
-        }
-    }
+    my $supervisor = determine_supervisor( $emp );
 
     my $message = "\n";
     $message .= "Full name:    " . ( $emp->fullname ? $emp->fullname : "(not set)" ) . "\n";
@@ -403,10 +396,67 @@ sub set_employee_other_password {
 }
 
 
+=head3 set_employee_supervisor
+
+Set supervisor of an arbitrary employee
+
+    EMPLOYEE_SPEC SUPERVISOR _TERM
+    EMPLOYEE_SPEC SET SUPERVISOR _TERM
+
+=cut
+
+sub set_employee_supervisor {
+    print "Entering " . __PACKAGE__ . "::set_employee_supervisor\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    # get employee object
+    my $status = determine_employee( $th->{EMPLOYEE_SPEC} );
+    return $status unless $status->ok;
+    my $emp = $status->payload;
+    my $emp_eid = $emp->eid;
+
+    # get supervisor employee object
+    $status = determine_employee( 'EMPL=' . $th->{_TERM} );
+    return $status unless $status->ok;
+    my $supervisor = $status->payload;
+    my $supervisor_eid = $supervisor->eid;
+
+    return send_req( 'POST', "employee/eid", <<"EOS" );
+{ "eid" : $emp_eid, "supervisor" : $supervisor_eid }
+EOS
+}
+
+
 
 =head2 Helper functions
 
 Functions used by multiple handlers
+
+
+=head3 determine_supervisor
+
+Given an employee object, return supervisor employee object.
+If no supervisor can be determined, the 'eid' and 'nick' attributes of the
+resulting supervisor object will be undefined.
+
+=cut
+
+sub determine_supervisor {
+    my ( $emp ) = @_;
+    my $supervisor = App::Dochazka::Common::Model::Employee->spawn();
+    if ( my $supervisor_eid = $emp->supervisor ) {
+        my $status = determine_employee( "EMPL=$supervisor_eid" );
+        if ( $status->ok ) {
+            $supervisor = $status->payload;
+        } else {
+            $log->warn( "Failed to look up supervisor by EID $supervisor_eid; error was " . $status->text );
+        }
+    }
+    return $supervisor;
+}
 
 
 =head3 _set_employee
