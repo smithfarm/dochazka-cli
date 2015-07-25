@@ -492,7 +492,8 @@ REST calls are cheap, so look up C<< $current_emp >> again just to make sure.
 
 sub refresh_current_emp {
     my $status = send_req( 'GET', 'employee/eid/' . $current_emp->eid );
-    die "Problem with data integrity (current employee)" unless $status->ok;
+    $log->crit( "Problem with data integrity (current employee)" );
+    return $status unless $status->ok;
     $current_emp = App::Dochazka::Common::Model::Employee->spawn( %{ $status->payload } );
     return $status;
 }

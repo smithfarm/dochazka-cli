@@ -450,7 +450,7 @@ sub determine_priv {
     return undef unless $emp->eid and $emp->nick;
 
     # GET priv/eid/:eid
-    $status = send_req( 'GET', 'priv/eid/' . $emp->eid );
+    my $status = send_req( 'GET', 'priv/eid/' . $emp->eid );
     if ( $status->not_ok ) {
         $log->error( "Could not determine priv level of employee -> " . $emp->nick .
                      "<- because: " . $status->text );
