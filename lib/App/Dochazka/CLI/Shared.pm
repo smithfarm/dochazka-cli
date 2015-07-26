@@ -150,20 +150,22 @@ sub show_as_at {
         die "AGHHAH! bad employee specifier";
     }
 
+    my $display_date;
     if ( $date ) {
         $resource .= "/$date";
+        $display_date = $th->{'_DATE'};
     } else {
-        $date = "now";
+        $display_date = "now";
     }
 
     $status = send_req( 'GET', $resource );
     if ( $status->ok ) {
         my $pl = '';
         if ( $type eq 'priv' ) {
-            $pl .= "Privilege level of $nick (EID $eid) as of $date: " . $status->payload->{'priv'} . "\n";
+            $pl .= "Privilege level of $nick (EID $eid) as of $display_date: " . $status->payload->{'priv'} . "\n";
         } elsif ( $type eq 'schedule' ) {
             my $sch_obj = App::Dochazka::Common::Model::Schedule->spawn( %{ $status->payload->{'schedule'} } );
-            $pl .= "Schedule of $nick (EID $eid) as of $date:\n";
+            $pl .= "Schedule of $nick (EID $eid) as of $display_date:\n";
             $pl .= print_schedule_object( $sch_obj, indent => 4 );
         } else {
             die "AGH! bad type " . $type || "undefined";
