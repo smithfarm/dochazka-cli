@@ -39,7 +39,9 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL );
-use App::Dochazka::CLI::Commands::Activity qw( activity_all );
+use App::Dochazka::CLI::Commands::Activity qw( 
+    activity_all 
+);
 use App::Dochazka::CLI::Commands::Employee qw( 
     employee_ldap
     employee_ldap_import
@@ -84,6 +86,7 @@ use App::Dochazka::CLI::Commands::Schedule qw(
     dump_memsched_entries
     fetch_all_schedules
     replicate_memsched_entry
+    schedule_all
     schedule_new
     schedulespec
     schedulespec_remark
@@ -699,6 +702,8 @@ our $dispatch_map = {
     "PROMPT DATE _DATE" => \&change_prompt_date,
 
     # Schedule commands
+    "SCHEDULE ALL" => \&schedule_all,
+    "SCHEDULE ALL DISABLED" => \&schedule_all,
     "SCHEDULE" => \&show_schedule_as_at,
     "SCHEDULE _DATE" => \&show_schedule_as_at,
     "EMPLOYEE_SPEC SCHEDULE" => \&show_schedule_as_at,

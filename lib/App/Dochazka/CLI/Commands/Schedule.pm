@@ -116,6 +116,24 @@ The functions in this module are called from the parser when it recognizes a com
 The routines in this section are called as command handlers.
 
 
+=head3 schedule_all
+
+    SCHEDULE ALL
+    SCHEDULE ALL DISABLED
+
+=cut
+
+sub schedule_all {
+    print "Entering " . __PACKAGE__ . "::schedule_all\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    return $CELL->status_ok( 'UNDER_CONSTRUCTION' );    
+}
+
+
 =head3 show_schedule_as_at
 
     SCHEDULE
