@@ -70,6 +70,7 @@ our @EXPORT_OK = qw(
     dump_memsched_entries 
     fetch_all_schedules
     replicate_memsched_entry 
+    schedule_all
     schedule_new
     schedulespec
     schedulespec_remark

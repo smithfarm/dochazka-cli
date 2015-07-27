@@ -45,10 +45,12 @@ use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
 use File::HomeDir;
 use Getopt::Long 2.32;
+use JSON;
 use Pod::Usage;
 use Term::ReadKey;
 use Term::ReadLine;
 
+my $JSON = JSON->new->utf8->pretty;
 
 
 =head1 NAME
@@ -244,13 +246,13 @@ COMMAND: while ( defined ( $cmd = $term->readline( get_prompt() ) ) ) {
     # that it might be just a plain string
 
     if ( ref( $rv ) eq 'App::CELL::Status' ) {
-        if ( $rv->{'rest_test'} ) {
+        if ( delete $rv->{'rest_test'} ) {
             print "HTTP status: " . ( delete $rv->{'http_status'} || '<NONE>' ) . "\n";
             print "Non-suppressed headers: " . Dumper( $rv->{'headers'} ) if $rv->{'headers'};
             delete $rv->{'headers'};
             my $expurgated_rv = $rv->expurgate;
             #print Dumper( $expurgated_rv );
-            print "Response: " . Dumper( $expurgated_rv ) . "\n";
+            print "Response:\n" . $JSON->encode( $expurgated_rv ) . "\n";
             next COMMAND;
         }
         if ( $rv->level eq 'ERR' and $rv->code eq 'DOCHAZKA_CLI_PARSE_ERROR' ) {
