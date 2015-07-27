@@ -216,10 +216,10 @@ sub lookup_employee {
     if ( $key_spec =~ m/^emp/i ) {
         $status = send_req( 'GET', "employee/nick/$key$minimal" );
         BREAK_OUT: {
-            last BREAK_OUT if $status->not_ok and $status->{'http_code'} == 403;
-            if ( $status->not_ok and $status->{'http_code'} == 404 ) {
+            last BREAK_OUT if $status->not_ok and $status->payload and $status->payload->{'http_code'} == 403;
+            if ( $status->not_ok and $status->payload and $status->payload->{'http_code'} == 404 ) {
                 $status = send_req( 'GET', "employee/sec_id/$key$minimal" );
-                if ( $status->not_ok and $status->{'http_code'} != 500 and looks_like_number( $key ) ) {
+                if ( $status->not_ok and $status->payload and $status->payload->{'http_code'} != 500 and looks_like_number( $key ) ) {
                     $status = send_req( 'GET', "employee/eid/$key$minimal" );
                 }
             }
