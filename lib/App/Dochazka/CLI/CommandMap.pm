@@ -686,7 +686,7 @@ our $dispatch_map = {
     "INTERVAL _DATE _TIME _HYPHEN _TIME1 _TERM" => \&interval_new_time_time1,
     "INTERVAL _DATE _TIMERANGE _TERM" => \&interval_new_timerange,
     "INTERVAL _DATE _TIME _DATE1 _TIME1 _TERM" => \&interval_new_date_time_date1_time1,
-    "INTERVAL _DATE _TIME _HYPHEN _DATE _TIME1 _TERM" => \&interval_new_date_time_date1_time1,
+    "INTERVAL _DATE _TIME _HYPHEN _DATE1 _TIME1 _TERM" => \&interval_new_date_time_date1_time1,
 
 
     # Lock commands
