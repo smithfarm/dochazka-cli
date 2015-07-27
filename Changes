@@ -965,3 +965,7 @@ Revision history for App-Dochazka-CLI
 - Add boilerplate for SCHEDULE ALL and SCHEDULE ALL DISABLED commands
 - Shared.pm: refrain from displaying time in show_as_at()
 
+0.206  2015-07-27 13:58 CEST
+- CommandMap.pm: change second _DATE to _DATE1
+  (fixes Github issue #5)
+
