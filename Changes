@@ -972,3 +972,6 @@ Revision history for App-Dochazka-CLI
 0.207  2015-07-27 14:08 CEST
 - Build.PL: change Web::MREST dependency to Web::MREST::CLI
 
+0.208  2015-07-27 14:43 CEST
+- Util.pm: import normalize_filespec() from Web::MREST::CLI::UserAgent
+
