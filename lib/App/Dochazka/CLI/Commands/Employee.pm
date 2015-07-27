@@ -49,6 +49,7 @@ use App::Dochazka::CLI::Util qw(
 use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
 use Exporter 'import';
+use Term::ReadKey;
 use Web::MREST::CLI::UserAgent qw( send_req );
 
 
@@ -537,20 +538,19 @@ sub _set_password {
     print "\n\n";
 
     # prompt for new password and ask nicely for confirmation
-    if ( length( $newpass ) > 0 ) {
-        print "New password      : $newpass\n";
-    } else {
+    if ( ! $newpass ) {
+        ReadMode ('noecho');
         print "New password      : ";
-        $newpass = <>;
-        chomp( $newpass );
+        chomp( $newpass = <> );
+        ReadMode ('restore');
+        print "\n";
     }
-    
+    ReadMode ('noecho');
     print "New password again: ";
-    my $confirm = <>;
-    chomp( $confirm );
-    if ( $newpass ne $confirm ) {
-        return $CELL->status_err( 'DOCHAZKA_CLI_NO_MATCH' );
-    }
+    chomp( my $confirm = <> );
+    ReadMode ('restore');
+    print "\n";
+    return $CELL->status_err( 'DOCHAZKA_CLI_NO_MATCH' ) unless $newpass eq $confirm;
 
     # send REST request
     my $status = send_req( 'PUT', "employee/eid/$eid", <<"EOS" );

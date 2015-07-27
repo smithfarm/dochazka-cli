@@ -42,6 +42,7 @@ my $build = Module::Build->new(
         'JSON'               => 0,
         'LWP::UserAgent'     => 0,
         'Params::Validate'   => 1.06,
+        'Term::ReadKey'      => 0,
         'Term::ReadLine::Gnu' => 0,
         'Text::Table'        => 0,
         'Web::MREST::CLI'    => 0.275,
