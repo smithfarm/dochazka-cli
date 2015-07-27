@@ -969,3 +969,6 @@ Revision history for App-Dochazka-CLI
 - CommandMap.pm: change second _DATE to _DATE1
   (fixes Github issue #5)
 
+0.207  2015-07-27 14:08 CEST
+- Build.PL: change Web::MREST dependency to Web::MREST::CLI
+
