@@ -958,3 +958,10 @@ Revision history for App-Dochazka-CLI
   commands with _DATE parameter
 - Util.pm: expose determine_employee() argument in debug log
 
+0.205  2015-07-27 10:14 CEST
+- Build.PL: require a recent version of Web::MREST
+- bin/dochazka-cli: use JSON->encode, instead of Data::Dumper, to format
+  statuses for display to user
+- Add boilerplate for SCHEDULE ALL and SCHEDULE ALL DISABLED commands
+- Shared.pm: refrain from displaying time in show_as_at()
+
