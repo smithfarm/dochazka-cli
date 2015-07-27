@@ -975,3 +975,9 @@ Revision history for App-Dochazka-CLI
 0.208  2015-07-27 14:43 CEST
 - Util.pm: import normalize_filespec() from Web::MREST::CLI::UserAgent
 
+0.209  2015-07-27 21:34 CEST
+- Util.pm: make CRIT log message more reasonable
+- Commands/Employee.pm: use Term::ReadKey noecho mode when user types his
+  password
+- Commands/Employee.pm: fix a regression in lookup_employee()
+
