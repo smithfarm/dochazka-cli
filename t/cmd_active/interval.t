@@ -90,6 +90,14 @@ is( $rv->code, 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
 like( $rv->payload, qr/\AInterval IID \d+.*2015-01-01.*06:30.*2015-01-01.*07:00.*WORK/ms,
     "IID $iid inserted");
 
+note( 'enter interval with non-existent activity' );
+note( $cmd = "INTERVAL 6:30-7:00 PRDBANK" );
+$rv = process_command( $cmd );
+is( ref( $rv ), 'App::CELL::Status' );
+is( $rv->level, 'ERR' );
+is( $rv->code, 'DOCHAZKA_CLI_WRONG_ACTIVITY' );
+like( $rv->text, qr/Activity -\>PRDBANK\<- does not exist \(use ACTIVITY ALL command to list activities\)/ );
+
 note( 'fetch the interval' );
 my $payload = fetch_interval_test( '', '' );
 like( $payload, qr/06:30.+07:00/ );

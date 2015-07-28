@@ -52,6 +52,7 @@ use Data::Dumper;
 use Date::Calc qw( Days_in_Month );
 use Exporter 'import';
 use JSON;
+use Params::Validate qw( :all );
 use Text::Table;
 use Web::MREST::CLI::UserAgent qw( send_req );
 
@@ -413,11 +414,22 @@ resulting status object.
 =cut
 
 sub _interval_new {
-    my ( $code, $tsrange, $long_desc ) = @_;
+    my ( $code, $tsrange, $long_desc ) = validate_pos( @_,
+        { type => SCALAR },
+        { type => SCALAR },
+        { type => SCALAR|UNDEF, optional => 1 },
+    );
 
     # get aid from code
     my $status = send_req( 'GET', "activity/code/$code" );
-    return rest_error( $status, "Determine AID from code" ) unless $status->ok;
+    if ( $status->not_ok ) {
+        if ( $status->code eq "DISPATCH_SEARCH_EMPTY" and
+             $status->text =~ m/Search over activity with key -\>code equals .+\<- returned nothing/
+        ) {
+            return $CELL->status_err( 'DOCHAZKA_CLI_WRONG_ACTIVITY', args => [ $code ] );
+        }
+        return rest_error( $status, "Determine AID from code" ) unless $status->ok;
+    }
     my $aid = $status->payload->{'aid'};
 
     # assemble entity
@@ -430,7 +442,11 @@ sub _interval_new {
 
     # send the request
     $status = send_req( 'POST', "interval/new", $entity );
-    return rest_error( $status, "Insert new attendance interval" ) unless $status->ok;
+    if ( $status->not_ok ) {
+        # if ... possible future checks for common errors
+        # elsif ... other common errors
+        return rest_error( $status, "Insert new attendance interval" ) unless $status->ok;
+    }
 
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION',
         payload => _print_interval( $status->payload ) );
