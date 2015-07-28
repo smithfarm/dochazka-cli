@@ -981,3 +981,8 @@ Revision history for App-Dochazka-CLI
   password
 - Commands/Employee.pm: fix a regression in lookup_employee()
 
+0.210  2015-07-28 12:32 CEST
+- Improve error message when user enters attempts to enter a new interval with
+  a non-existent activity code
+  Fixes: https://github.com/smithfarm/dochazka-cli/issues/10
+
