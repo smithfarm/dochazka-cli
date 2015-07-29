@@ -44,7 +44,7 @@ use App::Dochazka::CLI::TokenMap qw( $regex_map );
 use App::Dochazka::CLI::CommandMap;
 use Data::Dumper;
 use Exporter 'import';
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 =head1 NAME

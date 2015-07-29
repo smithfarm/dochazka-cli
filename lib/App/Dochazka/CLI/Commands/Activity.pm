@@ -42,7 +42,7 @@ use App::Dochazka::CLI qw( $debug_mode );
 use App::Dochazka::CLI::Util qw( parse_test rest_error );
 use Data::Dumper;
 use Exporter 'import';
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 

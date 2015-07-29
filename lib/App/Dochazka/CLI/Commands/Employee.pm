@@ -50,7 +50,7 @@ use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
 use Exporter 'import';
 use Term::ReadKey;
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 

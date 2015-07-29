@@ -60,7 +60,7 @@ use Log::Any::Adapter;
 use Params::Validate qw( :all );
 use Scalar::Util qw( looks_like_number );
 use Try::Tiny;
-use Web::MREST::CLI::UserAgent qw( normalize_filespec send_req );
+use Web::MREST::CLI qw( normalize_filespec send_req );
 
 
 
@@ -97,7 +97,7 @@ our @EXPORT_OK = qw(
 =head2 authenticate_to_server
 
 All communication between L<App::Dochazka::CLI> and the L<App::Dochazka::REST>
-server goes via the C<send_req> routine in L<Web::MREST::CLI::UserAgent>. This
+server goes via the C<send_req> routine in L<Web::MREST::CLI>. This
 routine takes its connection parameters (address of REST server, nick and
 password) from the following configuration parameters:
 
@@ -268,7 +268,7 @@ sub init_cli_client {
     init_prompt();
 
     # initialize the LWP::UserAgent object
-    Web::MREST::CLI::UserAgent::init_ua();
+    Web::MREST::CLI::init_ua();
 
     return $CELL->status_ok( 'DOCHAZKA_CLI_INIT_OK' ); 
 }

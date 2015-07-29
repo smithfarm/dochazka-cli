@@ -54,7 +54,7 @@ use Exporter 'import';
 use JSON;
 use Params::Validate qw( :all );
 use Text::Table;
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 
