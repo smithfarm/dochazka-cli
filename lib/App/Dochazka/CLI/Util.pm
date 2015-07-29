@@ -60,7 +60,8 @@ use Log::Any::Adapter;
 use Params::Validate qw( :all );
 use Scalar::Util qw( looks_like_number );
 use Try::Tiny;
-use Web::MREST::CLI::UserAgent qw( normalize_filespec send_req );
+use Web::MREST::CLI qw( normalize_filespec );
+use Web::MREST::CLI::UserAgent qw( send_req );
 
 
 
