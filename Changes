@@ -986,3 +986,9 @@ Revision history for App-Dochazka-CLI
   a non-existent activity code
   Fixes: https://github.com/smithfarm/dochazka-cli/issues/10
 
+0.211  2015-07-30 15:23 CEST
+- Util.pm: drop init_cli_client() in favor of the one from Web::MREST::CLI
+- bin/dochazka-cli: enable --early-debug option
+- t/: drop superfluous boilerplate units
+- Routines that were in Web::MREST::CLI::UserAgent are now in Web::MREST::CLI
+
