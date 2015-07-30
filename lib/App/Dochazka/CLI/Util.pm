@@ -79,7 +79,7 @@ our @EXPORT_OK = qw(
     authenticate_to_server 
     determine_employee
     lookup_employee 
-    init_cli_client
+    init_logger
     init_prompt
     normalize_date
     normalize_time
@@ -235,42 +235,6 @@ sub lookup_employee {
     }
 
     return $status;
-}
-
-
-=head2 init_cli_client
-
-CLI client initialization routine: might die
-
-=cut
-
-sub init_cli_client {
-    my ( $sitedir ) = @_;
-
-    # always load the App::Dochazka::CLI distro sharedir
-    my $target = File::ShareDir::dist_dir('App-Dochazka-CLI');
-    print "Loading configuration files from $target\n";
-    my $status = $CELL->load( sitedir => $target );
-    die $status->text unless $status->ok;
-
-    # load core config params and, if sitedir specified, site config params
-    # as well
-    my %CELL_ARGS = ( debug_mode => 1 );
-    if ( $sitedir ) {
-        $CELL_ARGS{sitedir} = $sitedir;
-        print "Loading configuration files from $sitedir\n";
-    }
-    $status = $CELL->load( %CELL_ARGS );
-    die $status->text unless $status->ok;
-
-    init_logger(); 
-
-    init_prompt();
-
-    # initialize the LWP::UserAgent object
-    Web::MREST::CLI::init_ua();
-
-    return $CELL->status_ok( 'DOCHAZKA_CLI_INIT_OK' ); 
 }
 
 

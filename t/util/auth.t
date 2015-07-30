@@ -31,7 +31,6 @@
 # ************************************************************************* 
 #
 # Tests for Util.pm functions:
-# + init_cli_client
 # + authenticate_to_server
 #
 
@@ -42,14 +41,15 @@ use warnings FATAL => 'all';
 
 use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI qw( $current_emp $current_priv );
-use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client );
+use App::Dochazka::CLI::Test qw( init_unit );
+use App::Dochazka::CLI::Util qw( authenticate_to_server );
 use Data::Dumper;
 use Test::More;
 
 my ( $status, $rv, $rv_type );
 
 note( 'init_cli_client' );
-$rv = init_cli_client();
+$rv = init_unit();
 diag( Dumper $rv ) unless $rv->ok;
 
 note( 'authenticate_to_server as root' );

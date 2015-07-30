@@ -39,15 +39,16 @@ use warnings FATAL => 'all';
 
 use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI::Parser qw( process_command );
-use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client );
+use App::Dochazka::CLI::Test qw( init_unit );
+use App::Dochazka::CLI::Util qw( authenticate_to_server );
 use Data::Dumper;
 use Test::More;
 
 my ( $cmd, $rv );
 
-note( 'initialize CLI client' );
-$rv = init_cli_client();
-diag( Dumper $rv ) unless $rv->ok;
+note( 'initialize unit' );
+$rv = init_unit();
+plan skip_all => "init_unit failed with status " . $rv->text unless $rv->ok;
 
 note( 'authenticate to server' );
 $rv = authenticate_to_server( user => 'demo', password => 'demo', quiet => 1 );

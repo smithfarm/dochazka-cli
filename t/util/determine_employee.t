@@ -41,10 +41,10 @@ use strict;
 use warnings FATAL => 'all';
 
 use App::CELL qw( $CELL $log $meta $site );
+use App::Dochazka::CLI::Test qw( init_unit );
 use App::Dochazka::CLI::Util qw( 
     authenticate_to_server 
     determine_employee
-    init_cli_client 
     lookup_employee
 );
 use Data::Dumper;
@@ -53,8 +53,8 @@ use Test::Fatal;
 
 my ( $status, $rv, $rv_type );
 
-note( 'init_cli_client' );
-$rv = init_cli_client();
+note( 'init_unit' );
+$rv = init_unit();
 diag( Dumper $rv ) unless $rv->ok;
 
 note( 'authenticate to server' );
