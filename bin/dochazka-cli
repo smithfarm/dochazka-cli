@@ -40,7 +40,7 @@ use warnings;
 use App::CELL qw( $CELL $log $site $meta );
 use App::Dochazka::CLI qw( $debug_mode $current_emp $current_priv $prompt_date );
 use App::Dochazka::CLI::Parser qw( process_command );
-use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client init_prompt );
+use App::Dochazka::CLI::Util qw( authenticate_to_server init_logger init_prompt );
 use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
 use File::HomeDir;
@@ -49,6 +49,7 @@ use JSON;
 use Pod::Usage;
 use Term::ReadKey;
 use Term::ReadLine;
+use Web::MREST::CLI qw( init_cli_client );
 
 my $JSON = JSON->new->utf8->pretty;
 
@@ -127,13 +128,14 @@ my $help = 0;
 my $user = '';
 my $password = '';
 my $sitedir;
+my $early_debug;
 GetOptions( 
     'help|?' => \$help, 
     'user|u=s' => \$user, 
     'password|p=s' => \$password,
     'sitedir|s=s' => \$sitedir,
     'noauth|n' => \$noauth,
-    'debug|d' => \$debugparam,
+    'early-debug|e=s' => \$early_debug,
     'version|v' => \$versionparam,
 );
 
@@ -153,12 +155,18 @@ if ( $sitedir ) {
 }
 
 # initialize CLI client
-my $status;
-if ( ( my $status = init_cli_client( $sitedir ) )->not_ok ) {
+my $status = init_cli_client( 
+    distro => 'App-Dochazka-CLI',
+    sitedir => $sitedir,
+    early_debug => $early_debug,
+);
+if ( $status->not_ok ) {
     print $status->code . ' (' . $status->level . ') ' . $status->text . "\n";
     print "Response: " . Dumper( $status->payload ) . "\n";
     exit;
 }
+init_logger();
+init_prompt();
 
 # debug mode
 $debug_mode = $debugparam ? 1 : 0;
