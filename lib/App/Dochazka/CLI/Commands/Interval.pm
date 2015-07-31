@@ -259,7 +259,7 @@ sub interval_fetch_date_date1 {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ?  _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 );
+        ? _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 )
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -308,8 +308,8 @@ sub interval_fetch_month {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ?  _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 );
-        :  _print_intervals_tsrange( $emp, $tsr );
+        ? _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 )
+        : _print_intervals_tsrange( $emp, $tsr );
 }
 
 
@@ -360,7 +360,7 @@ sub interval_fetch_num_num1 {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 );
+        ? _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 )
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -395,7 +395,7 @@ sub interval_fetch_promptdate {
     my $tsr = "( $prompt_date 00:00, $prompt_date 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( eid => $eid, begin_date => $prompt_date, end_date => $prompt_date );
+        ? _fillup_dry_run( eid => $eid, begin_date => $prompt_date, end_date => $prompt_date )
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
