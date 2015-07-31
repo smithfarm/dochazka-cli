@@ -209,8 +209,8 @@ sub interval_fetch_date {
     my $tsr = "( $date 00:00, $date 24:00 )";
 
     if ( $th->{'FILLUP'} ) {
-        my $status = send_req( 'GET', "interval/fillup/eid/$eid/$date/$date" );
-        return $status;
+        # fillup "dry run" - i.e. GET interval/fillup/...
+        return _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date );
     } else {
         return _print_intervals_tsrange( $emp, $tsr );
     }
@@ -259,7 +259,7 @@ sub interval_fetch_date_date1 {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? send_req( 'GET', "interval/fillup/eid/$eid/$date/$date1" )
+        ?  _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 );
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -308,7 +308,7 @@ sub interval_fetch_month {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? send_req( 'GET', "interval/fillup/eid/$eid/$date/$date1" )
+        ?  _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 );
         :  _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -360,7 +360,7 @@ sub interval_fetch_num_num1 {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? send_req( 'GET', "interval/fillup/eid/$eid/$date/$date1" )
+        ? _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 );
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -395,7 +395,7 @@ sub interval_fetch_promptdate {
     my $tsr = "( $prompt_date 00:00, $prompt_date 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? send_req( 'GET', "interval/fillup/eid/$eid/$prompt_date/$prompt_date" )
+        ? _fillup_dry_run( eid => $eid, begin_date => $prompt_date, end_date => $prompt_date );
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -579,5 +579,21 @@ sub _begin_and_end_from_intvl {
 
     return ( "$d0 $t0", "$d1 $t1" );
 }
+
+
+=head3 _fillup_dry_run
+
+=cut
+
+sub _fillup_dry_run {
+    my ( %ARGS ) = validate( @_, {
+        eid => { type => SCALAR },
+        begin_date => { type => SCALAR },
+        end_date => { type => SCALAR },
+    } );
+    my $status = send_req( 'GET', "interval/fillup/eid/$ARGS{eid}/$ARGS{begin_date}/$ARGS{end_date}" );
+    return $status
+}
+
 
 1;
