@@ -36,7 +36,7 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL );
-use Web::MREST::CLI::UserAgent;
+use Web::MREST::CLI;
 
 
 
@@ -72,7 +72,7 @@ sub _method_cookiejar {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     
-    my $cookie_jar = Web::MREST::CLI::UserAgent::cookie_jar() || "No cookies in jar";
+    my $cookie_jar = Web::MREST::CLI::cookie_jar() || "No cookies in jar";
 
     return $CELL->status_ok( 'COOKIE_JAR', payload => $cookie_jar );
 }

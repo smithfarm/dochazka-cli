@@ -43,7 +43,7 @@ use App::Dochazka::CLI::Shared qw( show_as_at );
 use App::Dochazka::CLI::Util qw( parse_test );
 use Data::Dumper;
 use Exporter 'import';
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 

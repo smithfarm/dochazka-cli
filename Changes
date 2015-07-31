@@ -986,3 +986,15 @@ Revision history for App-Dochazka-CLI
   a non-existent activity code
   Fixes: https://github.com/smithfarm/dochazka-cli/issues/10
 
+0.211  2015-07-30 15:23 CEST
+- Util.pm: drop init_cli_client() in favor of the one from Web::MREST::CLI
+- bin/dochazka-cli: enable --early-debug option
+- t/: drop superfluous boilerplate units
+- Routines that were in Web::MREST::CLI::UserAgent are now in Web::MREST::CLI
+
+0.212  2015-07-30 16:14 CEST
+- Commands/Employee.pm: make a _display_employee_ok() helper function
+  to assemble the OK return staus from EMPLOYEE PROFILE
+- t/cmd_admin/employee.t: add test cases for EMPLOYEE_SPEC SUPERVISOR _TERM
+- Commands/Employee.pm: make EMPLOYEE_SPEC SUPERVISOR _TERM output prett
+

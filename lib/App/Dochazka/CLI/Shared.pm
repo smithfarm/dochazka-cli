@@ -43,7 +43,7 @@ use App::Dochazka::CLI::Util qw( lookup_employee rest_error );
 use Data::Dumper;
 use Exporter 'import';
 use JSON;
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 

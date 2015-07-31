@@ -40,7 +40,8 @@ use warnings FATAL => 'all';
 
 use App::Dochazka::CLI qw( $debug_mode );
 use App::Dochazka::CLI::Parser qw( process_command );
-use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client );
+use App::Dochazka::CLI::Util qw( authenticate_to_server );
+use App::Dochazka::CLI::Test qw( init_unit );
 use Data::Dumper;
 use Test::More;
 
@@ -106,7 +107,7 @@ sub create_testing_schedule {
 
 my ( $cmd, $rv, $rv_type, $status );
 
-$rv = init_cli_client();
+$rv = init_unit();
 $rv_type = ref( $rv );
 if ( $rv_type ne 'App::CELL::Status' or $rv->not_ok ) {
     diag "init_cli_client returned unexpected status:";

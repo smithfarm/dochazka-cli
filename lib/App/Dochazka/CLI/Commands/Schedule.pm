@@ -45,7 +45,7 @@ use App::Dochazka::Common::Model::Schedule;
 use Data::Dumper;
 use Exporter 'import';
 use JSON;
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 

@@ -50,7 +50,7 @@ use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
 use Exporter 'import';
 use Term::ReadKey;
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 
@@ -109,18 +109,7 @@ sub employee_profile {
     return $status unless $status->ok;
     my $emp = $status->payload;
 
-    # determine supervisor
-    my $supervisor = determine_supervisor( $emp );
-
-    my $message = "\n";
-    $message .= "Full name:    " . ( $emp->fullname ? $emp->fullname : "(not set)" ) . "\n";
-    $message .= "Nick:         " . $emp->nick . "\n";
-    $message .= "Email:        " . ( $emp->email || "(not set)" ) . "\n";
-    $message .= "Secondary ID: " . ( $emp->sec_id ? $emp->sec_id : "(not set)" ) . "\n";
-    $message .= "Dochazka EID: " . $emp->eid . "\n";
-    $message .= "Reports to:   " . ( $supervisor->nick || "(not set)" ) . "\n";
-
-    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $message );
+    return _display_employee_ok( $emp );
 }
 
 
@@ -425,9 +414,15 @@ sub set_employee_supervisor {
     my $supervisor = $status->payload;
     my $supervisor_eid = $supervisor->eid;
 
-    return send_req( 'POST', "employee/eid", <<"EOS" );
+    # send the HTTP request
+    $status = send_req( 'POST', "employee/eid", <<"EOS" );
 { "eid" : $emp_eid, "supervisor" : $supervisor_eid }
 EOS
+    return $status unless $status->ok;
+
+    # display the employee profile -> it will include the new supervisor
+    $emp->reset( $status->payload );
+    return _display_employee_ok( $emp );
 }
 
 
@@ -560,6 +555,31 @@ EOS
     return $status unless $status->ok;
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
         payload => "Password changed" );
+}
+
+
+=head3 _display_employee_ok
+
+Given an employee object, prepare OK return status intended for EMPLOYEE PROFILE
+but usable also for other commands.
+
+=cut
+
+sub _display_employee_ok {
+    my ( $emp ) = @_;
+
+    # determine supervisor
+    my $supervisor = determine_supervisor( $emp );
+
+    my $message = "\n";
+    $message .= "Full name:    " . ( $emp->fullname ? $emp->fullname : "(not set)" ) . "\n";
+    $message .= "Nick:         " . $emp->nick . "\n";
+    $message .= "Email:        " . ( $emp->email || "(not set)" ) . "\n";
+    $message .= "Secondary ID: " . ( $emp->sec_id ? $emp->sec_id : "(not set)" ) . "\n";
+    $message .= "Dochazka EID: " . $emp->eid . "\n";
+    $message .= "Reports to:   " . ( $supervisor->nick || "(not set)" ) . "\n";
+
+    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $message );
 }
 
 

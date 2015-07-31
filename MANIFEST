@@ -46,14 +46,10 @@ t/cmd_inactive/employee.t
 t/cmd_passerby/activity.t
 t/cmd_passerby/employee.t
 t/cmd_passerby/schedule.t
-t/load.t
-t/manifest.t
 t/parser/parse_test.t
 t/parser/possible_words.t
 t/parser/rest_test.t
 t/parser/semantic_tree.t
-t/pod-coverage.t
-t/pod.t
 t/util/auth.t
 t/util/determine_employee.t
 t/util/truncate.t

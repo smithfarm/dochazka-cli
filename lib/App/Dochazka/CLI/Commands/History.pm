@@ -43,7 +43,7 @@ use App::Dochazka::CLI::Util qw( lookup_employee parse_test rest_error truncate_
 use Data::Dumper;
 use Exporter 'import';
 use Text::Table;
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( send_req );
 
 
 

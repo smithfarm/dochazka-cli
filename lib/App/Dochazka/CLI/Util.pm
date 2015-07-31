@@ -60,8 +60,7 @@ use Log::Any::Adapter;
 use Params::Validate qw( :all );
 use Scalar::Util qw( looks_like_number );
 use Try::Tiny;
-use Web::MREST::CLI qw( normalize_filespec );
-use Web::MREST::CLI::UserAgent qw( send_req );
+use Web::MREST::CLI qw( normalize_filespec send_req );
 
 
 
@@ -80,7 +79,7 @@ our @EXPORT_OK = qw(
     authenticate_to_server 
     determine_employee
     lookup_employee 
-    init_cli_client
+    init_logger
     init_prompt
     normalize_date
     normalize_time
@@ -98,7 +97,7 @@ our @EXPORT_OK = qw(
 =head2 authenticate_to_server
 
 All communication between L<App::Dochazka::CLI> and the L<App::Dochazka::REST>
-server goes via the C<send_req> routine in L<Web::MREST::CLI::UserAgent>. This
+server goes via the C<send_req> routine in L<Web::MREST::CLI>. This
 routine takes its connection parameters (address of REST server, nick and
 password) from the following configuration parameters:
 
@@ -236,42 +235,6 @@ sub lookup_employee {
     }
 
     return $status;
-}
-
-
-=head2 init_cli_client
-
-CLI client initialization routine: might die
-
-=cut
-
-sub init_cli_client {
-    my ( $sitedir ) = @_;
-
-    # always load the App::Dochazka::CLI distro sharedir
-    my $target = File::ShareDir::dist_dir('App-Dochazka-CLI');
-    print "Loading configuration files from $target\n";
-    my $status = $CELL->load( sitedir => $target );
-    die $status->text unless $status->ok;
-
-    # load core config params and, if sitedir specified, site config params
-    # as well
-    my %CELL_ARGS = ( debug_mode => 1 );
-    if ( $sitedir ) {
-        $CELL_ARGS{sitedir} = $sitedir;
-        print "Loading configuration files from $sitedir\n";
-    }
-    $status = $CELL->load( %CELL_ARGS );
-    die $status->text unless $status->ok;
-
-    init_logger(); 
-
-    init_prompt();
-
-    # initialize the LWP::UserAgent object
-    Web::MREST::CLI::UserAgent::init_ua();
-
-    return $CELL->status_ok( 'DOCHAZKA_CLI_INIT_OK' ); 
 }
 
 

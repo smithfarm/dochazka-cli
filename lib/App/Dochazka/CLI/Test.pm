@@ -40,8 +40,10 @@ use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI::Parser qw( look_up_command process_command );
+use App::Dochazka::CLI::Util qw( init_prompt );
 use Exporter qw( import );
 use Test::More;
+use Web::MREST::CLI qw( init_cli_client );
 
 
 
@@ -61,12 +63,24 @@ our @EXPORT_OK = qw(
     delete_interval_test
     do_parse_test
     fetch_interval_test
+    init_unit
 );
 
 
 
 
 =head1 FUNCTIONS
+
+
+=head2 init_unit
+
+=cut
+
+sub init_unit {
+    init_prompt();
+    my $status = init_cli_client( distro => 'App-Dochazka-CLI', );
+    return $status;
+}
 
 
 =head2 delete_interval

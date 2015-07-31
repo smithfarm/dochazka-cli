@@ -54,7 +54,7 @@
    "provides" : {
       "App::Dochazka::CLI" : {
          "file" : "lib/App/Dochazka/CLI.pm",
-         "version" : "0.210"
+         "version" : "0.212"
       },
       "App::Dochazka::CLI::CommandMap" : {
          "file" : "lib/App/Dochazka/CLI/CommandMap.pm"
@@ -82,7 +82,7 @@
       },
       "App::Dochazka::CLI::Guide" : {
          "file" : "lib/App/Dochazka/CLI/Guide.pm",
-         "version" : "0.210"
+         "version" : "0.212"
       },
       "App::Dochazka::CLI::Parser" : {
          "file" : "lib/App/Dochazka/CLI/Parser.pm"
@@ -112,5 +112,5 @@
          "url" : "https://github.com/smithfarm/dochazka-cli"
       }
    },
-   "version" : "0.210"
+   "version" : "0.212"
 }

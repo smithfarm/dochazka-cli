@@ -39,14 +39,15 @@ use warnings FATAL => 'all';
 
 use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI::Parser qw( process_command );
-use App::Dochazka::CLI::Util qw( authenticate_to_server init_cli_client );
+use App::Dochazka::CLI::Test qw( init_unit );
+use App::Dochazka::CLI::Util qw( authenticate_to_server );
 use Data::Dumper;
 use Test::More;
 
 my ( $cmd, $rv );
 
-$rv = init_cli_client();
-diag( Dumper $rv ) unless $rv->ok;
+$rv = init_unit();
+plan skip_all => "init_unit failed with status " . $rv->text unless $rv->ok;
 
 $rv = authenticate_to_server( user => 'root', password => 'immutable', quiet => 1 );
 if ( $rv->not_ok and $rv->{'http_status'} =~ m/500 Can\'t connect/ ) {
@@ -261,5 +262,39 @@ ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
 is( $rv->code, 'DISPATCH_EMPLOYEE_CURRENT' );
 is( $rv->payload->{'fullname'}, 'Mr. Fullneck' );
+
+
+#==========================================
+# EMPLOYEE_SPEC SUPERVISOR _TERM
+# EMPLOYEE_SPEC SET SUPERVISOR _TERM
+#==========================================
+
+note( $cmd = 'EMPL=absent SUPERVISOR worker' );
+$rv = process_command( $cmd );
+ok( ref( $rv ) eq 'App::CELL::Status' );
+is( $rv->level, 'OK' );
+is( $rv->code, 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
+like( $rv->payload, qr/Reports to:\s+worker/ );
+
+note( $cmd = 'POST employee nick { "nick" : "absent", "supervisor" : null }' );
+$rv = process_command( $cmd );
+ok( ref( $rv ) eq 'App::CELL::Status' );
+is( $rv->level, 'OK' );
+is( $rv->code, 'DOCHAZKA_CUD_OK' );
+ok( ! defined( $rv->payload->{'supervisor'} ) );
+
+note( $cmd = 'EMPL=absent PROFILE' );
+$rv = process_command( $cmd );
+ok( ref( $rv ) eq 'App::CELL::Status' );
+is( $rv->level, 'OK' );
+is( $rv->code, 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
+like( $rv->payload, qr/Reports to:\s+\(not set\)/ );
+
+note( $cmd = 'EMPL=absent SET SUPERVISOR worker' );
+$rv = process_command( $cmd );
+ok( ref( $rv ) eq 'App::CELL::Status' );
+is( $rv->level, 'OK' );
+is( $rv->code, 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
+like( $rv->payload, qr/Reports to:\s+worker/ );
 
 done_testing;
