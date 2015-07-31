@@ -210,7 +210,7 @@ sub interval_fetch_date {
 
     if ( $th->{'FILLUP'} ) {
         # fillup "dry run" - i.e. GET interval/fillup/...
-        return _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date );
+        return _fillup_dry_run( emp_obj => $emp, begin_date => $date, end_date => $date );
     } else {
         return _print_intervals_tsrange( $emp, $tsr );
     }
@@ -259,7 +259,7 @@ sub interval_fetch_date_date1 {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 )
+        ? _fillup_dry_run( emp_obj => $emp, begin_date => $date, end_date => $date1 )
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -308,7 +308,7 @@ sub interval_fetch_month {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 )
+        ? _fillup_dry_run( emp_obj => $emp, begin_date => $date, end_date => $date1 )
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -360,7 +360,7 @@ sub interval_fetch_num_num1 {
     my $tsr = "( $date 00:00, $date1 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( eid => $eid, begin_date => $date, end_date => $date1 )
+        ? _fillup_dry_run( emp_obj => $emp, begin_date => $date, end_date => $date1 )
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -395,7 +395,7 @@ sub interval_fetch_promptdate {
     my $tsr = "( $prompt_date 00:00, $prompt_date 24:00 )";
 
     return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( eid => $eid, begin_date => $prompt_date, end_date => $prompt_date )
+        ? _fillup_dry_run( emp_obj => $emp, begin_date => $prompt_date, end_date => $prompt_date )
         : _print_intervals_tsrange( $emp, $tsr );
 }
 
@@ -587,12 +587,33 @@ sub _begin_and_end_from_intvl {
 
 sub _fillup_dry_run {
     my ( %ARGS ) = validate( @_, {
-        eid => { type => SCALAR },
+        emp_obj => { can => [ 'eid', 'nick' ] },
         begin_date => { type => SCALAR },
         end_date => { type => SCALAR },
     } );
-    my $status = send_req( 'GET', "interval/fillup/eid/$ARGS{eid}/$ARGS{begin_date}/$ARGS{end_date}" );
-    return $status
+    my $eid = $ARGS{emp_obj}->eid;
+    my $nick = $ARGS{emp_obj}->nick;
+    my $heading1 = "INTERVAL FILLUP (dry run) for $nick (EID $eid)";
+    my $heading2 = "from $ARGS{begin_date} to $ARGS{end_date}";
+
+    my $status = send_req( 'GET', "interval/fillup/eid/$eid/$ARGS{begin_date}/$ARGS{end_date}" );
+    return rest_error( $status, "$heading1 $heading2" ) unless $status->ok;
+
+    my $pl = '';
+    $pl .= "$heading1\n";
+    $pl .= "$heading2\n\n";
+
+    my $t = Text::Table->new( 'Begin', 'End' );
+    for my $int ( @{ $status->payload } ) {
+        my ( $begin, $end ) = $int =~ m/\[\s+(\S+ \S+),\s+(\S+ \S+)\s+\)/;
+        $t->add( 
+            $begin,
+            $end,
+        );
+    }
+    $pl .= $t;
+
+    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
 }
 
 
