@@ -4,7 +4,7 @@
       "Smithfarm <presnypreklad@gmail.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4212",
+   "generated_by" : "Module::Build version 0.4205",
    "license" : [
       "bsd"
    ],
@@ -54,7 +54,7 @@
    "provides" : {
       "App::Dochazka::CLI" : {
          "file" : "lib/App/Dochazka/CLI.pm",
-         "version" : "0.212"
+         "version" : "0.213"
       },
       "App::Dochazka::CLI::CommandMap" : {
          "file" : "lib/App/Dochazka/CLI/CommandMap.pm"
@@ -82,7 +82,7 @@
       },
       "App::Dochazka::CLI::Guide" : {
          "file" : "lib/App/Dochazka/CLI/Guide.pm",
-         "version" : "0.212"
+         "version" : "0.213"
       },
       "App::Dochazka::CLI::Parser" : {
          "file" : "lib/App/Dochazka/CLI/Parser.pm"
@@ -106,11 +106,11 @@
          "web" : "https://github.com/smithfarm/dochazka-cli/issues"
       },
       "license" : [
-         "http://opensource.org/licenses/bsd-license.php"
+         "http://opensource.org/licenses/BSD-3-Clause"
       ],
       "repository" : {
          "url" : "https://github.com/smithfarm/dochazka-cli"
       }
    },
-   "version" : "0.212"
+   "version" : "0.213"
 }

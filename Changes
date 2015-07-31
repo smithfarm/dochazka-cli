@@ -998,3 +998,8 @@ Revision history for App-Dochazka-CLI
 - t/cmd_admin/employee.t: add test cases for EMPLOYEE_SPEC SUPERVISOR _TERM
 - Commands/Employee.pm: make EMPLOYEE_SPEC SUPERVISOR _TERM output prett
 
+0.213  2015-07-31 11:14 CEST
+- Commands/Interval.pm: implement a _fillup_dry_run() function to help fetch
+  and format fillup intervals
+- bin/dochazka-cli: reinstate --debug parameter
+
