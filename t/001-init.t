@@ -110,7 +110,7 @@ my ( $cmd, $rv, $rv_type, $status );
 $rv = init_unit();
 $rv_type = ref( $rv );
 if ( $rv_type ne 'App::CELL::Status' or $rv->not_ok ) {
-    diag "init_cli_client returned unexpected status:";
+    diag "init_unit returned unexpected status:";
     diag( Dumper $rv );
     BAIL_OUT(0);
 }
