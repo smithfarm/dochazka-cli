@@ -1004,7 +1004,10 @@ Revision history for App-Dochazka-CLI
 - bin/dochazka-cli: reinstate --debug parameter
 
 0.214  2015-07-31 23:22 CEST
-- worked on https://github.com/smithfarm/dochazka-cli/issues/12
+- work on https://github.com/smithfarm/dochazka-cli/issues/12
   - Commands/Interval.pm: fix syntax errors introduced in 0.213
   - Commands/Interval.pm: make _fillup_dry_run() return prettier output
+
+0.215  2015-08-02 16:57 CEST
+- Build.PL: require latest version of Web::MREST:CLI
 
