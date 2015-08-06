@@ -109,6 +109,7 @@ our $regex_map = {
     FULLNAME  => '(ful\S*)',
     GET       => '(get\S*)',
     HISTORY   => '(his\S*)',
+    HOLIDAY   => '(hol\S*)',
     HTML      => '(htm\S*)',
     IID       => '(iid\S*)',
     IMPORT    => '(imp\S*)',

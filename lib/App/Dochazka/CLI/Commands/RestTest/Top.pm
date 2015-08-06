@@ -148,12 +148,22 @@ sub _method_echo {
     
     return [ $method, 'echo', $th->{_REST} ];
 } 
+
 # $METHOD FORBIDDEN
 sub _method_forbidden {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     
     return [ $method, 'forbidden', $th->{_REST} ];
+}
+
+# $METHOD HOLIDAY _TSRANGE
+sub _method_holiday_tsrange {
+    my ( $ts, $th ) = @_;
+    my $method = $ts->[0];
+    my $tsrange = $th->{_TSRANGE};
+    
+    return [ $method, "holiday/$tsrange", $th->{_REST} ];
 }
 
 # $METHOD NOOP
