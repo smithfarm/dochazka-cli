@@ -17,7 +17,7 @@
       "build" : {
          "requires" : {
             "App::CELL" : "0.209",
-            "App::Dochazka::Common" : "0.189",
+            "App::Dochazka::Common" : "0.192",
             "Date::Calc" : "0",
             "Params::Validate" : "1.06",
             "Test::Fatal" : "0",
@@ -33,7 +33,7 @@
       "runtime" : {
          "requires" : {
             "App::CELL" : "0.209",
-            "App::Dochazka::Common" : "0.189",
+            "App::Dochazka::Common" : "0.192",
             "Date::Calc" : "0",
             "File::HomeDir" : "0",
             "File::ShareDir" : "1.00",
@@ -54,7 +54,7 @@
    "provides" : {
       "App::Dochazka::CLI" : {
          "file" : "lib/App/Dochazka/CLI.pm",
-         "version" : "0.215"
+         "version" : "0.216"
       },
       "App::Dochazka::CLI::CommandMap" : {
          "file" : "lib/App/Dochazka/CLI/CommandMap.pm"
@@ -82,7 +82,7 @@
       },
       "App::Dochazka::CLI::Guide" : {
          "file" : "lib/App/Dochazka/CLI/Guide.pm",
-         "version" : "0.215"
+         "version" : "0.216"
       },
       "App::Dochazka::CLI::Parser" : {
          "file" : "lib/App/Dochazka/CLI/Parser.pm"
@@ -112,5 +112,5 @@
          "url" : "https://github.com/smithfarm/dochazka-cli"
       }
    },
-   "version" : "0.215"
+   "version" : "0.216"
 }

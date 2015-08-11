@@ -1011,3 +1011,9 @@ Revision history for App-Dochazka-CLI
 0.215  2015-08-02 16:57 CEST
 - Build.PL: require latest version of Web::MREST:CLI
 
+0.216  2015-08-11 19:05 CEST
+- Commands/Interval.pm: add _interval_fillup_delete_print() helper function
+- Commands/Interval.pm: remove "fetch_" from function names
+- Build.PL: require newest App::Dochazka::Common
+- Implement GET HOLIDAY $TSRANGE command
+
