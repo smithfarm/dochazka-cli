@@ -433,201 +433,201 @@ note( "Interval fetch and fillup" );
 
 note( $cmd = "INTERVAL your text here or there" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_promptdate' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_promptdate' ); 
 
 note( $cmd = "EMPLOYEE=orc6e INTERVAL your text here or there" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_promptdate' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_promptdate' ); 
 
 note( $cmd = "INTERVAL FETCH" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_promptdate' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_promptdate' ); 
 
 note( $cmd = "EMPLOYEE=orc6e INTERVAL FETCH" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_promptdate' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_promptdate' ); 
 
 note( $cmd = "INTERVAL FILLUP" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_promptdate' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_promptdate' ); 
 
 note( $cmd = "EMPLOYEE=orc6e INTERVAL FILLUP" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_promptdate' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_promptdate' ); 
 
 note( $cmd = "INTERVAL TOMORROW" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date' ); 
 
 note( $cmd = "EMPLOYEE=orc6e INTERVAL TOMORROW" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date' ); 
 
 note( $cmd = "INTERVAL FETCH 77-1-3" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date' ); 
 
 note( $cmd = "EMPLOYEE=orc6e INTERVAL FETCH 77-1-3" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date' ); 
 
 note( $cmd = "INTERVAL FILLUP 77-1-3" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date' ); 
 
 note( $cmd = "EMPLOYEE=orc6e INTERVAL FILLUP 77-1-3" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date' ); 
 
 note( $cmd = "INTERVAL 77-1-3 78-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "EMPLOYEE=33 INTERVAL +1 2078-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "INTERVAL FETCH 77-1-3 78-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "EMPLOYEE=33 INTERVAL FETCH +1 2078-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "INTERVAL FILLUP 77-1-3 78-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "EMPLOYEE=33 INTERVAL FILLUP +1 2078-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "INTERVAL 77-1-3 - 78-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "EMPLOYEE=33 INTERVAL +1 - -1" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "INTERVAL FETCH 77-1-3 - 78-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "EMPLOYEE=33 INTERVAL FETCH -15 - +0" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "INTERVAL FILLUP 77-1-3 - 78-12-15" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "EMPLOYEE=33 INTERVAL FILLUP -15 - +0" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_date_date1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_date_date1' ); 
 
 note( $cmd = "INTERVAL JUNE" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL JUNE" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "INTERVAL FETCH decmer" ); # only the first three characters
                                         # of the month are significant
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL FETCH JUNE" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "INTERVAL FILLUP decmer" ); # only the first three characters
                                         # of the month are significant
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL FILLUP JUNE" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "INTERVAL JUNE 2015" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL JUNE 1933" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "INTERVAL FETCH decmer 33" ); # only the first three characters
                                         # of the month are significant
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL FETCH JUNE 43523" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "INTERVAL FILLUP decmer 33" ); # only the first three characters
                                         # of the month are significant
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL FILLUP JUNE 43523" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_month' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_month' ); 
 
 note( $cmd = "INTERVAL 6" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL 6" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "INTERVAL FETCH 12" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL FETCH 34" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "INTERVAL FILLUP 12" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL FILLUP 34" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "INTERVAL 6 2015" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL 6 1933" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "INTERVAL FETCH 12 33" ); # only the first three characters
                                         # of the month are significant
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL FETCH 6 43523" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "INTERVAL FILLUP 12 33" ); # only the first three characters
                                         # of the month are significant
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 note( $cmd = "EMPLOYEE=0 INTERVAL FILLUP 6 43523" );
 $r = parse( $cmd );
-do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_fetch_num_num1' ); 
+do_parse_test( $r->{'nc'}, 'App::Dochazka::CLI::Commands::Interval::interval_num_num1' ); 
 
 
 note( "Interval adding" );

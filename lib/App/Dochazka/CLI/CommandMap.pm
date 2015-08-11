@@ -64,11 +64,11 @@ use App::Dochazka::CLI::Commands::History qw(
     set_history_remark
 );
 use App::Dochazka::CLI::Commands::Interval qw(
-    interval_fetch_date
-    interval_fetch_date_date1
-    interval_fetch_month
-    interval_fetch_num_num1
-    interval_fetch_promptdate
+    interval_date
+    interval_date_date1
+    interval_month
+    interval_num_num1
+    interval_promptdate
     interval_new_date_time_date1_time1
     interval_new_time_time1
     interval_new_timerange
@@ -629,58 +629,60 @@ our $dispatch_map = {
     # Interval commands
 
     # fetch/fillup intervals
-    "INTERVAL" => \&interval_fetch_promptdate,
-    "EMPLOYEE_SPEC INTERVAL" => \&interval_fetch_promptdate,
-    "INTERVAL FETCH" => \&interval_fetch_promptdate,
-    "EMPLOYEE_SPEC INTERVAL FETCH" => \&interval_fetch_promptdate,
-    "INTERVAL FILLUP" => \&interval_fetch_promptdate,
-    "EMPLOYEE_SPEC INTERVAL FILLUP" => \&interval_fetch_promptdate,
+    "INTERVAL" => \&interval_promptdate,
+    "EMPLOYEE_SPEC INTERVAL" => \&interval_promptdate,
+    "INTERVAL FETCH" => \&interval_promptdate,
+    "EMPLOYEE_SPEC INTERVAL FETCH" => \&interval_promptdate,
+    "INTERVAL FILLUP" => \&interval_promptdate,
+    "EMPLOYEE_SPEC INTERVAL FILLUP" => \&interval_promptdate,
 
-    "INTERVAL _DATE" => \&interval_fetch_date,
-    "EMPLOYEE_SPEC INTERVAL _DATE" => \&interval_fetch_date,
-    "INTERVAL FETCH _DATE" => \&interval_fetch_date,
-    "EMPLOYEE_SPEC INTERVAL FETCH _DATE" => \&interval_fetch_date,
-    "INTERVAL FILLUP _DATE" => \&interval_fetch_date,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _DATE" => \&interval_fetch_date,
+    "INTERVAL _DATE" => \&interval_date,
+    "EMPLOYEE_SPEC INTERVAL _DATE" => \&interval_date,
+    "INTERVAL FETCH _DATE" => \&interval_date,
+    "EMPLOYEE_SPEC INTERVAL FETCH _DATE" => \&interval_date,
+    "INTERVAL FILLUP _DATE" => \&interval_date,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _DATE" => \&interval_date,
+    "INTERVAL DELETE _DATE" => \&interval_date,
+    "EMPLOYEE_SPEC INTERVAL DELETE _DATE" => \&interval_date,
 
-    "INTERVAL _DATE _DATE1" => \&interval_fetch_date_date1,
-    "EMPLOYEE_SPEC INTERVAL _DATE _DATE1" => \&interval_fetch_date_date1,
-    "INTERVAL FETCH _DATE _DATE1" => \&interval_fetch_date_date1,
-    "EMPLOYEE_SPEC INTERVAL FETCH _DATE _DATE1" => \&interval_fetch_date_date1,
-    "INTERVAL FILLUP _DATE _DATE1" => \&interval_fetch_date_date1,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _DATE _DATE1" => \&interval_fetch_date_date1,
-    "INTERVAL _DATE _HYPHEN _DATE1" => \&interval_fetch_date_date1,
-    "EMPLOYEE_SPEC INTERVAL _DATE _HYPHEN _DATE1" => \&interval_fetch_date_date1,
-    "INTERVAL FETCH _DATE _HYPHEN _DATE1" => \&interval_fetch_date_date1,
-    "EMPLOYEE_SPEC INTERVAL FETCH _DATE _HYPHEN _DATE1" => \&interval_fetch_date_date1,
-    "INTERVAL FILLUP _DATE _HYPHEN _DATE1" => \&interval_fetch_date_date1,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _DATE _HYPHEN _DATE1" => \&interval_fetch_date_date1,
+    "INTERVAL _DATE _DATE1" => \&interval_date_date1,
+    "EMPLOYEE_SPEC INTERVAL _DATE _DATE1" => \&interval_date_date1,
+    "INTERVAL FETCH _DATE _DATE1" => \&interval_date_date1,
+    "EMPLOYEE_SPEC INTERVAL FETCH _DATE _DATE1" => \&interval_date_date1,
+    "INTERVAL FILLUP _DATE _DATE1" => \&interval_date_date1,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _DATE _DATE1" => \&interval_date_date1,
+    "INTERVAL _DATE _HYPHEN _DATE1" => \&interval_date_date1,
+    "EMPLOYEE_SPEC INTERVAL _DATE _HYPHEN _DATE1" => \&interval_date_date1,
+    "INTERVAL FETCH _DATE _HYPHEN _DATE1" => \&interval_date_date1,
+    "EMPLOYEE_SPEC INTERVAL FETCH _DATE _HYPHEN _DATE1" => \&interval_date_date1,
+    "INTERVAL FILLUP _DATE _HYPHEN _DATE1" => \&interval_date_date1,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _DATE _HYPHEN _DATE1" => \&interval_date_date1,
 
-    "INTERVAL _MONTH" => \&interval_fetch_month,
-    "EMPLOYEE_SPEC INTERVAL _MONTH" => \&interval_fetch_month,
-    "INTERVAL FETCH _MONTH" => \&interval_fetch_month,
-    "EMPLOYEE_SPEC INTERVAL FETCH _MONTH" => \&interval_fetch_month,
-    "INTERVAL FILLUP _MONTH" => \&interval_fetch_month,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH" => \&interval_fetch_month,
-    "INTERVAL _MONTH _NUM" => \&interval_fetch_month,
-    "EMPLOYEE_SPEC INTERVAL _MONTH _NUM" => \&interval_fetch_month,
-    "INTERVAL FETCH _MONTH _NUM" => \&interval_fetch_month,
-    "EMPLOYEE_SPEC INTERVAL FETCH _MONTH _NUM" => \&interval_fetch_month,
-    "INTERVAL FILLUP _MONTH _NUM" => \&interval_fetch_month,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH _NUM" => \&interval_fetch_month,
+    "INTERVAL _MONTH" => \&interval_month,
+    "EMPLOYEE_SPEC INTERVAL _MONTH" => \&interval_month,
+    "INTERVAL FETCH _MONTH" => \&interval_month,
+    "EMPLOYEE_SPEC INTERVAL FETCH _MONTH" => \&interval_month,
+    "INTERVAL FILLUP _MONTH" => \&interval_month,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH" => \&interval_month,
+    "INTERVAL _MONTH _NUM" => \&interval_month,
+    "EMPLOYEE_SPEC INTERVAL _MONTH _NUM" => \&interval_month,
+    "INTERVAL FETCH _MONTH _NUM" => \&interval_month,
+    "EMPLOYEE_SPEC INTERVAL FETCH _MONTH _NUM" => \&interval_month,
+    "INTERVAL FILLUP _MONTH _NUM" => \&interval_month,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH _NUM" => \&interval_month,
 
-    "INTERVAL _NUM" => \&interval_fetch_num_num1,
-    "EMPLOYEE_SPEC INTERVAL _NUM" => \&interval_fetch_num_num1,
-    "INTERVAL FETCH _NUM" => \&interval_fetch_num_num1,
-    "EMPLOYEE_SPEC INTERVAL FETCH _NUM" => \&interval_fetch_num_num1,
-    "INTERVAL FILLUP _NUM" => \&interval_fetch_num_num1,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _NUM" => \&interval_fetch_num_num1,
-    "INTERVAL _NUM _NUM1" => \&interval_fetch_num_num1,
-    "EMPLOYEE_SPEC INTERVAL _NUM _NUM1" => \&interval_fetch_num_num1,
-    "INTERVAL FETCH _NUM _NUM1" => \&interval_fetch_num_num1,
-    "EMPLOYEE_SPEC INTERVAL FETCH _NUM _NUM1" => \&interval_fetch_num_num1,
-    "INTERVAL FILLUP _NUM _NUM1" => \&interval_fetch_num_num1,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _NUM _NUM1" => \&interval_fetch_num_num1,
+    "INTERVAL _NUM" => \&interval_num_num1,
+    "EMPLOYEE_SPEC INTERVAL _NUM" => \&interval_num_num1,
+    "INTERVAL FETCH _NUM" => \&interval_num_num1,
+    "EMPLOYEE_SPEC INTERVAL FETCH _NUM" => \&interval_num_num1,
+    "INTERVAL FILLUP _NUM" => \&interval_num_num1,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _NUM" => \&interval_num_num1,
+    "INTERVAL _NUM _NUM1" => \&interval_num_num1,
+    "EMPLOYEE_SPEC INTERVAL _NUM _NUM1" => \&interval_num_num1,
+    "INTERVAL FETCH _NUM _NUM1" => \&interval_num_num1,
+    "EMPLOYEE_SPEC INTERVAL FETCH _NUM _NUM1" => \&interval_num_num1,
+    "INTERVAL FILLUP _NUM _NUM1" => \&interval_num_num1,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _NUM _NUM1" => \&interval_num_num1,
 
     # add/insert new intervals
     "INTERVAL _TIME _TIME1 _TERM" => \&interval_new_time_time1,
