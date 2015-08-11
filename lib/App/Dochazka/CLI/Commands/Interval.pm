@@ -86,11 +86,11 @@ our %month_map = (
 );
 
 our @EXPORT_OK = qw( 
-    interval_fetch_date
-    interval_fetch_date_date1
-    interval_fetch_month
-    interval_fetch_num_num1
-    interval_fetch_promptdate
+    interval_date
+    interval_date_date1
+    interval_month
+    interval_num_num1
+    interval_promptdate
     interval_new_date_time_date1_time1
     interval_new_time_time1
     interval_new_timerange
@@ -154,6 +154,8 @@ sub interval_new_time_time1 {
 
 =head3 interval_new_timerange
 
+    INTERVAL _TIMERANGE _TERM
+
 =cut
 
 sub interval_new_timerange {
@@ -175,7 +177,7 @@ sub interval_new_timerange {
 }
 
 
-=head3 interval_fetch_date
+=head3 interval_date
 
     INTERVAL _DATE
     EMPLOYEE_SPEC INTERVAL _DATE
@@ -183,11 +185,13 @@ sub interval_new_timerange {
     EMPLOYEE_SPEC INTERVAL FETCH _DATE
     INTERVAL FILLUP _DATE
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE
+    INTERVAL DELETE _DATE
+    EMPLOYEE_SPEC INTERVAL DELETE _DATE
 
 =cut
 
-sub interval_fetch_date {
-    print "Entering " . __PACKAGE__ . "::interval_fetch_date\n" if $debug_mode;
+sub interval_date {
+    print "Entering " . __PACKAGE__ . "::interval_date\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
@@ -199,25 +203,15 @@ sub interval_fetch_date {
     my $status = determine_employee( $th->{'EMPLOYEE_SPEC'} );
     return $status unless $status->ok;
     my $emp = $status->payload;
-    my $eid = $emp->eid;
 
     # determine date
     my $date = normalize_date( $th->{'_DATE'} );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date;
 
-    # assemble tsrange -- note round paren before lower timestamp
-    my $tsr = "( $date 00:00, $date 24:00 )";
-
-    if ( $th->{'FILLUP'} ) {
-        # fillup "dry run" - i.e. GET interval/fillup/...
-        return _fillup_dry_run( emp_obj => $emp, begin_date => $date, end_date => $date );
-    } else {
-        return _print_intervals_tsrange( $emp, $tsr );
-    }
+    return _interval_fillup_delete_print( $th, $emp, $date, $date );
 }
 
-
-=head3 interval_fetch_date_date1
+=head3 interval_date_date1
 
     INTERVAL _DATE _DATE1
     EMPLOYEE_SPEC INTERVAL _DATE _DATE1
@@ -225,17 +219,21 @@ sub interval_fetch_date {
     EMPLOYEE_SPEC INTERVAL FETCH _DATE _DATE1
     INTERVAL FILLUP _DATE _DATE1
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE _DATE1
+    INTERVAL DELETE _DATE _DATE1
+    EMPLOYEE_SPEC INTERVAL DELETE _DATE _DATE1
     INTERVAL _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL _DATE _HYPHEN _DATE1
     INTERVAL FETCH _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL FETCH _DATE _HYPHEN _DATE1
     INTERVAL FILLUP _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE _HYPHEN _DATE1
+    INTERVAL DELETE _DATE _HYPHEN _DATE1
+    EMPLOYEE_SPEC INTERVAL DELETE _DATE _HYPHEN _DATE1
 
 =cut
 
-sub interval_fetch_date_date1 {
-    print "Entering " . __PACKAGE__ . "::interval_fetch_date_date1\n" if $debug_mode;
+sub interval_date_date1 {
+    print "Entering " . __PACKAGE__ . "::interval_date_date1\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
@@ -247,7 +245,6 @@ sub interval_fetch_date_date1 {
     my $status = determine_employee( $th->{'EMPLOYEE_SPEC'} );
     return $status unless $status->ok;
     my $emp = $status->payload;
-    my $eid = $emp->eid;
 
     # determine date
     my $date = normalize_date( $th->{'_DATE'} );
@@ -255,16 +252,10 @@ sub interval_fetch_date_date1 {
     my $date1 = normalize_date( $th->{'_DATE1'} );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    # assemble tsrange -- note round paren before lower timestamp
-    my $tsr = "( $date 00:00, $date1 24:00 )";
-
-    return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( emp_obj => $emp, begin_date => $date, end_date => $date1 )
-        : _print_intervals_tsrange( $emp, $tsr );
+    return _interval_fillup_delete_print( $th, $emp, $date, $date1 );
 }
 
-
-=head3 interval_fetch_month
+=head3 interval_month
 
     INTERVAL _MONTH [_NUM]
     EMPLOYEE_SPEC INTERVAL _MONTH [_NUM]
@@ -272,11 +263,13 @@ sub interval_fetch_date_date1 {
     EMPLOYEE_SPEC INTERVAL FETCH _MONTH [_NUM]
     INTERVAL FILLUP _MONTH [_NUM]
     EMPLOYEE_SPEC INTERVAL FILLUP _MONTH [_NUM]
+    INTERVAL DELETE _MONTH [_NUM]
+    EMPLOYEE_SPEC INTERVAL DELETE _MONTH [_NUM]
 
 =cut
 
-sub interval_fetch_month {
-    print "Entering " . __PACKAGE__ . "::interval_fetch_month\n" if $debug_mode;
+sub interval_month {
+    print "Entering " . __PACKAGE__ . "::interval_month\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
@@ -288,7 +281,6 @@ sub interval_fetch_month {
     my $status = determine_employee( $th->{'EMPLOYEE_SPEC'} );
     return $status unless $status->ok;
     my $emp = $status->payload;
-    my $eid = $emp->eid;
 
     # determine lower and upper bounds
     # - month
@@ -304,16 +296,10 @@ sub interval_fetch_month {
                                 Days_in_Month( $year, $nmonth ) );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    # assemble tsrange -- note round paren before lower timestamp
-    my $tsr = "( $date 00:00, $date1 24:00 )";
-
-    return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( emp_obj => $emp, begin_date => $date, end_date => $date1 )
-        : _print_intervals_tsrange( $emp, $tsr );
+    return _interval_fillup_delete_print( $th, $emp, $date, $date1 );
 }
 
-
-=head3 interval_fetch_num_num1
+=head3 interval_num_num1
 
     INTERVAL _NUM [_NUM1]
     EMPLOYEE_SPEC INTERVAL _NUM [_NUM1]
@@ -321,11 +307,13 @@ sub interval_fetch_month {
     EMPLOYEE_SPEC INTERVAL FETCH _NUM [_NUM1]
     INTERVAL FILLUP _NUM [_NUM1]
     EMPLOYEE_SPEC INTERVAL FILLUP _NUM [_NUM1]
+    INTERVAL DELETE _NUM [_NUM1]
+    EMPLOYEE_SPEC INTERVAL DELETE _NUM [_NUM1]
 
 =cut
 
-sub interval_fetch_num_num1 {
-    print "Entering " . __PACKAGE__ . "::interval_fetch_num_num1\n" if $debug_mode;
+sub interval_num_num1 {
+    print "Entering " . __PACKAGE__ . "::interval_num_num1\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
@@ -337,7 +325,6 @@ sub interval_fetch_num_num1 {
     my $status = determine_employee( $th->{'EMPLOYEE_SPEC'} );
     return $status unless $status->ok;
     my $emp = $status->payload;
-    my $eid = $emp->eid;
 
     # determine lower and upper bounds
     # - numeric month
@@ -356,16 +343,10 @@ sub interval_fetch_num_num1 {
                                 Days_in_Month( $year, $nmonth ) );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    # assemble tsrange -- note round paren before lower timestamp
-    my $tsr = "( $date 00:00, $date1 24:00 )";
-
-    return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( emp_obj => $emp, begin_date => $date, end_date => $date1 )
-        : _print_intervals_tsrange( $emp, $tsr );
+    return _interval_fillup_delete_print( $th, $emp, $date, $date1 );
 }
 
-
-=head3 interval_fetch_promptdate
+=head3 interval_promptdate
 
     INTERVAL
     EMPLOYEE_SPEC INTERVAL
@@ -373,11 +354,13 @@ sub interval_fetch_num_num1 {
     EMPLOYEE_SPEC INTERVAL FETCH
     INTERVAL FILLUP
     EMPLOYEE_SPEC INTERVAL FILLUP
+    INTERVAL DELETE
+    EMPLOYEE_SPEC INTERVAL DELETE
 
 =cut
 
-sub interval_fetch_promptdate {
-    print "Entering " . __PACKAGE__ . "::interval_fetch_promptdate\n" if $debug_mode;
+sub interval_promptdate {
+    print "Entering " . __PACKAGE__ . "::interval_promptdate\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
@@ -389,14 +372,22 @@ sub interval_fetch_promptdate {
     my $status = determine_employee( $th->{'EMPLOYEE_SPEC'} );
     return $status unless $status->ok;
     my $emp = $status->payload;
-    my $eid = $emp->eid;
 
-    # assemble tsrange -- note round paren before lower timestamp
-    my $tsr = "( $prompt_date 00:00, $prompt_date 24:00 )";
+    return _interval_fillup_delete_print( $th, $emp, $prompt_date, $prompt_date );
+}
 
-    return ( $th->{'FILLUP'} )
-        ? _fillup_dry_run( emp_obj => $emp, begin_date => $prompt_date, end_date => $prompt_date )
-        : _print_intervals_tsrange( $emp, $tsr );
+sub _interval_fillup_delete_print {
+    my ( $th, $emp, $date, $date1 ) = @_;
+
+    my $tsr = "( $date 00:00, $date1 24:00 )";
+
+    if ( $th->{'FILLUP'} ) {
+        return _fillup_dry_run( emp_obj => $emp, tsrange => $tsr );
+    } elsif ( $th->{'DELETE'} ) {
+        return _delete_intervals_tsrange( $emp->eid, $tsr );
+    } else {
+        return _print_intervals_tsrange( $emp, $tsr );
+    }
 }
 
 
@@ -545,6 +536,9 @@ sub _print_intervals_tsrange {
     my $nick = $emp->nick;
 
     my $status = send_req( 'GET', "interval/eid/$eid/$tsr" );
+    if ( $status->not_ok and $status->code eq 'DISPATCH_NOTHING_IN_TSRANGE' ) {
+        return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $status->text );
+    }
     return rest_error( $status, "Get intervals for employee $nick (EID $eid) in range $tsr" ) 
         unless $status->ok;
 
@@ -580,6 +574,20 @@ sub _begin_and_end_from_intvl {
     return ( "$d0 $t0", "$d1 $t1" );
 }
 
+=head3 _delete_intervals_tsrange
+
+Given an EID and a tsrange, delete all matching intervals
+
+=cut
+
+sub _delete_intervals_tsrange {
+    my ( $eid, $tsr ) = @_;
+    my $status = send_req( 'DELETE', "interval/eid/$eid/$tsr" );
+    return $status unless $status->ok;
+    my $count = $status->payload;
+    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
+        payload => "$count intervals deleted in range $tsr" );
+}
 
 =head3 _fillup_dry_run
 
@@ -588,27 +596,25 @@ sub _begin_and_end_from_intvl {
 sub _fillup_dry_run {
     my ( %ARGS ) = validate( @_, {
         emp_obj => { can => [ 'eid', 'nick' ] },
-        begin_date => { type => SCALAR },
-        end_date => { type => SCALAR },
+        tsrange => { type => SCALAR },
     } );
     my $eid = $ARGS{emp_obj}->eid;
     my $nick = $ARGS{emp_obj}->nick;
     my $heading1 = "INTERVAL FILLUP (dry run) for $nick (EID $eid)";
-    my $heading2 = "from $ARGS{begin_date} to $ARGS{end_date}";
+    my $heading2 = "tsrange $ARGS{tsrange}";
 
-    my $status = send_req( 'GET', "interval/fillup/eid/$eid/$ARGS{begin_date}/$ARGS{end_date}" );
+    my $status = send_req( 'GET', "interval/fillup/eid/$eid/$ARGS{tsrange}" );
     return rest_error( $status, "$heading1 $heading2" ) unless $status->ok;
 
     my $pl = '';
     $pl .= "$heading1\n";
     $pl .= "$heading2\n\n";
 
-    my $t = Text::Table->new( 'Begin', 'End' );
+    my $t = Text::Table->new( 'IID', 'Tsrange' );
     for my $int ( @{ $status->payload } ) {
-        my ( $begin, $end ) = $int =~ m/\[\s+(\S+ \S+),\s+(\S+ \S+)\s+\)/;
         $t->add( 
-            $begin,
-            $end,
+            $int->{iid},
+            $int->{intvl},
         );
     }
     $pl .= $t;

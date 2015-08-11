@@ -61,9 +61,8 @@ note( 'INTERVAL displays today\'s intervals (but there are none)' );
 $cmd = "INTERVAL";
 $rv = process_command( $cmd );
 is( ref( $rv ), 'App::CELL::Status' );
-is( $rv->level, 'ERR' );
-is( $rv->{'http_status'}, '404 Not Found' );
-is( $rv->code, 'REST_ERROR' );
+is( $rv->level, 'OK' );
+like( $rv->payload, qr/No attendance intervals found in tsrange/ );
 
 my $iid;
 
