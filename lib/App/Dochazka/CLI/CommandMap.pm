@@ -66,6 +66,7 @@ use App::Dochazka::CLI::Commands::History qw(
 use App::Dochazka::CLI::Commands::Interval qw(
     interval_date
     interval_date_date1
+    interval_fillup_tsrange
     interval_month
     interval_num_num1
     interval_promptdate
@@ -683,6 +684,9 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FETCH _NUM _NUM1" => \&interval_num_num1,
     "INTERVAL FILLUP _NUM _NUM1" => \&interval_num_num1,
     "EMPLOYEE_SPEC INTERVAL FILLUP _NUM _NUM1" => \&interval_num_num1,
+
+    "INTERVAL FILLUP _TSRANGE" => \&interval_fillup_tsrange,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE" => \&interval_fillup_tsrange,
 
     # add/insert new intervals
     "INTERVAL _TIME _TIME1 _TERM" => \&interval_new_time_time1,

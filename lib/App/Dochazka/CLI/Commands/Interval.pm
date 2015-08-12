@@ -88,6 +88,7 @@ our %month_map = (
 our @EXPORT_OK = qw( 
     interval_date
     interval_date_date1
+    interval_fillup_tsrange
     interval_month
     interval_num_num1
     interval_promptdate
@@ -208,7 +209,7 @@ sub interval_date {
     my $date = normalize_date( $th->{'_DATE'} );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date;
 
-    return _interval_fillup_delete_print( $th, $emp, $date, $date );
+    return _interval_fillup_delete_print( $th, $emp, "( $date 00:00, $date 24:00 )" );
 }
 
 =head3 interval_date_date1
@@ -252,7 +253,7 @@ sub interval_date_date1 {
     my $date1 = normalize_date( $th->{'_DATE1'} );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    return _interval_fillup_delete_print( $th, $emp, $date, $date1 );
+    return _interval_fillup_delete_print( $th, $emp, "( $date 00:00, $date1 24:00 )" );
 }
 
 =head3 interval_month
@@ -296,7 +297,7 @@ sub interval_month {
                                 Days_in_Month( $year, $nmonth ) );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    return _interval_fillup_delete_print( $th, $emp, $date, $date1 );
+    return _interval_fillup_delete_print( $th, $emp, "( $date 00:00, $date1 24:00 )" );
 }
 
 =head3 interval_num_num1
@@ -343,8 +344,33 @@ sub interval_num_num1 {
                                 Days_in_Month( $year, $nmonth ) );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    return _interval_fillup_delete_print( $th, $emp, $date, $date1 );
+    return _interval_fillup_delete_print( $th, $emp, "( $date 00:00, $date1 24:00 )" );
 }
+
+=head3 interval_fillup_tsrange
+
+    INTERVAL FILLUP _TSRANGE
+    EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE
+
+=cut
+
+sub interval_fillup_tsrange {
+    print "Entering " . __PACKAGE__ . "::interval_fillup_tsrange\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    print Dumper( $th ) if $debug_mode;
+
+    # determine employee
+    my $status = determine_employee( $th->{'EMPLOYEE_SPEC'} );
+    return $status unless $status->ok;
+    my $emp = $status->payload;
+    
+    return _interval_fillup_delete_print( $th, $emp, $th->{_TSRANGE} );
+}
+
 
 =head3 interval_promptdate
 
@@ -373,13 +399,11 @@ sub interval_promptdate {
     return $status unless $status->ok;
     my $emp = $status->payload;
 
-    return _interval_fillup_delete_print( $th, $emp, $prompt_date, $prompt_date );
+    return _interval_fillup_delete_print( $th, $emp, "( $prompt_date 00:00, $prompt_date 24:00 )" );
 }
 
 sub _interval_fillup_delete_print {
-    my ( $th, $emp, $date, $date1 ) = @_;
-
-    my $tsr = "( $date 00:00, $date1 24:00 )";
+    my ( $th, $emp, $tsr ) = @_;
 
     if ( $th->{'FILLUP'} ) {
         return _fillup_dry_run( emp_obj => $emp, tsrange => $tsr );
