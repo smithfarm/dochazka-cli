@@ -637,8 +637,8 @@ sub _fillup_dry_run {
     my $t = Text::Table->new( 'IID', 'Tsrange' );
     for my $int ( @{ $status->payload } ) {
         $t->add( 
-            $int->{iid},
-            $int->{intvl},
+            '',
+            $int,
         );
     }
     $pl .= $t;
