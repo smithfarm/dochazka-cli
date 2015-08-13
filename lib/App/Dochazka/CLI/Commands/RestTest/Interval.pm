@@ -67,10 +67,9 @@ sub _method_interval_fillup_eid {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     my $eid = $th->{_NUM};
-    my $lower = $th->{_DATE};
-    my $upper = $th->{_DATE1};
+    my $tsr = $th->{_TSRANGE};
 
-    return [ $method, "interval/fillup/eid/$eid/$lower/$upper", $th->{_REST} ];
+    return [ $method, "interval/fillup/eid/$eid/$tsr", $th->{_REST} ];
 }
 
 # $METHOD interval fillup nick $TERM $LOWER_DATE $UPPER_DATE
@@ -78,20 +77,18 @@ sub _method_interval_fillup_nick {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     my $nick = $th->{_TERM};
-    my $lower = $th->{_DATE};
-    my $upper = $th->{_DATE1};
+    my $tsr = $th->{_TSRANGE};
 
-    return [ $method, "interval/fillup/nick/$nick/$lower/$upper", $th->{_REST} ];
+    return [ $method, "interval/fillup/nick/$nick/$tsr", $th->{_REST} ];
 }
 
 # $METHOD interval fillup self $LOWER_DATE $UPPER_DATE
 sub _method_interval_fillup_self {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    my $lower = $th->{_DATE};
-    my $upper = $th->{_DATE1};
+    my $tsr = $th->{_TSRANGE};
 
-    return [ $method, "interval/fillup/self/$lower/$upper", $th->{_REST} ];
+    return [ $method, "interval/fillup/self/$tsr", $th->{_REST} ];
 }
 
 # $METHOD interval iid $IID $JSON
