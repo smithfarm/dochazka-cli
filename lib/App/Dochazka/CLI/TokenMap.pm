@@ -84,6 +84,7 @@ our $regex_map = {
     BUGREPORT => '(bug\S*)',
     CLEAR     => '(cle\S*)',
     CODE      => '(cod\S*)',
+    COMMIT    => '(com\S*)',
     COOKIEJAR => '(coo\S*)',
     CORE      => '(cor\S*)',
     COUNT     => '(cou\S*)',
