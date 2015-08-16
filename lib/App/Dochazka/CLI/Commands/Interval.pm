@@ -209,7 +209,7 @@ sub interval_date {
     my $date = normalize_date( $th->{'_DATE'} );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date;
 
-    return _interval_fillup_delete_print( $th, $emp, "( $date 00:00, $date 24:00 )" );
+    return _interval_fillup_delete_print( $th, $emp, "[ $date 00:00, $date 24:00 )" );
 }
 
 =head3 interval_date_date1
@@ -253,7 +253,7 @@ sub interval_date_date1 {
     my $date1 = normalize_date( $th->{'_DATE1'} );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    return _interval_fillup_delete_print( $th, $emp, "( $date 00:00, $date1 24:00 )" );
+    return _interval_fillup_delete_print( $th, $emp, "[ $date 00:00, $date1 24:00 )" );
 }
 
 =head3 interval_month
@@ -297,7 +297,7 @@ sub interval_month {
                                 Days_in_Month( $year, $nmonth ) );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    return _interval_fillup_delete_print( $th, $emp, "( $date 00:00, $date1 24:00 )" );
+    return _interval_fillup_delete_print( $th, $emp, "[ $date 00:00, $date1 24:00 )" );
 }
 
 =head3 interval_num_num1
@@ -344,7 +344,7 @@ sub interval_num_num1 {
                                 Days_in_Month( $year, $nmonth ) );
     return $CELL->status_err( 'DOCHAZKA_CLI_INVALID_DATE' ) unless $date1;
 
-    return _interval_fillup_delete_print( $th, $emp, "( $date 00:00, $date1 24:00 )" );
+    return _interval_fillup_delete_print( $th, $emp, "[ $date 00:00, $date1 24:00 )" );
 }
 
 =head3 interval_fillup_tsrange
@@ -399,14 +399,17 @@ sub interval_promptdate {
     return $status unless $status->ok;
     my $emp = $status->payload;
 
-    return _interval_fillup_delete_print( $th, $emp, "( $prompt_date 00:00, $prompt_date 24:00 )" );
+    return _interval_fillup_delete_print( $th, $emp, "[ $prompt_date 00:00, $prompt_date 24:00 )" );
 }
 
 sub _interval_fillup_delete_print {
     my ( $th, $emp, $tsr ) = @_;
 
     if ( $th->{'FILLUP'} ) {
-        return _fillup_dry_run( emp_obj => $emp, tsrange => $tsr );
+        my $dry = exists( $th->{'COMMIT'} )
+            ? 0
+            : 1;
+        return _fillup( emp_obj => $emp, tsrange => $tsr, dry_run => $dry );
     } elsif ( $th->{'DELETE'} ) {
         return _delete_intervals_tsrange( $emp->eid, $tsr );
     } else {
@@ -613,33 +616,44 @@ sub _delete_intervals_tsrange {
         payload => "$count intervals deleted in range $tsr" );
 }
 
-=head3 _fillup_dry_run
+=head3 _fillup
 
 =cut
 
-sub _fillup_dry_run {
+sub _fillup {
     my ( %ARGS ) = validate( @_, {
         emp_obj => { can => [ 'eid', 'nick' ] },
         tsrange => { type => SCALAR },
+        dry_run => { type => SCALAR },
     } );
     my $eid = $ARGS{emp_obj}->eid;
     my $nick = $ARGS{emp_obj}->nick;
-    my $heading1 = "INTERVAL FILLUP (dry run) for $nick (EID $eid)";
+    my $heading1 = "INTERVAL FILLUP " . ( $ARGS{dry_run} ? '(dry run)' : '' ) . " for $nick (EID $eid)";
     my $heading2 = "tsrange $ARGS{tsrange}";
+    my $method = $ARGS{dry_run}
+        ? 'GET'
+        : 'POST';
 
-    my $status = send_req( 'GET', "interval/fillup/eid/$eid/$ARGS{tsrange}" );
+    my $status = send_req( $method, "interval/fillup/eid/$eid/$ARGS{tsrange}" );
     return rest_error( $status, "$heading1 $heading2" ) unless $status->ok;
+
+    return $status unless $ARGS{dry_run};
 
     my $pl = '';
     $pl .= "$heading1\n";
     $pl .= "$heading2\n\n";
 
-    my $t = Text::Table->new( 'IID', 'Tsrange' );
-    for my $int ( @{ $status->payload } ) {
-        $t->add( 
-            '',
-            $int,
-        );
+    my $t;
+    if ( ref( $status->payload ) eq 'ARRAY' ) {
+        $t = Text::Table->new( 'IID', 'Tsrange' );
+        for my $int ( @{ $status->payload } ) {
+            $t->add( 
+                '',
+                $int,
+            );
+        }
+    } else {
+        $t = "No scheduled intervals in range";
     }
     $pl .= $t;
 
