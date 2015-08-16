@@ -42,11 +42,11 @@ App::Dochazka::CLI::Guide - Dochazka CLI Guide
 
 =head1 VERSION
 
-Version 0.216
+Version 0.217
 
 =cut
 
-our $VERSION = '0.216';
+our $VERSION = '0.217';
 
 
 

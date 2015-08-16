@@ -1017,3 +1017,11 @@ Revision history for App-Dochazka-CLI
 - Build.PL: require newest App::Dochazka::Common
 - Implement GET HOLIDAY $TSRANGE command
 
+0.217  2015-08-16 23:23 CEST
+- Implement INTERVAL FILLUP _TSRANGE command
+- Commands/Interval.pm: temporary fix for _fillup_dry_run() exception
+- CommandMap.pm: interval/fillup resources now take a tsrange instead of two dates
+- t/parser/rest_test.t: interval/fillup resources take a tsrange now
+- Add INTERVAL FETCH ... COMMIT commands
+- Commands/Interval.pm: make handlers commit-aware
+
