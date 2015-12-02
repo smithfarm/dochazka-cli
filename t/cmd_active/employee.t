@@ -104,7 +104,7 @@ $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'ERR' );
 is( $rv->code, 'REST_ERROR' );
-like( $rv->payload, qr/DOCHAZKA_ACL_VIOLATION/ );
+like( $rv->payload, qr/ACL_VIOLATION/ );
 is( $rv->{'http_status'}, '403 Forbidden' );
 
 # EMPLOYEE SET FULLNAME
@@ -113,7 +113,7 @@ $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'ERR' );
 is( $rv->code, 'REST_ERROR' );
-like( $rv->payload, qr/DOCHAZKA_ACL_VIOLATION/ );
+like( $rv->payload, qr/ACL_VIOLATION/ );
 is( $rv->{'http_status'}, '403 Forbidden' );
 
 done_testing;
