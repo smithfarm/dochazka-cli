@@ -1025,3 +1025,10 @@ Revision history for App-Dochazka-CLI
 - Add INTERVAL FETCH ... COMMIT commands
 - Commands/Interval.pm: make handlers commit-aware
 
+0.218 2015-13-11 12:13 CET
+- t/cmd_active/employee.t: fix check for ACL_VIOLATION
+- prerelease.sh: copy new prerelease script from REST
+- global: do not convert warnings into errors
+- tests: use Test::Warnings to check for unexpected warnings
+- update release and prerelease scripts
+
