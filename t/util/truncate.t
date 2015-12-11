@@ -37,7 +37,7 @@
 #!perl
 use 5.012;
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 
 use App::Dochazka::CLI::Util qw( truncate_to );
 use Data::Dumper;

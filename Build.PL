@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use 5.012000; # CPAN Testers
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 use Module::Build 0.37;
 
 my $build = Module::Build->new(

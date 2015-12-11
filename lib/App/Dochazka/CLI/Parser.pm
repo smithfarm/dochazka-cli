@@ -36,7 +36,7 @@ package App::Dochazka::CLI::Parser;
 
 use 5.012;
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 
 use App::CELL qw( $CELL );
 use App::Dochazka::CLI qw( $debug_mode );

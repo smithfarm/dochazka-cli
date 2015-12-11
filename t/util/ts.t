@@ -38,7 +38,7 @@
 #!perl
 use 5.012;
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 
 use App::Dochazka::Common qw( $t $today $tomorrow $yesterday );
 use App::Dochazka::CLI qw( $prompt_date $prompt_year $prompt_month $prompt_day );

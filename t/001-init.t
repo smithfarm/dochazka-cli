@@ -36,7 +36,7 @@
 #!perl
 use 5.012;
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 
 use App::Dochazka::CLI qw( $debug_mode );
 use App::Dochazka::CLI::Parser qw( process_command );

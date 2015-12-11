@@ -35,7 +35,7 @@
 #!perl
 use 5.012;
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 
 use App::Dochazka::CLI::Parser qw( generate_semantic_tree );
 use Data::Dumper;

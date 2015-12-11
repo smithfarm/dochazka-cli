@@ -35,7 +35,7 @@
 #!perl
 use 5.012;
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI qw( $prompt_date $prompt_century $prompt_year $prompt_month $prompt_day );

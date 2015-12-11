@@ -37,7 +37,7 @@
 #!perl
 use 5.012;
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
 use App::Dochazka::CLI qw( $current_emp $current_priv );
