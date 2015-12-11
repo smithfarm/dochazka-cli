@@ -49,6 +49,7 @@ use App::Dochazka::CLI::Util qw(
 );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 use Test::Fatal;
 
 my ( $status, $rv, $rv_type );

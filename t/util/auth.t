@@ -45,6 +45,7 @@ use App::Dochazka::CLI::Test qw( init_unit );
 use App::Dochazka::CLI::Util qw( authenticate_to_server );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 my ( $status, $rv, $rv_type );
 

@@ -49,6 +49,7 @@ use App::Dochazka::CLI::Util qw(
 );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 my ( $rd, $nd, $rt, $nt ); 
 

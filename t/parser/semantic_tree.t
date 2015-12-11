@@ -40,6 +40,7 @@ use warnings;
 use App::Dochazka::CLI::Parser qw( generate_semantic_tree );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 my ( $dm, $tree );
 

@@ -43,6 +43,7 @@ use App::Dochazka::CLI::Util qw( truncate_to );
 use Data::Dumper;
 use Test::Fatal;
 use Test::More;
+use Test::Warnings;
 
 note( 'truncate_to with undef' );
 is( truncate_to( undef ), undef, 'truncate_to undef returns undef 1' );

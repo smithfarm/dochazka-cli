@@ -40,6 +40,7 @@ use warnings;
 use App::Dochazka::CLI::Parser qw( possible_words $semantic_tree );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 my ( $ts, $pw );
 

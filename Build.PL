@@ -27,6 +27,7 @@ my $build = Module::Build->new(
         'App::Dochazka::Common'      => 0.192,
         'Date::Calc'         => 0,
         'Test::Fatal'        => 0,
+        'Test::Warnings'     => 0,
         'Params::Validate'   => 1.06,
         'Web::MREST::CLI'    => 0.277,
     },

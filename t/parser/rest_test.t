@@ -40,6 +40,7 @@ use warnings;
 use App::Dochazka::CLI::Parser qw( look_up_command parse );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 my ( $cmd, $res, $r, $e );
 

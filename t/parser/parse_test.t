@@ -41,6 +41,7 @@ use App::Dochazka::CLI::Parser qw( parse $semantic_tree );
 use App::Dochazka::CLI::Test qw( do_parse_test );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 my ( $cmd, $r, $r_should_be, $coderef );
 

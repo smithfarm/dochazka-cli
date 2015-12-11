@@ -44,6 +44,7 @@ use App::Dochazka::CLI::Test qw( delete_interval_test fetch_interval_test init_u
 use App::Dochazka::CLI::Util qw( authenticate_to_server );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 my ( $cmd, $rv );
 

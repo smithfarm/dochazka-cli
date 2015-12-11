@@ -45,6 +45,7 @@ use App::Dochazka::Common::Model::Privhistory;
 use App::Dochazka::Common::Model::Schedhistory;
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 my ( $cmd, $rv );
 

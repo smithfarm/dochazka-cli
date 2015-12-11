@@ -44,6 +44,7 @@ use App::Dochazka::CLI::Util qw( authenticate_to_server );
 use App::Dochazka::CLI::Test qw( init_unit );
 use Data::Dumper;
 use Test::More;
+use Test::Warnings;
 
 $debug_mode = 1;
 
