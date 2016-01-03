@@ -309,6 +309,15 @@ listing, use this command:
 
     SCHEDULES FETCH ALL DISABLED
 
+=head3 View an individual schedule (by SID or SCODE)
+
+If the SID or SCODE of a schedule is known, it can be looked up like so:
+
+    SID=12 SHOW
+    SCODE=SAMPLE SHOW
+
+The first example looks up the schedule with SID 12, and the second looks
+up the schedule with SCODE "SAMPLE".
 
 =head3 Define a new schedule
 
