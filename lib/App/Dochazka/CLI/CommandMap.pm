@@ -638,8 +638,8 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP" => \&interval_promptdate,
     "INTERVAL FILLUP COMMIT" => \&interval_promptdate,
     "EMPLOYEE_SPEC INTERVAL FILLUP COMMIT" => \&interval_promptdate,
-    "INTERVAL DELETE COMMIT" => \&interval_promptdate,
-    "EMPLOYEE_SPEC INTERVAL DELETE COMMIT" => \&interval_promptdate,
+    "INTERVAL DELETE" => \&interval_promptdate,
+    "EMPLOYEE_SPEC INTERVAL DELETE" => \&interval_promptdate,
 
     "INTERVAL _DATE" => \&interval_date,
     "EMPLOYEE_SPEC INTERVAL _DATE" => \&interval_date,
