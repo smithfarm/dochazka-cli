@@ -48,6 +48,7 @@ use App::Dochazka::CLI::Util qw(
     rest_error
     truncate_to
 );
+use App::Dochazka::Common::Model::Interval;
 use Data::Dumper;
 use Date::Calc qw( Days_in_Month );
 use Exporter 'import';
@@ -574,15 +575,25 @@ sub _print_intervals_tsrange {
     $pl .= "in the range $tsr\n\n";
 
     my $t = Text::Table->new( 'IID', 'Begin', 'End', 'Code', 'Description' );
-    for my $int ( @{ $status->payload } ) {
+    my $partial_intervals_present = 0;
+    for my $props ( @{ $status->payload } ) {
+        my $int = App::Dochazka::Common::Model::Interval->spawn( $props );
+        my $iid;
+        if ( $int->partial ) {
+            $partial_intervals_present = 1;
+            $iid = $int->iid . '**';
+        } else {
+            $iid = $int->iid;
+        }
         $t->add( 
-            $int->{'iid'},
-            _begin_and_end_from_intvl( $int->{'intvl'} ),
-            $int->{'code'},
-            truncate_to( $int->{'long_desc'} ),
+            $iid,
+            _begin_and_end_from_intvl( $int->intvl ),
+            $int->code,
+            truncate_to( $int->long_desc ),
         );
     }
     $pl .= $t;
+    $pl .= "\nPartial intervals signified by **\n";
 
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
 }
