@@ -180,28 +180,6 @@ sub interval_new_timerange {
 }
 
 
-=head3 interval_summary
-
-    INTERVAL SUMMARY
-
-=cut
-
-sub interval_summary {
-    print "Entering " . __PACKAGE__ . "::interval_summary\n" if $debug_mode;
-    my ( $ts, $th ) = @_;
-
-    # parse test
-    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
-
-    print Dumper( $th ) if $debug_mode;
-
-    my $rest;
-    $rest = '/' . $th->{_REST} if $th->{_REST};
-    my $status = send_req( 'GET', "interval/summary$rest" );
-    return $status;
-}
-
-
 =head3 interval_date
 
     INTERVAL _DATE
@@ -210,6 +188,8 @@ sub interval_summary {
     EMPLOYEE_SPEC INTERVAL FETCH _DATE
     INTERVAL FILLUP _DATE
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE
+    INTERVAL SUMMARY _DATE
+    EMPLOYEE_SPEC INTERVAL SUMMARY _DATE
     INTERVAL DELETE _DATE
     EMPLOYEE_SPEC INTERVAL DELETE _DATE
 
@@ -252,6 +232,8 @@ sub interval_date {
     EMPLOYEE_SPEC INTERVAL FETCH _DATE _HYPHEN _DATE1
     INTERVAL FILLUP _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE _HYPHEN _DATE1
+    INTERVAL SUMMARY _DATE _HYPHEN _DATE1
+    EMPLOYEE_SPEC INTERVAL SUMMARY _DATE _HYPHEN _DATE1
     INTERVAL DELETE _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL DELETE _DATE _HYPHEN _DATE1
 
@@ -288,6 +270,8 @@ sub interval_date_date1 {
     EMPLOYEE_SPEC INTERVAL FETCH _MONTH [_NUM]
     INTERVAL FILLUP _MONTH [_NUM]
     EMPLOYEE_SPEC INTERVAL FILLUP _MONTH [_NUM]
+    INTERVAL SUMMARY _MONTH [_NUM]
+    EMPLOYEE_SPEC INTERVAL SUMMARY _MONTH [_NUM]
     INTERVAL DELETE _MONTH [_NUM]
     EMPLOYEE_SPEC INTERVAL DELETE _MONTH [_NUM]
 
@@ -332,6 +316,8 @@ sub interval_month {
     EMPLOYEE_SPEC INTERVAL FETCH _NUM [_NUM1]
     INTERVAL FILLUP _NUM [_NUM1]
     EMPLOYEE_SPEC INTERVAL FILLUP _NUM [_NUM1]
+    INTERVAL SUMMARY _NUM [_NUM1]
+    EMPLOYEE_SPEC INTERVAL SUMMARY _NUM [_NUM1]
     INTERVAL DELETE _NUM [_NUM1]
     EMPLOYEE_SPEC INTERVAL DELETE _NUM [_NUM1]
 
@@ -375,6 +361,8 @@ sub interval_num_num1 {
 
     INTERVAL FILLUP _TSRANGE
     EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE
+    INTERVAL SUMMARY _TSRANGE
+    EMPLOYEE_SPEC INTERVAL SUMMARY _TSRANGE
 
 =cut
 
@@ -404,6 +392,8 @@ sub interval_fillup_tsrange {
     EMPLOYEE_SPEC INTERVAL FETCH
     INTERVAL FILLUP
     EMPLOYEE_SPEC INTERVAL FILLUP
+    INTERVAL SUMMARY
+    EMPLOYEE_SPEC INTERVAL SUMMARY
     INTERVAL DELETE
     EMPLOYEE_SPEC INTERVAL DELETE
 
@@ -436,6 +426,8 @@ sub _interval_fillup_delete_print {
         return _fillup( emp_obj => $emp, tsrange => $tsr, dry_run => $dry );
     } elsif ( $th->{'DELETE'} ) {
         return _delete_intervals_tsrange( $emp->eid, $tsr );
+    } elsif ( $th->{'SUMMARY'} ) {
+        return _interval_summary( $emp->eid, $tsr );
     } else {
         return _print_intervals_tsrange( $emp, $tsr );
     }
@@ -644,6 +636,22 @@ Given an EID and a tsrange, delete all matching intervals
 sub _delete_intervals_tsrange {
     my ( $eid, $tsr ) = @_;
     my $status = send_req( 'DELETE', "interval/eid/$eid/$tsr" );
+    return $status unless $status->ok;
+    my $count = $status->payload;
+    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
+        payload => "$count intervals deleted in range $tsr" );
+}
+
+=head3 _interval_summary
+
+Given an EID and a tsrange, call the "interval/sumary/eid/:eid/:tsrange"
+resource.
+
+=cut
+
+sub _interval_summary {
+    my ( $eid, $tsr ) = @_;
+    my $status = send_req( 'GET', "interval/summary/eid/$eid/$tsr" );
     return $status unless $status->ok;
     my $count = $status->payload;
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 

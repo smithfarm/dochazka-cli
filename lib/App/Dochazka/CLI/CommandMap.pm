@@ -639,6 +639,8 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP" => \&interval_promptdate,
     "INTERVAL FILLUP COMMIT" => \&interval_promptdate,
     "EMPLOYEE_SPEC INTERVAL FILLUP COMMIT" => \&interval_promptdate,
+    "INTERVAL SUMMARY" => \&interval_promptdate,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY" => \&interval_promptdate,
     "INTERVAL DELETE" => \&interval_promptdate,
     "EMPLOYEE_SPEC INTERVAL DELETE" => \&interval_promptdate,
 
@@ -650,6 +652,8 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP _DATE" => \&interval_date,
     "INTERVAL FILLUP _DATE COMMIT" => \&interval_date,
     "EMPLOYEE_SPEC INTERVAL FILLUP _DATE COMMIT" => \&interval_date,
+    "INTERVAL SUMMARY _DATE" => \&interval_date,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _DATE" => \&interval_date,
     "INTERVAL DELETE _DATE" => \&interval_date,
     "EMPLOYEE_SPEC INTERVAL DELETE _DATE" => \&interval_date,
 
@@ -661,8 +665,11 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP _DATE _DATE1" => \&interval_date_date1,
     "INTERVAL FILLUP _DATE _DATE1 COMMIT" => \&interval_date_date1,
     "EMPLOYEE_SPEC INTERVAL FILLUP _DATE _DATE1 COMMIT" => \&interval_date_date1,
+    "INTERVAL SUMMARY _DATE _DATE1" => \&interval_date_date1,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _DATE _DATE1" => \&interval_date_date1,
     "INTERVAL DELETE _DATE _DATE1" => \&interval_date_date1,
     "EMPLOYEE_SPEC INTERVAL DELETE _DATE _DATE1" => \&interval_date_date1,
+
     "INTERVAL _DATE _HYPHEN _DATE1" => \&interval_date_date1,
     "EMPLOYEE_SPEC INTERVAL _DATE _HYPHEN _DATE1" => \&interval_date_date1,
     "INTERVAL FETCH _DATE _HYPHEN _DATE1" => \&interval_date_date1,
@@ -671,6 +678,8 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP _DATE _HYPHEN _DATE1" => \&interval_date_date1,
     "INTERVAL FILLUP _DATE _HYPHEN _DATE1 COMMIT" => \&interval_date_date1,
     "EMPLOYEE_SPEC INTERVAL FILLUP _DATE _HYPHEN _DATE1 COMMIT" => \&interval_date_date1,
+    "INTERVAL SUMMARY _DATE _HYPHEN _DATE1" => \&interval_date_date1,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _DATE _HYPHEN _DATE1" => \&interval_date_date1,
     "INTERVAL DELETE _DATE _HYPHEN _DATE1" => \&interval_date_date1,
     "EMPLOYEE_SPEC INTERVAL DELETE _DATE _HYPHEN _DATE1" => \&interval_date_date1,
 
@@ -682,8 +691,11 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH" => \&interval_month,
     "INTERVAL FILLUP _MONTH COMMIT" => \&interval_month,
     "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH COMMIT" => \&interval_month,
+    "INTERVAL SUMMARY _MONTH" => \&interval_month,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _MONTH" => \&interval_month,
     "INTERVAL DELETE _MONTH" => \&interval_month,
     "EMPLOYEE_SPEC INTERVAL DELETE _MONTH" => \&interval_month,
+
     "INTERVAL _MONTH _NUM" => \&interval_month,
     "EMPLOYEE_SPEC INTERVAL _MONTH _NUM" => \&interval_month,
     "INTERVAL FETCH _MONTH _NUM" => \&interval_month,
@@ -692,6 +704,8 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH _NUM" => \&interval_month,
     "INTERVAL FILLUP _MONTH _NUM COMMIT" => \&interval_month,
     "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH _NUM COMMIT" => \&interval_month,
+    "INTERVAL SUMMARY _MONTH _NUM" => \&interval_month,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _MONTH _NUM" => \&interval_month,
     "INTERVAL DELETE _MONTH _NUM" => \&interval_month,
     "EMPLOYEE_SPEC INTERVAL DELETE _MONTH _NUM" => \&interval_month,
 
@@ -703,8 +717,11 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP _NUM" => \&interval_num_num1,
     "INTERVAL FILLUP _NUM COMMIT" => \&interval_num_num1,
     "EMPLOYEE_SPEC INTERVAL FILLUP _NUM COMMIT" => \&interval_num_num1,
+    "INTERVAL SUMMARY _NUM" => \&interval_num_num1,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _NUM" => \&interval_num_num1,
     "INTERVAL DELETE _NUM" => \&interval_num_num1,
     "EMPLOYEE_SPEC INTERVAL DELETE _NUM" => \&interval_num_num1,
+
     "INTERVAL _NUM _NUM1" => \&interval_num_num1,
     "EMPLOYEE_SPEC INTERVAL _NUM _NUM1" => \&interval_num_num1,
     "INTERVAL FETCH _NUM _NUM1" => \&interval_num_num1,
@@ -713,6 +730,8 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP _NUM _NUM1" => \&interval_num_num1,
     "INTERVAL FILLUP _NUM _NUM1 COMMIT" => \&interval_num_num1,
     "EMPLOYEE_SPEC INTERVAL FILLUP _NUM _NUM1 COMMIT" => \&interval_num_num1,
+    "INTERVAL SUMMARY _NUM _NUM1" => \&interval_num_num1,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _NUM _NUM1" => \&interval_num_num1,
     "INTERVAL DELETE _NUM _NUM1" => \&interval_num_num1,
     "EMPLOYEE_SPEC INTERVAL DELETE _NUM _NUM1" => \&interval_num_num1,
 
@@ -720,6 +739,8 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE" => \&interval_fillup_tsrange,
     "INTERVAL FILLUP _TSRANGE COMMIT" => \&interval_fillup_tsrange,
     "EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE COMMIT" => \&interval_fillup_tsrange,
+    "INTERVAL SUMMARY _TSRANGE" => \&interval_fillup_tsrange,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _TSRANGE" => \&interval_fillup_tsrange,
 
     # add/insert new intervals
     "INTERVAL _TIME _TIME1 _TERM" => \&interval_new_time_time1,
