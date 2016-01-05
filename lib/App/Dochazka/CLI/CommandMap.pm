@@ -752,9 +752,6 @@ our $dispatch_map = {
     "INTERVAL _DATE _TIME _DATE1 _TIME1 _TERM" => \&interval_new_date_time_date1_time1,
     "INTERVAL _DATE _TIME _HYPHEN _DATE1 _TIME1 _TERM" => \&interval_new_date_time_date1_time1,
 
-    # interval summary
-    "INTERVAL SUMMARY" => \&interval_summary,
-
     # Lock commands
 
     # Priv commands

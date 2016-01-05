@@ -637,7 +637,7 @@ sub _delete_intervals_tsrange {
     my ( $eid, $tsr ) = @_;
     my $status = send_req( 'DELETE', "interval/eid/$eid/$tsr" );
     return $status unless $status->ok;
-    my $count = $status->payload;
+    my $count = $status->{'count'};
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
         payload => "$count intervals deleted in range $tsr" );
 }
@@ -653,9 +653,8 @@ sub _interval_summary {
     my ( $eid, $tsr ) = @_;
     my $status = send_req( 'GET', "interval/summary/eid/$eid/$tsr" );
     return $status unless $status->ok;
-    my $count = $status->payload;
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
-        payload => "$count intervals deleted in range $tsr" );
+        payload => $status->payload );
 }
 
 =head3 _fillup
