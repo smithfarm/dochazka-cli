@@ -96,6 +96,7 @@ our @EXPORT_OK = qw(
     interval_new_date_time_date1_time1
     interval_new_time_time1
     interval_new_timerange
+    interval_summary
 );
 
 
@@ -176,6 +177,28 @@ sub interval_new_timerange {
     print "tsrange: " . $status->payload . "\n" if $debug_mode;
 
     return _interval_new( $th->{_TERM}, $status->payload, $th->{_REST} );
+}
+
+
+=head3 interval_summary
+
+    INTERVAL SUMMARY
+
+=cut
+
+sub interval_summary {
+    print "Entering " . __PACKAGE__ . "::interval_summary\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    print Dumper( $th ) if $debug_mode;
+
+    my $rest;
+    $rest = '/' . $th->{_REST} if $th->{_REST};
+    my $status = send_req( 'GET', "interval/summary$rest" );
+    return $status;
 }
 
 
