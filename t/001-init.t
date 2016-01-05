@@ -38,6 +38,7 @@ use 5.012;
 use strict;
 use warnings;
 
+#use App::CELL::Test::LogToFile;
 use App::Dochazka::CLI qw( $debug_mode );
 use App::Dochazka::CLI::Parser qw( process_command );
 use App::Dochazka::CLI::Util qw( authenticate_to_server );
