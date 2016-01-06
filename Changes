@@ -1032,3 +1032,11 @@ Revision history for App-Dochazka-CLI
 - tests: use Test::Warnings to check for unexpected warnings
 - update release and prerelease scripts
 
+0.219 2016-11-06 21:11 CET
+- Guide.pm: tell how to look up individual schedules
+- Commands/Interval.pm: be aware of partial intervals
+- Commands/Interval.pm: get count from $status->{'count'}
+- CommandMap.pm: fix INTERVAL DELETE
+- plumb in INTERVAL SUMMARY commands
+- bin/dochazka-cli: tweak how NON_OK error statuses are displayed
+
