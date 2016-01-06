@@ -284,7 +284,7 @@ COMMAND: while ( defined ( $cmd = $term->readline( get_prompt() ) ) ) {
             if ( my $status = $rv->{'http_status'} ) {
                 print "Status:      $status\n";
             }
-            print $rv->level . ": " . $rv->text . "\n";
+            print "Explanation: " . $rv->text . " (" . $rv->level . ")\n";
             print "\n";
         }
         last COMMAND if $rv->level eq 'OK' and $rv->code eq 'DOCHAZKA_CLI_EXIT';
