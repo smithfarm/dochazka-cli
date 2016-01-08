@@ -42,6 +42,9 @@ use App::CELL qw( $CELL );
 use App::Dochazka::CLI::Commands::Activity qw( 
     activity_all 
 );
+use App::Dochazka::CLI::Commands::Component qw( 
+    component_path
+);
 use App::Dochazka::CLI::Commands::Employee qw( 
     employee_ldap
     employee_ldap_import
@@ -580,6 +583,9 @@ our $dispatch_map = {
     "ACTIVITY" => \&activity_all,
     "ACTIVITY ALL" => \&activity_all,
     "ACTIVITY ALL DISABLED" => \&activity_all,
+    
+    # Component commands
+    "COMPONENT PATH" => \&component_path,
 
     # Employee commands
     "EMPLOYEE" => \&employee_profile,
