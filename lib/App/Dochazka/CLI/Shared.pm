@@ -42,6 +42,8 @@ use App::Dochazka::CLI qw( $current_emp $debug_mode );
 use App::Dochazka::CLI::Util qw( lookup_employee rest_error );
 use Data::Dumper;
 use Exporter 'import';
+use File::Slurp;
+use File::Temp;
 use JSON;
 use Web::MREST::CLI qw( send_req );
 
@@ -61,6 +63,7 @@ App::Dochazka::CLI::Shared - Shared routines
 
 our @EXPORT_OK = qw(
     print_schedule_object
+    shared_generate_report
     show_as_at
 );
 
@@ -113,6 +116,31 @@ sub print_schedule_object {
     }
 
     return $ps;
+}
+
+
+=head2 shared_generate_report
+
+Given an entity, call POST genreport and open the results in web browser.
+
+=cut
+
+sub shared_generate_report {
+    print "Entering " . __PACKAGE__ . "::shared_generate_report\n" if $debug_mode;
+    my ( $entity ) = @_;
+
+    my $status = send_req( 'POST', 'genreport', $entity );
+    return rest_error( $status, "GENERATE REPORT" ) unless $status->ok;
+
+    # report output in $status->payload: write it to a file
+    my $tmp = File::Temp->new( DIR => '/tmp' );
+    write_file( $tmp->filename, $status->payload );
+    system( "xdg-open " . $tmp->filename );
+
+    return $CELL->status_ok( 
+        'DOCHAZKA_CLI_NORMAL_COMPLETION', 
+        payload => "Report written to " . $tmp->filename . " and attempted to open in web browser" 
+    );
 }
 
 

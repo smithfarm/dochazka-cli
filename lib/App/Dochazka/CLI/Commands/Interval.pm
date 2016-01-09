@@ -39,6 +39,7 @@ use warnings;
 
 use App::CELL qw( $CELL );
 use App::Dochazka::CLI qw( $current_emp $debug_mode $prompt_date $prompt_year );
+use App::Dochazka::CLI::Shared qw( shared_generate_report );
 use App::Dochazka::CLI::Util qw( 
     determine_employee
     normalize_date
@@ -440,7 +441,7 @@ sub _interval_fillup_delete_print {
     } elsif ( $th->{'SUMMARY'} ) {
         return _interval_summary( $emp->eid, $tsr );
     } elsif ( $th->{'REPORT'} ) {
-        return _interval_report( $emp->eid, $tsr );
+        return _interval_report( $emp, $tsr );
     } else {
         return _print_intervals_tsrange( $emp, $tsr );
     }
@@ -672,13 +673,13 @@ sub _interval_summary {
 
 =head3 _interval_report
 
-Given an EID and a tsrange, POST to the "genreport" resource with
+Given an employee object and a tsrange, POST to the "genreport" resource with
 an entity body: 
 
     { 
         "path" : "suse-cz-monthly.mc", 
         "parameters" : {
-            "eid" : $EID,
+            "employee" : $EMPLOYEE_OBJECT_JSON,
             "tsrange" : "$TSRANGE"
         }
     }
@@ -686,20 +687,18 @@ an entity body:
 =cut
 
 sub _interval_report {
-    my ( $eid, $tsr ) = @_;
+    my ( $emp, $tsr ) = @_;
+    my $emp_json = JSON->new->convert_blessed->encode( $emp );
     my $entity = <<"EOS";
 { 
     "path" : "suse-cz-monthly.mc", 
     "parameters" : {
-        "eid" : $eid,
+        "employee" : $emp_json,
         "tsrange" : "$tsr"
     }
 }
 EOS
-    my $status = send_req( 'POST', "genreport", $entity );
-    return $status unless $status->ok;
-    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
-        payload => $status->payload );
+    return shared_generate_report( $entity );
 }
 
 =head3 _fillup

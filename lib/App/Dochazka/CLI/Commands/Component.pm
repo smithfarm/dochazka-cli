@@ -39,11 +39,10 @@ use warnings;
 
 use App::CELL qw( $CELL );
 use App::Dochazka::CLI qw( $debug_mode );
+use App::Dochazka::CLI::Shared qw( shared_generate_report );
 use App::Dochazka::CLI::Util qw( parse_test rest_error );
 use Data::Dumper;
 use Exporter 'import';
-use File::Slurp;
-use File::Temp;
 use Web::MREST::CLI qw( send_req );
 
 
@@ -127,18 +126,7 @@ sub generate_report {
     my $entity = "{ \"path\": \"$path\"";
     $entity .= ", \"parameters\": " . $th->{_JSON} if $th->{_JSON};
     $entity .= " }";
-    my $status = send_req( 'POST', 'genreport', $entity );
-    return rest_error( $status, "GENERATE REPORT" ) unless $status->ok;
-
-    # report output in $status->payload: write it to a file
-    my $tmp = File::Temp->new( DIR => '/tmp' );
-    write_file( $tmp->filename, $status->payload );
-    system( "xdg-open " . $tmp->filename );
-
-    return $CELL->status_ok( 
-        'DOCHAZKA_CLI_NORMAL_COMPLETION', 
-        payload => "Report written to " . $tmp->filename . " and attempted to open in web browser" 
-    );
+    return shared_generate_report( $entity );
 }
 
 

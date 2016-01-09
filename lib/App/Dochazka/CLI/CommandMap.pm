@@ -77,7 +77,6 @@ use App::Dochazka::CLI::Commands::Interval qw(
     interval_new_date_time_date1_time1
     interval_new_time_time1
     interval_new_timerange
-    interval_summary
 );
 use App::Dochazka::CLI::Commands::Misc qw( 
     change_prompt_date 
