@@ -24,7 +24,7 @@ my $build = Module::Build->new(
     },
     build_requires     => { 
         'App::CELL'          => 0.209,
-        'App::Dochazka::Common'      => 0.192,
+        'App::Dochazka::Common'      => 0.199,
         'Date::Calc'         => 0,
         'Test::Fatal'        => 0,
         'Test::Warnings'     => 0,
@@ -34,7 +34,7 @@ my $build = Module::Build->new(
     requires           => {
         'perl'               => 5.012,
         'App::CELL'          => 0.209,
-        'App::Dochazka::Common'      => 0.192,
+        'App::Dochazka::Common'      => 0.199,
         'Date::Calc'         => 0,
         'File::HomeDir'      => 0,
         'File::Slurp'        => 0,
