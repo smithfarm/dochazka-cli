@@ -1040,3 +1040,8 @@ Revision history for App-Dochazka-CLI
 - plumb in INTERVAL SUMMARY commands
 - bin/dochazka-cli: tweak how NON_OK error statuses are displayed
 
+0.220 2016-01-09 22:14 CET
+- COMPONENT PATH command: first draft (commented out for now)
+- prerelease.sh: fix date template
+- GENERATE REPORT: implement new command
+
