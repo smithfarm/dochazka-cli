@@ -44,6 +44,7 @@ use App::Dochazka::CLI::Commands::Activity qw(
 );
 use App::Dochazka::CLI::Commands::Component qw( 
     component_path
+    generate_report
 );
 use App::Dochazka::CLI::Commands::Employee qw( 
     employee_ldap
@@ -584,8 +585,10 @@ our $dispatch_map = {
     "ACTIVITY ALL" => \&activity_all,
     "ACTIVITY ALL DISABLED" => \&activity_all,
     
-    # Component commands
-    "COMPONENT PATH" => \&component_path,
+    # Report commands
+    #"COMPONENT PATH _PATH" => \&component_path,
+    "GENERATE REPORT _PATH" => \&generate_report,
+    "GENERATE REPORT _PATH _JSON" => \&generate_report,
 
     # Employee commands
     "EMPLOYEE" => \&employee_profile,

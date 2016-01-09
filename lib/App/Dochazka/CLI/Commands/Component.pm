@@ -42,6 +42,8 @@ use App::Dochazka::CLI qw( $debug_mode );
 use App::Dochazka::CLI::Util qw( parse_test rest_error );
 use Data::Dumper;
 use Exporter 'import';
+use File::Slurp;
+use File::Temp;
 use Web::MREST::CLI qw( send_req );
 
 
@@ -58,7 +60,10 @@ App::Dochazka::CLI::Commands::Component - Component commands
 
 =cut
 
-our @EXPORT_OK = qw( component_path );
+our @EXPORT_OK = qw( 
+    component_path
+    generate_report
+);
 
 
 
@@ -72,6 +77,8 @@ The functions in this module are called from the parser when it recognizes a com
 =head2 component_path
 
     COMPONENT PATH
+
+    N.B. Work In Progress, unclear whether it will ever be useful
 
 =cut
 
@@ -92,6 +99,46 @@ sub component_path {
     return rest_error( $status, "COMPONENT PATH" ) unless $status->ok;
 
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $status->payload );
+}
+
+
+=head2 generate_report
+
+    GENERATE REPORT _PATH $PARAMETERS_JSON
+
+    Example $PARAMETERS_JSON: { "name" : "John Doe" }
+
+=cut
+
+sub generate_report {
+    print "Entering " . __PACKAGE__ . "::generate_report\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    # print debug info
+    if ( $debug_mode ) {
+        print "Entering " . __PACKAGE__ . "::generate_report\n";
+        print Dumper( $th );
+    }
+
+    my $path = $th->{_PATH};
+    my $entity = "{ \"path\": \"$path\"";
+    $entity .= ", \"parameters\": " . $th->{_JSON} if $th->{_JSON};
+    $entity .= " }";
+    my $status = send_req( 'POST', 'genreport', $entity );
+    return rest_error( $status, "GENERATE REPORT" ) unless $status->ok;
+
+    # report output in $status->payload: write it to a file
+    my $tmp = File::Temp->new( DIR => '/tmp' );
+    write_file( $tmp->filename, $status->payload );
+    system( "xdg-open " . $tmp->filename );
+
+    return $CELL->status_ok( 
+        'DOCHAZKA_CLI_NORMAL_COMPLETION', 
+        payload => "Report written to " . $tmp->filename . " and attempted to open in web browser" 
+    );
 }
 
 
