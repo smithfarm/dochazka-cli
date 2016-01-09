@@ -96,7 +96,6 @@ our @EXPORT_OK = qw(
     interval_new_date_time_date1_time1
     interval_new_time_time1
     interval_new_timerange
-    interval_summary
 );
 
 
@@ -190,6 +189,8 @@ sub interval_new_timerange {
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE
     INTERVAL SUMMARY _DATE
     EMPLOYEE_SPEC INTERVAL SUMMARY _DATE
+    INTERVAL REPORT _DATE
+    EMPLOYEE_SPEC INTERVAL REPORT _DATE
     INTERVAL DELETE _DATE
     EMPLOYEE_SPEC INTERVAL DELETE _DATE
 
@@ -234,6 +235,8 @@ sub interval_date {
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE _HYPHEN _DATE1
     INTERVAL SUMMARY _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL SUMMARY _DATE _HYPHEN _DATE1
+    INTERVAL REPORT _DATE _HYPHEN _DATE1
+    EMPLOYEE_SPEC INTERVAL REPORT _DATE _HYPHEN _DATE1
     INTERVAL DELETE _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL DELETE _DATE _HYPHEN _DATE1
 
@@ -272,6 +275,8 @@ sub interval_date_date1 {
     EMPLOYEE_SPEC INTERVAL FILLUP _MONTH [_NUM]
     INTERVAL SUMMARY _MONTH [_NUM]
     EMPLOYEE_SPEC INTERVAL SUMMARY _MONTH [_NUM]
+    INTERVAL REPORT _MONTH [_NUM]
+    EMPLOYEE_SPEC INTERVAL REPORT _MONTH [_NUM]
     INTERVAL DELETE _MONTH [_NUM]
     EMPLOYEE_SPEC INTERVAL DELETE _MONTH [_NUM]
 
@@ -318,6 +323,8 @@ sub interval_month {
     EMPLOYEE_SPEC INTERVAL FILLUP _NUM [_NUM1]
     INTERVAL SUMMARY _NUM [_NUM1]
     EMPLOYEE_SPEC INTERVAL SUMMARY _NUM [_NUM1]
+    INTERVAL REPORT _NUM [_NUM1]
+    EMPLOYEE_SPEC INTERVAL REPORT _NUM [_NUM1]
     INTERVAL DELETE _NUM [_NUM1]
     EMPLOYEE_SPEC INTERVAL DELETE _NUM [_NUM1]
 
@@ -363,6 +370,8 @@ sub interval_num_num1 {
     EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE
     INTERVAL SUMMARY _TSRANGE
     EMPLOYEE_SPEC INTERVAL SUMMARY _TSRANGE
+    INTERVAL REPORT _TSRANGE
+    EMPLOYEE_SPEC INTERVAL REPORT _TSRANGE
 
 =cut
 
@@ -394,6 +403,8 @@ sub interval_fillup_tsrange {
     EMPLOYEE_SPEC INTERVAL FILLUP
     INTERVAL SUMMARY
     EMPLOYEE_SPEC INTERVAL SUMMARY
+    INTERVAL REPORT
+    EMPLOYEE_SPEC INTERVAL REPORT
     INTERVAL DELETE
     EMPLOYEE_SPEC INTERVAL DELETE
 
@@ -428,6 +439,8 @@ sub _interval_fillup_delete_print {
         return _delete_intervals_tsrange( $emp->eid, $tsr );
     } elsif ( $th->{'SUMMARY'} ) {
         return _interval_summary( $emp->eid, $tsr );
+    } elsif ( $th->{'REPORT'} ) {
+        return _interval_report( $emp->eid, $tsr );
     } else {
         return _print_intervals_tsrange( $emp, $tsr );
     }
@@ -652,6 +665,38 @@ resource.
 sub _interval_summary {
     my ( $eid, $tsr ) = @_;
     my $status = send_req( 'GET', "interval/summary/eid/$eid/$tsr" );
+    return $status unless $status->ok;
+    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
+        payload => $status->payload );
+}
+
+=head3 _interval_report
+
+Given an EID and a tsrange, POST to the "genreport" resource with
+an entity body: 
+
+    { 
+        "path" : "suse-cz-monthly.mc", 
+        "parameters" : {
+            "eid" : $EID,
+            "tsrange" : "$TSRANGE"
+        }
+    }
+
+=cut
+
+sub _interval_report {
+    my ( $eid, $tsr ) = @_;
+    my $entity = <<"EOS";
+{ 
+    "path" : "suse-cz-monthly.mc", 
+    "parameters" : {
+        "eid" : $eid,
+        "tsrange" : "$tsr"
+    }
+}
+EOS
+    my $status = send_req( 'POST', "genreport", $entity );
     return $status unless $status->ok;
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
         payload => $status->payload );
