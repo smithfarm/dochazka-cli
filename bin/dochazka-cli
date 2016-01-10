@@ -154,6 +154,9 @@ if ( $sitedir ) {
     }
 }
 
+my $interactive = -t STDIN ? 1 : 0;
+my $pipe = -p STDIN ? 1 : 0;
+
 # initialize CLI client
 my $status = init_cli_client( 
     distro => 'App-Dochazka-CLI',
@@ -238,12 +241,16 @@ sub initialize_readline {
     return $term;
 }
 
-my $term = initialize_readline();
+my $term = initialize_readline() if $interactive;
+
+my $readline = $interactive 
+    ? sub { $term->readline( get_prompt() ) } 
+    : sub { <STDIN> };
 
 binmode STDOUT, ":utf8";
 
 my $cmd;
-COMMAND: while ( defined ( $cmd = $term->readline( get_prompt() ) ) ) {
+COMMAND: while ( defined ( $cmd = $readline->() ) ) {
 
     my $rv = process_command( $cmd );
 
