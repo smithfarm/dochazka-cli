@@ -1025,14 +1025,14 @@ Revision history for App-Dochazka-CLI
 - Add INTERVAL FETCH ... COMMIT commands
 - Commands/Interval.pm: make handlers commit-aware
 
-0.218 2015-13-11 12:13 CET
+0.218  2015-12-11 12:13 CET
 - t/cmd_active/employee.t: fix check for ACL_VIOLATION
 - prerelease.sh: copy new prerelease script from REST
 - global: do not convert warnings into errors
 - tests: use Test::Warnings to check for unexpected warnings
 - update release and prerelease scripts
 
-0.219 2016-11-06 21:11 CET
+0.219  2016-01-06 21:11 CET
 - Guide.pm: tell how to look up individual schedules
 - Commands/Interval.pm: be aware of partial intervals
 - Commands/Interval.pm: get count from $status->{'count'}
@@ -1040,8 +1040,14 @@ Revision history for App-Dochazka-CLI
 - plumb in INTERVAL SUMMARY commands
 - bin/dochazka-cli: tweak how NON_OK error statuses are displayed
 
-0.220 2016-01-09 22:14 CET
+0.220  2016-01-09 22:14 CET
 - COMPONENT PATH command: first draft (commented out for now)
 - prerelease.sh: fix date template
 - GENERATE REPORT: implement new command
+
+0.221  2016-01-11 22:40 CET
+- Build.PL: require latest version of App::Dochazka::Common
+- INTERVAL REPORT: basic implementation
+- INTERVAL REPORT: more advanced implementation
+- bin/dochazka-cli: become aware of non-interactive usage
 
