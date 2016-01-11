@@ -86,16 +86,16 @@ And, finally, install the CLI:
 =head2 Verify success
 
 Provided you have successfully completed all of the above steps, you should
-be able to start the CLI and login as "root" with password "immutable":
+be able to start the CLI and login as "demo" with password "demo":
 
-    $ dochazka-cli -u root -p immutable
+    $ dochazka-cli -u demo -p demo
     Loading configuration files from
     /usr/lib/perl5/vendor_perl/5.18.2/auto/share/dist/App-Dochazka-CLI
     Cookie jar: /root/.cookies.txt
     URI base http://localhost:5000 set from site configuration
     Authenticating to server at http://localhost:5000 as user root
     Server is alive
-    Dochazka(2016-01-12) root ADMIN>
+    Dochazka(2016-01-12) demo PASSERBY>
 
 Congratulations! You have passed the first test.
 
