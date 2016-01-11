@@ -1,0 +1,28 @@
+#
+# dochazka Docker container
+#
+FROM BASE_IMAGE
+MAINTAINER Nathan Cutler <ncutler@suse.com>
+
+# configure repo
+RUN zypper --no-gpg-checks --non-interactive addrepo http://download.opensuse.org/repositories/home:smithfarm/BUILD_TARGET/home:smithfarm.repo
+RUN zypper --no-gpg-checks --non-interactive ref
+
+# install "general utility" packages 
+RUN zypper --no-gpg-checks --non-interactive install \
+    timezone
+
+# install App::Dochazka::REST dependencies
+RUN zypper --no-gpg-checks --non-interactive install \
+    perl-App-Dochazka-CLI
+
+# create Docker state directory
+RUN install -d -o root -g root -m 777 /var/lib/dochazka
+
+# set the timezone
+RUN ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localtime
+ENV PGTZ Europe/Prague
+
+# start the server
+CMD [ "-u root -p immutable" ]
+ENTRYPOINT [ "dochazka-cli" ]
