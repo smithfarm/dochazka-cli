@@ -26,6 +26,7 @@ lib/App/Dochazka/CLI/Guide.pm
 lib/App/Dochazka/CLI/Parser.pm
 lib/App/Dochazka/CLI/Shared.pm
 lib/App/Dochazka/CLI/Test.pm
+lib/App/Dochazka/CLI/Testers.pm
 lib/App/Dochazka/CLI/TokenMap.pm
 lib/App/Dochazka/CLI/Util.pm
 LICENSE
