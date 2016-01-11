@@ -73,3 +73,6 @@
 \bApp-Dochazka-CLI-[\d\.\_]+
 \bCPAN_NAME$
 release.sh$
+
+# Avoid Docker stuff
+\bdocker/
