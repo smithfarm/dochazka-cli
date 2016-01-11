@@ -1051,3 +1051,9 @@ Revision history for App-Dochazka-CLI
 - INTERVAL REPORT: more advanced implementation
 - bin/dochazka-cli: become aware of non-interactive usage
 
+0.222 2016-01-12 00:41 CET
+- MANIFEST.SKIP: avoid docker/ directory
+- docker/: add Dockerization
+- Testers.pm: a place to hold instructions for volunteer testers
+- Testers.pm: first test is to meet the prerequisites
+
