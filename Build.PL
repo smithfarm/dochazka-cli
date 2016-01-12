@@ -29,7 +29,7 @@ my $build = Module::Build->new(
         'Test::Fatal'        => 0,
         'Test::Warnings'     => 0,
         'Params::Validate'   => 1.06,
-        'Web::MREST::CLI'    => 0.277,
+        'Web::MREST::CLI'    => 0.279,
     },
     requires           => {
         'perl'               => 5.012,
@@ -48,7 +48,7 @@ my $build = Module::Build->new(
         'Term::ReadKey'      => 0,
         'Term::ReadLine::Gnu' => 0,
         'Text::Table'        => 0,
-        'Web::MREST::CLI'    => 0.277,
+        'Web::MREST::CLI'    => 0.279,
     },
     meta_merge => {
         resources => {
