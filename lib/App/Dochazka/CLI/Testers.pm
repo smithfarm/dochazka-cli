@@ -56,23 +56,23 @@ Before you start, you will need to complete the following steps.
 For testing purposes, you can use the Dockerized REST server. For this, you
 will need to have Docker installed and running:
 
-    zypper in docker
+    zypper install docker
     systemctl start docker.service
 
 =head2 Get and run test drive script
 
 The REST server Docker image depends on the official PostgreSQL image and
 must be run with certain parameters. A script is provided to make this
-easy. First, download the script:
+easy. Download and run the script:
 
     wget https://raw.githubusercontent.com/smithfarm/dochazka-rest/master/test-drive.sh
-
-Then run it:
-
     sh test-drive.sh
 
-When the script completes, you should be able to access the REST server at
-L<http://localhost:5000>. (It will display a login prompt - you can ignore it.)
+If you have never run Docker containers before, you may be surprised that
+the script downloads quite a lot of data from Docker Hub. When the script
+completes, you should be able to access the REST server. For now, try
+pointing your browser at L<http://localhost:5000>. If you get a login 
+dialog, you have completed this step.
 
 =head2 Add zypper repo and install CLI
 
@@ -97,7 +97,168 @@ be able to start the CLI and login as "demo" with password "demo":
     Server is alive
     Dochazka(2016-01-12) demo PASSERBY>
 
+Exit the CLI by issuing the C<exit> command:
+
+    Dochazka(2016-01-12) demo PASSERBY> exit
+    $
+
 Congratulations! You have passed the first test.
+
+
+=head1 SESSION 1: CREATE AN EMPLOYEE
+
+=head2 Try with insufficient privileges
+
+To create an employee, you will need to be logged in as an administrator.
+The "demo" employee is not an administrator, but let's try anyway. First,
+log in according to L<"Verify success">, above. Then, issue the C<employee
+list> command:
+
+    Dochazka(2016-01-12) demo PASSERBY> employee list
+    *** Anomaly detected ***
+    Status:      403 Forbidden
+    Explanation: ACL check failed for resource employee/list/?:priv (ERR)
+
+This output indicates that the REST server returned a C<403 Forbidden> error,
+which is to be expected because the C<demo> employee has insufficient
+privileges.
+
+Next, try to create an employee:
+
+    Dochazka(2016-01-12) demo PASSERBY> PUT employee nick george { "fullname" : "King George III" }
+    HTTP status: 403 Forbidden
+    Non-suppressed headers: {
+      'X-Web-Machine-Trace' => 'b13,b12,b11,b10,b9,b8,b7'
+    }
+    Response:
+    {
+       "payload" : {
+          "http_code" : 403,
+          "uri_path" : "employee/nick/george",
+          "permanent" : true,
+          "found_in" : {
+             "file" : "/usr/lib/perl5/vendor_perl/5.22.0/App/Dochazka/REST/Auth.pm",
+             "package" : "App::Dochazka::REST::Auth",
+             "line" : 431
+          },
+          "resource_name" : "employee/nick/:nick",
+          "http_method" : "PUT"
+       },
+       "text" : "ACL check failed for resource employee/nick/:nick",
+       "level" : "ERR",
+       "code" : "DISPATCH_ACL_CHECK_FAILED"
+    }
+
+Here, the error is the same C<403 Forbidden> but the output is more detailed.
+This is because we used a special type of command that is ordinarily only
+used to test the REST API.
+
+=head2 Log in as root
+
+For the rest of this session, we will be logged in as the C<root> employee, 
+which has a special status in that it is created when the database is
+initialized and it is difficult or impossible to delete. In a freshly
+initialized database, the C<root> employee's password is "immutable".
+
+The username and password need not be specified on the command line.
+Try it this way:
+
+    $ dochazka-cli
+    Loading configuration files from /usr/lib/perl5/vendor_perl/5.18.2/auto/share/dist/App-Dochazka-CLI
+    Cookie jar: /root/.cookies.txt
+    URI base http://localhost:5000 set from site configuration
+    Username: root
+    Authenticating to server at http://localhost:5000 as user root
+    Password: 
+    Server is alive
+    Dochazka(2016-01-12) root ADMIN>
+
+=head2 List employees
+
+A list of all employees in the database can be obtained using the C<employee
+list> command, which is documented at L<App::Dochazka::CLI::Guide|"Get list of
+employees">:
+
+    Dochazka(2016-01-12) root ADMIN> employee list
+
+    List of employees with priv level ->all<-
+        demo
+        root
+
+Actually, there is no priv level "all" - this just means that all employees are
+listed, regardless of their priv level.
+
+You can also try listing employees by priv level as per the documentation.
+
+=head2 Create an employee
+
+At the moment there is no CLI command to create a new employee. Hence we use
+the REST API testing command as described in
+L<App::Dochazka::CLI::Guide|"Create a new employee">:
+
+    Dochazka(2016-01-12) root ADMIN> PUT employee nick george { "fullname" : "King George III" }
+    HTTP status: 200 OK
+    Non-suppressed headers: {
+      'X-Web-Machine-Trace' => 'b13,b12,b11,b10,b9,b8,b7,b6,b5,b4,b3,c3,c4,d4,e5,f6,g7,g8,h10,i12,l13,m16,n16,o16,o14,p11,o20,o18,o18b'
+    }
+    Response:
+    {
+       "code" : "DOCHAZKA_CUD_OK",
+       "count" : 1,
+       "payload" : {
+          "email" : null,
+          "remark" : null,
+          "eid" : 3,
+          "passhash" : null,
+          "supervisor" : null,
+          "sec_id" : null,
+          "salt" : null,
+          "nick" : "george",
+          "fullname" : "King George III"
+       },
+       "text" : "DOCHAZKA_CUD_OK",
+       "DBI_return_value" : 1,
+       "level" : "OK"
+    }
+
+=head2 Employee profile
+
+The properties, or attributes, of the C<employee> class can be seen in the
+output of the previous command (under "payload"). A more comfortable way to
+display the properties of any employee is the C<employee profile> command:
+
+    Dochazka(2016-01-12) root ADMIN> employee profile
+
+    Full name:    Root Immutable
+    Nick:         root
+    Email:        root@site.org
+    Secondary ID: (not set)
+    Dochazka EID: 1
+    Reports to:   (not set)
+
+In this form, it displays the profile of the logged-in employee. To show the
+profile of a different employee, use this form:
+
+    Dochazka(2016-01-12) root ADMIN> emp=demo profile
+
+    Full name:    Demo Employee
+    Nick:         demo
+    Email:        demo@dochazka.site
+    Secondary ID: (not set)
+    Dochazka EID: 2
+    Reports to:   (not set)
+
+Here, the "emp=demo" is an employee spec. This is explained in
+L<App::Dochazka::CLI::Guide/"Specify an employee">.
+
+Finally, try various combinations of the following commands to get
+information about the new employee you just created:
+
+    employee list
+    employee profile
+    emp=... profile
+    nick=... profile
+    eid=... profile
 
 =cut
 
