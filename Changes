@@ -1057,3 +1057,8 @@ Revision history for App-Dochazka-CLI
 - Testers.pm: a place to hold instructions for volunteer testers
 - Testers.pm: first test is to meet the prerequisites
 
+0.223 2016-01-12 15:26 CET
+- Testers.pm: have them first login with demo/demo
+- bin/dochazka-cli: show prompt/commands in non-interactive mode
+- CLI/Testers.pm: add testing session 1
+
