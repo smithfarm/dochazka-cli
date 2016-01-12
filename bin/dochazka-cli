@@ -245,7 +245,12 @@ my $term = initialize_readline() if $interactive;
 
 my $readline = $interactive 
     ? sub { $term->readline( get_prompt() ) } 
-    : sub { <STDIN> };
+    : sub {
+        my $line = <STDIN>;
+        return unless defined($line);
+        print get_prompt() . $line;
+        return $line;
+    };
 
 binmode STDOUT, ":utf8";
 
