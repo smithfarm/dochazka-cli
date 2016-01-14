@@ -101,8 +101,9 @@ my $noauth = 0;
 my $versionparam = 0;
 
 sub dochazka_cli_completion {
-    my ($text, $state) = @_;
-    return Term::ReadLine::Gnu->filename_completion_function($text, $state);
+    my ($text, $line, $start, $end) = @_;
+    $log->debug( "text $text line $line start $start end $end" );
+    return ();
 }
 
 sub get_prompt {
