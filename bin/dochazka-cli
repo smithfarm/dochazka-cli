@@ -100,9 +100,11 @@ my $home = File::HomeDir->my_home;
 my $noauth = 0;
 my $versionparam = 0;
 
-#
-# get prompt
-#
+sub dochazka_cli_completion {
+    my ($text, $state) = @_;
+    return Term::ReadLine::Gnu->filename_completion_function($text, $state);
+}
+
 sub get_prompt {
     init_prompt();
     if ( $noauth ) {
