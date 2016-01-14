@@ -4,7 +4,7 @@
       "Smithfarm <presnypreklad@gmail.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4205",
+   "generated_by" : "Module::Build version 0.4212",
    "license" : [
       "bsd"
    ],
@@ -22,7 +22,7 @@
             "Params::Validate" : "1.06",
             "Test::Fatal" : "0",
             "Test::Warnings" : "0",
-            "Web::MREST::CLI" : "0.277"
+            "Web::MREST::CLI" : "0.279"
          }
       },
       "configure" : {
@@ -49,7 +49,7 @@
             "Term::ReadKey" : "0",
             "Term::ReadLine::Gnu" : "0",
             "Text::Table" : "0",
-            "Web::MREST::CLI" : "0.277",
+            "Web::MREST::CLI" : "0.279",
             "perl" : "5.012"
          }
       }
@@ -57,7 +57,7 @@
    "provides" : {
       "App::Dochazka::CLI" : {
          "file" : "lib/App/Dochazka/CLI.pm",
-         "version" : "0.223"
+         "version" : "0.224"
       },
       "App::Dochazka::CLI::CommandMap" : {
          "file" : "lib/App/Dochazka/CLI/CommandMap.pm"
@@ -87,8 +87,7 @@
          "file" : "lib/App/Dochazka/CLI/Commands/Schedule.pm"
       },
       "App::Dochazka::CLI::Guide" : {
-         "file" : "lib/App/Dochazka/CLI/Guide.pm",
-         "version" : "0.223"
+         "file" : "lib/App/Dochazka/CLI/Guide.pm"
       },
       "App::Dochazka::CLI::Parser" : {
          "file" : "lib/App/Dochazka/CLI/Parser.pm"
@@ -121,6 +120,6 @@
          "url" : "https://github.com/smithfarm/dochazka-cli"
       }
    },
-   "version" : "0.223",
-   "x_serialization_backend" : "JSON::PP version 2.27203"
+   "version" : "0.224",
+   "x_serialization_backend" : "JSON::PP version 2.27202"
 }

@@ -1062,3 +1062,9 @@ Revision history for App-Dochazka-CLI
 - bin/dochazka-cli: show prompt/commands in non-interactive mode
 - CLI/Testers.pm: add testing session 1
 
+0.224 2016-01-14 13:10 CET
+- Build.PL: require Web::MREST::CLI 0.279 for bugfixes
+- bin/dochazka-cli: add rudimentary custom completion function
+  https://github.com/smithfarm/dochazka-cli/issues/27 Fixes: #27
+- CLI/Guide.pm: remove VERSION
+
