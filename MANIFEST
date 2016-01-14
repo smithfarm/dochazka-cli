@@ -42,6 +42,7 @@ t/cmd_active/employee.t
 t/cmd_active/interval.t
 t/cmd_admin/activity.t
 t/cmd_admin/employee.t
+t/cmd_admin/employee-utf8.t
 t/cmd_admin/history.t
 t/cmd_inactive/activity.t
 t/cmd_inactive/employee.t
