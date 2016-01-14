@@ -51,7 +51,7 @@ use Term::ReadKey;
 use Term::ReadLine;
 use Web::MREST::CLI qw( init_cli_client );
 
-my $JSON = JSON->new->utf8->pretty;
+my $JSON = JSON->new->pretty;
 
 
 =head1 NAME
