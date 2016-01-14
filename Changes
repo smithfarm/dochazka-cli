@@ -1076,3 +1076,6 @@ Revision history for App-Dochazka-CLI
 - Build.PL: require Web::MREST::CLI 0.280 for UTF-8 bugfix
 - Testers.pm: in PREREQUISITES describe non-Docker way
 
+0.227 2016-01-14 20:16 CET
+- Revert "Drop VERSION from CLI/Guide.pm"
+
