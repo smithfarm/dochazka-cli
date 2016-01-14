@@ -36,7 +36,6 @@
 use 5.012;
 use strict;
 use warnings;
-use utf8;
 
 #use App::CELL::Test::LogToFile;
 use App::CELL qw( $CELL $log $meta $site );
@@ -47,8 +46,6 @@ use App::Dochazka::CLI::Util qw( authenticate_to_server );
 use Data::Dumper;
 use Test::More;
 use Test::Warnings;
-
-plan skip_all => "UTF-8 testing is a WIP";
 
 $debug_mode = 1;
 
@@ -78,6 +75,6 @@ $cmd = "EMP=george PROFILE";
 $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 ok( $rv->ok );
-diag( Dumper $rv );
+like( $rv->payload, qr/Full name:    Karel Om\x{e1}\x{10d}ka/ );
 
 done_testing;
