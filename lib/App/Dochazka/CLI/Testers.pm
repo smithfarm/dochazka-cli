@@ -49,9 +49,39 @@ App::Dochazka::CLI::Testers - Documentation for volunteer testers
 
 =head1 PREREQUISITES
 
-Before you start, you will need to complete the following steps.
 
-=head2 Install Docker
+=head2 Add zypper repo
+
+Add the C<home:smithfarm> zypper repo for your operating system:
+L<http://software.opensuse.org/download.html?project=home%3Asmithfarm&package=perl-App-Dochazka-CLI>.
+
+
+=head2 Server installation
+
+Before you start, you will need to install and set up PostgreSQL and the
+Dochazka REST server. There are two ways to accomplish this:
+the Docker way and the "traditional" way.
+
+L<"The Docker way"> is arguably simpler, because you don't install as many
+packages and there is little or no setup work involved. However, quite a
+lot of data (on the order of hundreds of MB) will be downloaded from Docker
+Hub. (To handle this, it may be a good idea to put C</var/lib/docker> on a
+separate partition.)
+
+L<"The traditional way"> is to install and configure PostgreSQL and the
+Dochazka REST server in your testing environment. This is somewhat more
+complicated and involves installing and operating a PostgreSQL server on
+the machine where you will be running the tests.
+
+Both ways are described below.
+
+=head3 The Docker way
+
+Complete the steps described below:
+
+=over
+
+=item Install Docker
 
 For testing purposes, you can use the Dockerized REST server. For this, you
 will need to have Docker installed and running:
@@ -59,7 +89,7 @@ will need to have Docker installed and running:
     zypper install docker
     systemctl start docker.service
 
-=head2 Get and run test drive script
+=item Get and run test drive script
 
 The REST server Docker image depends on the official PostgreSQL image and
 must be run with certain parameters. A script is provided to make this
@@ -69,24 +99,65 @@ easy. Download and run the script:
     sh test-drive.sh
 
 If you have never run Docker containers before, you may be surprised that
-the script downloads quite a lot of data from Docker Hub. When the script
-completes, you should be able to access the REST server. For now, try
-pointing your browser at L<http://localhost:5000>. If you get a login 
-dialog, you have completed this step.
+the script downloads quite a lot of data from Docker Hub. The script should
+complete without any error messages.
 
-=head2 Add zypper repo and install CLI
+=item Web browser test
 
-Next, add the C<home:smithfarm> zypper repo for your operating system:
-L<http://software.opensuse.org/download.html?project=home%3Asmithfarm&package=perl-App-Dochazka-CLI>.
+When the C<test-drive.sh> script completes, you should be able to access
+the REST server by pointing your browser at L<http://localhost:5000>. At
+the login dialog, enter username "demo" and password "demo".
 
-And, finally, install the CLI:
+=back
+
+
+=head3 The traditional way
+
+This way involves taking the same steps as if you were installing a
+production Dochazka server.
+
+=over
+
+=item Install server packages
+
+The traditional way assumes that you have the PostgreSQL and Dochazka REST
+server packages installed:
+
+    zypper install postgresql postgresql-server postgresql-contrib 
+    zypper install perl-App-Dochazka-REST 
+
+=item PostgreSQL setup
+
+Follow the instructions at
+L<https://metacpan.org/pod/App::Dochazka::REST::Guide#PostgreSQL-setup>.
+
+=item Site configuration
+
+Follow the instructions at
+L<https://metacpan.org/pod/App::Dochazka::REST::Guide#Site-configuration>.
+
+=item Database initialization
+
+Follow the instructions at
+L<https://metacpan.org/pod/App::Dochazka::REST::Guide#Database-initialization>.
+
+=item Web browser test
+
+After completing the above, you should be able to access the REST server by
+pointing your browser at L<http://localhost:5000>. At the login dialog,
+enter username "demo" and password "demo".
+
+=back
+
+
+=head2 Install Dochazka CLI client
+
+Now that the server part is working, install the CLI:
 
     zypper install perl-App-Dochazka-CLI
 
-=head2 Verify success
-
-Provided you have successfully completed all of the above steps, you should
-be able to start the CLI and login as "demo" with password "demo":
+You should now be able to start the CLI and login as "demo" with password
+"demo":
 
     $ dochazka-cli -u demo -p demo
     Loading configuration files from
