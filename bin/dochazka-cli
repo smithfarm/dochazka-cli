@@ -39,7 +39,7 @@ use warnings;
 
 use App::CELL qw( $CELL $log $site $meta );
 use App::Dochazka::CLI qw( $debug_mode $current_emp $current_priv $prompt_date );
-use App::Dochazka::CLI::Parser qw( process_command );
+use App::Dochazka::CLI::Parser qw( parse possible_words process_command );
 use App::Dochazka::CLI::Util qw( authenticate_to_server init_logger init_prompt );
 use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
@@ -100,10 +100,61 @@ my $home = File::HomeDir->my_home;
 my $noauth = 0;
 my $versionparam = 0;
 
+sub matches {
+    my ( $text, $entry_func ) = @_;
+}
+
 sub dochazka_cli_completion {
-    my ($text, $line, $start, $end) = @_;
-    $log->debug( "text $text line $line start $start end $end" );
-    return ();
+    my ( $text, $line, $start ) = @_;
+    #
+    # $text is the current token
+    # $line is the entire line of user input
+    # $start is offset of $text within $line
+    #
+    $log->debug( "text $text line ->$line<- start $start" );
+
+    my $rv = parse( $line );
+    #
+    # $rv->{ts} is the token stack
+    # $rv->{th} is hash of user-entered strings for each token
+    # $rv->{th}->{_REST} is the unrecognized part
+    # $rv->{nc} is the normalized command
+    # 
+    #$log->debug( Dumper $rv );
+
+    # number of tokens in line before $text should equal number of elements
+    # in $rv->{ts} (the token stack)
+    my $previous_text = substr( $line, 0, $start );
+    my $number_of_tokens = split( ' ', $previous_text );
+    my $number_of_elements = scalar @{ $rv->{ts} };
+    if ( ( $number_of_tokens - $number_of_elements ) > 1 ) {
+        $log->debug( "User adding token to unrecognized command" );
+        return sub {};
+    }
+    if ( ( $number_of_tokens > 1 ) and 
+         ( ( $number_of_tokens - $number_of_elements ) == 1 ) ) {
+        $log->debug( "User adding token to recognized command" );
+        return sub {};
+    }
+
+    # if $text is the same as $rv->{th}->{_REST}, there are two
+    # possibilities:
+    # - not enough characters to recognize token
+    # - token potentially recognizable, but not recognized
+    if ( $text eq $rv->{th}->{_REST} ) {
+        if ( length( $text ) < 3 ) {
+            $log->debug( "Not enough characters to recognize token" );
+            return sub {};
+        }
+        $log->debug( "Unrecognized command" );
+        return sub {};
+    }
+       
+    $log->debug( "Command OK so far" );
+    #$log->debug( Dumper $rv );
+    #my $possible_words = possible_words( $rv->{ts} );
+    #$log->debug( Dumper $possible_words );
+    return \&matches;
 }
 
 sub get_prompt {
@@ -240,7 +291,7 @@ if ( ! $noauth ) {
 # paraphrased from https://metacpan.org/source/HAYASHI/Term-ReadLine-Gnu-1.26/eg/fileman
 sub initialize_readline {
     my $term = new Term::ReadLine 'dochazka-cli';
-    $term->Attribs->{attempted_completion_function} = \&dochazka_cli_completion;
+    $term->Attribs->{completion_function} = \&dochazka_cli_completion;
     return $term;
 }
 
