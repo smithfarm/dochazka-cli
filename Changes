@@ -1068,3 +1068,7 @@ Revision history for App-Dochazka-CLI
   https://github.com/smithfarm/dochazka-cli/issues/27 Fixes: #27
 - CLI/Guide.pm: remove VERSION
 
+0.225 2016-01-14 17:19 CET
+- bin/dochazka-cli: tell JSON to not decode UTF-8
+  https://github.com/smithfarm/dochazka-cli/issues/24 Fixes: #24
+

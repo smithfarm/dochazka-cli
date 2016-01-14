@@ -23,7 +23,7 @@ name: App-Dochazka-CLI
 provides:
   App::Dochazka::CLI:
     file: lib/App/Dochazka/CLI.pm
-    version: '0.224'
+    version: '0.225'
   App::Dochazka::CLI::CommandMap:
     file: lib/App/Dochazka/CLI/CommandMap.pm
   App::Dochazka::CLI::Commands::Activity:
@@ -79,5 +79,5 @@ resources:
   bugtracker: https://github.com/smithfarm/dochazka-cli/issues
   license: http://opensource.org/licenses/bsd-license.php
   repository: https://github.com/smithfarm/dochazka-cli
-version: '0.224'
+version: '0.225'
 x_serialization_backend: 'CPAN::Meta::YAML version 0.016'
