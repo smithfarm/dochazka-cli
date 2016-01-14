@@ -9,7 +9,7 @@ build_requires:
   Params::Validate: '1.06'
   Test::Fatal: '0'
   Test::Warnings: '0'
-  Web::MREST::CLI: '0.279'
+  Web::MREST::CLI: '0.28'
 configure_requires:
   Module::Build: '0.37'
   Software::License: '0'
@@ -23,7 +23,7 @@ name: App-Dochazka-CLI
 provides:
   App::Dochazka::CLI:
     file: lib/App/Dochazka/CLI.pm
-    version: '0.225'
+    version: '0.226'
   App::Dochazka::CLI::CommandMap:
     file: lib/App/Dochazka/CLI/CommandMap.pm
   App::Dochazka::CLI::Commands::Activity:
@@ -73,11 +73,11 @@ requires:
   Term::ReadKey: '0'
   Term::ReadLine::Gnu: '0'
   Text::Table: '0'
-  Web::MREST::CLI: '0.279'
+  Web::MREST::CLI: '0.28'
   perl: '5.012'
 resources:
   bugtracker: https://github.com/smithfarm/dochazka-cli/issues
   license: http://opensource.org/licenses/bsd-license.php
   repository: https://github.com/smithfarm/dochazka-cli
-version: '0.225'
+version: '0.226'
 x_serialization_backend: 'CPAN::Meta::YAML version 0.016'

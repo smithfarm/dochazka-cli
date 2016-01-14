@@ -53,11 +53,11 @@ App::Dochazka::CLI - Dochazka command line client
 
 =head1 VERSION
 
-Version 0.225
+Version 0.226
 
 =cut
 
-our $VERSION = '0.225';
+our $VERSION = '0.226';
 
 
 

@@ -1072,3 +1072,7 @@ Revision history for App-Dochazka-CLI
 - bin/dochazka-cli: tell JSON to not decode UTF-8
   https://github.com/smithfarm/dochazka-cli/issues/24 Fixes: #24
 
+0.226 2016-01-14 19:54 CET
+- Build.PL: require Web::MREST::CLI 0.280 for UTF-8 bugfix
+- Testers.pm: in PREREQUISITES describe non-Docker way
+
