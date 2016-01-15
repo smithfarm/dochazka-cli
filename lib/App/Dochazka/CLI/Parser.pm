@@ -40,7 +40,7 @@ use warnings;
 
 use App::CELL qw( $CELL );
 use App::Dochazka::CLI qw( $debug_mode );
-use App::Dochazka::CLI::TokenMap qw( $regex_map );
+use App::Dochazka::CLI::TokenMap qw( $token_map );
 use App::Dochazka::CLI::CommandMap;
 use Data::Dumper;
 use Exporter 'import';
@@ -254,7 +254,7 @@ sub parse {
 
             # look up the regular expression and apply it to the remaining 
             # command text $w_cmd
-            my $re = $regex_map->{ $stripped_key };
+            my $re = $token_map->{ $stripped_key };
             if ( ! $re ) {
                 die "AGH! Possible token $key has no regular expression assigned";
             }

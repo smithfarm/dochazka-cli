@@ -40,7 +40,7 @@ use warnings;
 
 use Exporter qw( import );
 
-our @EXPORT_OK = qw( $regex_map );
+our @EXPORT_OK = qw( $token_map );
 
 
 
@@ -54,7 +54,7 @@ App::Dochazka::CLI::TokenMap - Token map
 
 =over
 
-=item C<< $regex_map >>
+=item C<< $token_map >>
 
 Maps tokens to regular expression "strings". These strings are just the
 "business end" - the final regular expression is generated from each string in
@@ -72,7 +72,7 @@ comparison.
 
 =cut
 
-our $regex_map = { 
+our $token_map = { 
 #    ACTIVE    => '(active)',
     ACTIVITY  => '(activi\S*)',
     ADD       => '(add\S*)',

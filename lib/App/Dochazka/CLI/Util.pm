@@ -50,7 +50,6 @@ use App::Dochazka::CLI qw(
     $prompt_month 
     $prompt_day 
 );
-use App::Dochazka::CLI::TokenMap qw( $regex_map ); 
 use App::Dochazka::Common::Model::Employee;
 use Data::Dumper;
 use Date::Calc qw( check_date Add_Delta_Days );
