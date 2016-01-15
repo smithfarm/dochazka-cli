@@ -63,7 +63,7 @@ sub dochazka_cli_completion {
     # $line is the entire line of user input
     # $start is offset of $text within $line
     #
-    $log->debug( "text $text line ->$line<- start $start" );
+    #$log->debug( "text $text line ->$line<- start $start" );
 
     my $rv = parse( $line );
     #
@@ -76,8 +76,13 @@ sub dochazka_cli_completion {
 
     # if _REST contains more than one token, nothing to do
     if ( split( ' ', $rv->{th}->{_REST} ) > 1 ) {
-        $log->debug( "Command not recognized: do nothing" );
-        return sub {};
+        #$log->debug( "Command not recognized: do nothing" );
+        return; 
+    }
+
+    # if $line ends in '=', do nothing
+    if ( $line =~ m/=$/ ) {
+        return;
     }
 
     # if there is no $text, match everything
@@ -85,27 +90,34 @@ sub dochazka_cli_completion {
 
     # get matching words
     my @matches = grep( /^$text/i, keys %$completion_map );
-    $log->debug( "Matches: " . Dumper( \@matches ) );
+    #$log->debug( "Matches: " . Dumper( \@matches ) );
 
     # possibly adjust token stack
-    pop( $rv->{ts} ) unless $rv->{th}->{_REST} or $line =~ m/ $/;
-    $log->debug( "Token stack: " . Dumper( $rv->{ts} ) );
+    my @ts = @{ $rv->{ts} };
+    pop( @ts ) unless $rv->{th}->{_REST} or $line =~ m/ $/;
+    #$log->debug( "Token stack: " . Dumper( \@ts ) );
 
     # get permissible tokens in this position
-    my $permissibles = possible_words( $rv->{ts} );
-    $log->debug( "Permissibles: " . Dumper( $permissibles ) );
+    my $permissibles = possible_words( \@ts );
+    #$log->debug( "Permissibles: " . Dumper( $permissibles ) );
     
     # construct list of regexes
-    my @regexes_of_permissibles = map { qr/$token_map->{$_}/ } ( @$permissibles );
-    $log->debug( "Regexes of permissibles: " . Dumper( \@regexes_of_permissibles ) );
+    my @regexes_of_permissibles = map { qr/^$token_map->{$_}/ } ( @$permissibles );
+    #$log->debug( "Regexes of permissibles: " . Dumper( \@regexes_of_permissibles ) );
 
     # return only those words that match 
     my @result = ();
     foreach my $match ( @matches ) {
         # does it match one of the permissibles?
-        push( @result, $match ) if grep { $match =~ $_ } ( @regexes_of_permissibles );
+        #$log->debug( "Considering $match" );
+        if ( grep { $match =~ $_; } ( @regexes_of_permissibles ) ) {
+            #$log->debug( "Matches one of the permissible regexes!" );
+            push( @result, $match ) 
+        } else {
+            #$log->debug( "(no match)" );
+        }
     }
-    $log->debug( "Result: " . Dumper( \@result ) );
+    #$log->debug( "Result: " . Dumper( \@result ) );
 
     return @result;
 }
