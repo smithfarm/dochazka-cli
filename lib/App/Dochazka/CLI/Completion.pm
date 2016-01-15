@@ -63,7 +63,7 @@ sub dochazka_cli_completion {
     # $line is the entire line of user input
     # $start is offset of $text within $line
     #
-    #$log->debug( "text $text line ->$line<- start $start" );
+    $log->debug( "text $text line ->$line<- start $start" );
 
     my $rv = parse( $line );
     #
@@ -117,7 +117,7 @@ sub dochazka_cli_completion {
             #$log->debug( "(no match)" );
         }
     }
-    #$log->debug( "Result: " . Dumper( \@result ) );
+    $log->debug( "Result: " . Dumper( \@result ) );
 
     return @result;
 }

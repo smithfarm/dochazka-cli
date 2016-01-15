@@ -26,6 +26,7 @@ my $build = Module::Build->new(
         'App::CELL'          => 0.209,
         'App::Dochazka::Common'      => 0.199,
         'Date::Calc'         => 0,
+        'Test::Deep'         => 0,
         'Test::Fatal'        => 0,
         'Test::Warnings'     => 0,
         'Params::Validate'   => 1.06,
