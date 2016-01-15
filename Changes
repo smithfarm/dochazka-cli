@@ -1085,3 +1085,11 @@ Revision history for App-Dochazka-CLI
   - t/cmd_admin/employee-utf8.t: new test
 - bin/dochazka-cli: beginnings of tab completion
 
+0.229 2016-01-15 22:25 CET
+- Extend copyright into 2016
+- tab completion:
+  - TokenMap.pm: rename $regex_map -> $token_map, add $completion_map
+  - Completion.pm: working custom completion
+  - custom completion: fix various issues
+  - CommandMap: add some noop commands to fix tab completion
+

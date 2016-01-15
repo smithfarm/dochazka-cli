@@ -57,7 +57,7 @@
    "provides" : {
       "App::Dochazka::CLI" : {
          "file" : "lib/App/Dochazka/CLI.pm",
-         "version" : "0.228"
+         "version" : "0.229"
       },
       "App::Dochazka::CLI::CommandMap" : {
          "file" : "lib/App/Dochazka/CLI/CommandMap.pm"
@@ -86,9 +86,12 @@
       "App::Dochazka::CLI::Commands::Schedule" : {
          "file" : "lib/App/Dochazka/CLI/Commands/Schedule.pm"
       },
+      "App::Dochazka::CLI::Completion" : {
+         "file" : "lib/App/Dochazka/CLI/Completion.pm"
+      },
       "App::Dochazka::CLI::Guide" : {
          "file" : "lib/App/Dochazka/CLI/Guide.pm",
-         "version" : "0.228"
+         "version" : "0.229"
       },
       "App::Dochazka::CLI::Parser" : {
          "file" : "lib/App/Dochazka/CLI/Parser.pm"
@@ -121,6 +124,6 @@
          "url" : "https://github.com/smithfarm/dochazka-cli"
       }
    },
-   "version" : "0.228",
+   "version" : "0.229",
    "x_serialization_backend" : "JSON::PP version 2.27203"
 }
