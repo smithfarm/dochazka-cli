@@ -101,7 +101,7 @@ our $token_map = {
     EFFECTIVE => '(eff\S*)',
     EID       => '(eid[^\s=]*)',
     EMPLOYEE  => '(emp[^\s=]*)',
-    EMPLOYEE_SPEC => '((emp|sec|nic|eid)\S*=([%[:alnum:]_][%[:alnum:]_-]*)*)',
+    EMPLOYEE_SPEC => '((emp|sec_id|nick|eid)\S*=([%[:alnum:]_][%[:alnum:]_-]*)*)',
     EXIT      => '(((exi)|(qui)|(\\\\q))\S*)',
 #    FEBRUARY  => '(feb\S*)',
     FETCH     => '(fet\S*)',
@@ -153,7 +153,7 @@ our $token_map = {
     REPORT    => '(rep\S*)',
 #    SATURDAY    => '(sat\S*)',  RESERVED BY _DOW
     SCHEDULE  => '(sch\S*)',
-    SCHEDULE_SPEC => '((sco|sid)[^\s=]*=[%[:alnum:]_][%[:alnum:]_-]*)',
+    SCHEDULE_SPEC => '((sco|sid)[^\s=]*=([%[:alnum:]_][%[:alnum:]_-]*)*)',
     SCODE     => '(sco[^\s=]*)',
     SEARCH    => '(sea\S*)',
     SEC_ID    => '(sec[^\s=]*)',
