@@ -60,6 +60,7 @@ App::Dochazka::CLI::Commands::Misc - Misc commands
 
 our @EXPORT_OK = qw( 
     change_prompt_date
+    noop
 );
 
 
@@ -98,5 +99,21 @@ sub change_prompt_date {
     return $CELL->status_ok( 'DOCHAZKA_CLI_PROMPT_DATE_CHANGED', args => [ $prompt_date ] );
 }
 
+=head2 noop
+
+=cut
+
+sub noop {
+    print "Entering " . __PACKAGE__ . "::noop\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    return $CELL->status_ok( 
+        'DOCHAZKA_NOOP',
+        payload => "This is a placeholder for tab completion"
+    );
+}
 
 1;

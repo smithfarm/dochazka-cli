@@ -80,6 +80,7 @@ use App::Dochazka::CLI::Commands::Interval qw(
 );
 use App::Dochazka::CLI::Commands::Misc qw( 
     change_prompt_date 
+    noop
 );
 use App::Dochazka::CLI::Commands::Priv qw(
     show_priv_as_at
@@ -591,6 +592,9 @@ our $dispatch_map = {
 
     # Employee commands
     "EMPLOYEE" => \&employee_profile,
+    "EID" => \&noop,
+    "NICK" => \&noop,
+    "SEC_ID" => \&noop,
     "EMPLOYEE LDAP" => \&employee_ldap,
     "EMPLOYEE LIST" => \&employee_list,
     "EMPLOYEE LIST _TERM" => \&employee_list,
