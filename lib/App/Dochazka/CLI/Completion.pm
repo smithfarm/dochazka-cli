@@ -39,7 +39,6 @@ use strict;
 use warnings;
 
 use App::CELL qw( $log );
-use App::Dochazka::CLI qw( $debug_mode );
 use App::Dochazka::CLI::Parser qw( parse possible_words );
 use App::Dochazka::CLI::TokenMap qw( $completion_map $token_map );
 use Data::Dumper;
