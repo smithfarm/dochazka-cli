@@ -1093,3 +1093,10 @@ Revision history for App-Dochazka-CLI
   - custom completion: fix various issues
   - CommandMap: add some noop commands to fix tab completion
 
+0.230 2016-01-16 20:35 CET
+- tab completion:
+  - fix some minor glitches
+  - add tab completion tests
+  - drop a senseless dependency
+- CLI/Testers.pm: clarify PREREQUISITES
+
