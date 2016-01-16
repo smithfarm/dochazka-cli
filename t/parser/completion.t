@@ -51,4 +51,7 @@ cmp_deeply( \@rv, bag( 'employee', 'employee=' ) );
 @rv = dochazka_cli_completion( 'p', 'employee p', 9 );
 cmp_deeply( \@rv, bag( 'profile', 'password' ) );
 
+@rv = dochazka_cli_completion( 'ni', 'ni ni', 3 );
+cmp_deeply( \@rv, bag() );
+
 done_testing;
