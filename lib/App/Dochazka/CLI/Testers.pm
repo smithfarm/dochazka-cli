@@ -50,34 +50,42 @@ App::Dochazka::CLI::Testers - Documentation for volunteer testers
 =head1 PREREQUISITES
 
 
-=head2 Add zypper repo
+=head2 Prereq 1: Add home:smithfarm repo
 
-Add the C<home:smithfarm> zypper repo for your operating system:
+The Dochazka packages and their dependencies currently live in the
+C<home:smithfarm> repo on the OBS. To fulfill this prereq, add the right
+repo for your operating system:
 L<http://software.opensuse.org/download.html?project=home%3Asmithfarm&package=perl-App-Dochazka-CLI>.
 
 
-=head2 Server installation
+=head2 Prereq 2: Install/configure servers
 
 Before you start, you will need to install and set up PostgreSQL and the
 Dochazka REST server. There are two ways to accomplish this:
 the Docker way and the "traditional" way.
 
-L<"The Docker way"> is arguably simpler, because you don't install as many
+=over
+
+=item L<"The Docker way">
+
+is arguably simpler, because you don't install as many
 packages and there is little or no setup work involved. However, quite a
 lot of data (on the order of hundreds of MB) will be downloaded from Docker
 Hub. (To handle this, it may be a good idea to put C</var/lib/docker> on a
 separate partition.)
 
-L<"The traditional way"> is to install and configure PostgreSQL and the
+=item L<"The traditional way">
+
+is to install and configure PostgreSQL and the
 Dochazka REST server in your testing environment. This is somewhat more
 complicated and involves installing and operating a PostgreSQL server on
 the machine where you will be running the tests.
 
-Both ways are described below.
+=back
+
+Both ways are described below, but you only need to do one or the other!
 
 =head3 The Docker way
-
-Complete the steps described below:
 
 =over
 
@@ -113,15 +121,13 @@ the login dialog, enter username "demo" and password "demo".
 
 =head3 The traditional way
 
-This way involves taking the same steps as if you were installing a
-production Dochazka server.
+Alternatively, if you don't like Docker or can't use it for some reason,
+you can install and set up PostgreSQL and the Dochazka REST server
+yourself.
 
 =over
 
 =item Install server packages
-
-The traditional way assumes that you have the PostgreSQL and Dochazka REST
-server packages installed:
 
     zypper install postgresql postgresql-server postgresql-contrib 
     zypper install perl-App-Dochazka-REST 
@@ -150,7 +156,7 @@ enter username "demo" and password "demo".
 =back
 
 
-=head2 Install Dochazka CLI client
+=head2 Prereq 3: Install Dochazka CLI client
 
 Now that the server part is working, install the CLI:
 
