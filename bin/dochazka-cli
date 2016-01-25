@@ -96,6 +96,11 @@ CLI commands are documented in L<App::Dochazka::CLI::Guide>.
 
 local $Data::Dumper::Terse = 1;
 
+$log->init( 
+    ident => "DochazkaCLI",
+    debug_mode => 1,
+); 
+
 my $server = '';
 my $home = File::HomeDir->my_home;
 my $noauth = 0;
