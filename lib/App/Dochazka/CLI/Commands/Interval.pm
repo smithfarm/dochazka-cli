@@ -38,10 +38,18 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL );
-use App::Dochazka::CLI qw( $current_emp $debug_mode $prompt_date $prompt_year );
+use App::Dochazka::CLI qw(
+    $current_emp
+    $debug_mode
+    $prompt_date
+    $prompt_month
+    $prompt_year
+);
 use App::Dochazka::CLI::Shared qw( shared_generate_report );
 use App::Dochazka::CLI::Util qw( 
+    datelist_from_token
     determine_employee
+    month_alpha_to_numeric
     normalize_date
     normalize_time
     parse_test 
@@ -72,31 +80,17 @@ App::Dochazka::CLI::Commands::Interval - Interval commands
 
 =cut
 
-our %month_map = (
-    'jan' => 1,
-    'feb' => 2,
-    'mar' => 3,
-    'apr' => 4,
-    'may' => 5,
-    'jun' => 6,
-    'jul' => 7,
-    'aug' => 8,
-    'sep' => 9,
-    'oct' => 10,
-    'nov' => 11,
-    'dec' => 12,
-);
-
 our @EXPORT_OK = qw( 
     interval_date
     interval_date_date1
-    interval_fillup_tsrange
+    interval_datelist
     interval_month
-    interval_num_num1
-    interval_promptdate
     interval_new_date_time_date1_time1
     interval_new_time_time1
     interval_new_timerange
+    interval_num_num1
+    interval_promptdate
+    interval_tsrange
 );
 
 
@@ -188,6 +182,8 @@ sub interval_new_timerange {
     EMPLOYEE_SPEC INTERVAL FETCH _DATE
     INTERVAL FILLUP _DATE
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE
+    INTERVAL FILLUP DRY_RUN _DATE
+    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _DATE
     INTERVAL SUMMARY _DATE
     EMPLOYEE_SPEC INTERVAL SUMMARY _DATE
     INTERVAL REPORT _DATE
@@ -226,6 +222,8 @@ sub interval_date {
     EMPLOYEE_SPEC INTERVAL FETCH _DATE _DATE1
     INTERVAL FILLUP _DATE _DATE1
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE _DATE1
+    INTERVAL FILLUP DRY_RUN _DATE _DATE1
+    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _DATE _DATE1
     INTERVAL DELETE _DATE _DATE1
     EMPLOYEE_SPEC INTERVAL DELETE _DATE _DATE1
     INTERVAL _DATE _HYPHEN _DATE1
@@ -234,6 +232,8 @@ sub interval_date {
     EMPLOYEE_SPEC INTERVAL FETCH _DATE _HYPHEN _DATE1
     INTERVAL FILLUP _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL FILLUP _DATE _HYPHEN _DATE1
+    INTERVAL FILLUP DRY_RUN _DATE _HYPHEN _DATE1
+    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _DATE _HYPHEN _DATE1
     INTERVAL SUMMARY _DATE _HYPHEN _DATE1
     EMPLOYEE_SPEC INTERVAL SUMMARY _DATE _HYPHEN _DATE1
     INTERVAL REPORT _DATE _HYPHEN _DATE1
@@ -274,6 +274,8 @@ sub interval_date_date1 {
     EMPLOYEE_SPEC INTERVAL FETCH _MONTH [_NUM]
     INTERVAL FILLUP _MONTH [_NUM]
     EMPLOYEE_SPEC INTERVAL FILLUP _MONTH [_NUM]
+    INTERVAL FILLUP DRY_RUN _MONTH [_NUM]
+    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _MONTH [_NUM]
     INTERVAL SUMMARY _MONTH [_NUM]
     EMPLOYEE_SPEC INTERVAL SUMMARY _MONTH [_NUM]
     INTERVAL REPORT _MONTH [_NUM]
@@ -299,9 +301,7 @@ sub interval_month {
 
     # determine lower and upper bounds
     # - month
-    my ( $month ) = $th->{'_MONTH'} =~ m/\A(\S\S\S)/;
-    $month = lc $month;
-    my $nmonth = $month_map{ $month };
+    my $nmonth = month_alpha_to_numeric( $th->{_MONTH} );
     # - year
     my $year = $th->{'_NUM'} || $prompt_year;
     # - normalize
@@ -322,6 +322,8 @@ sub interval_month {
     EMPLOYEE_SPEC INTERVAL FETCH _NUM [_NUM1]
     INTERVAL FILLUP _NUM [_NUM1]
     EMPLOYEE_SPEC INTERVAL FILLUP _NUM [_NUM1]
+    INTERVAL FILLUP DRY_RUN _NUM [_NUM1]
+    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _NUM [_NUM1]
     INTERVAL SUMMARY _NUM [_NUM1]
     EMPLOYEE_SPEC INTERVAL SUMMARY _NUM [_NUM1]
     INTERVAL REPORT _NUM [_NUM1]
@@ -365,10 +367,12 @@ sub interval_num_num1 {
     return _interval_fillup_delete_print( $th, $emp, "[ $date 00:00, $date1 24:00 )" );
 }
 
-=head3 interval_fillup_tsrange
+=head3 interval_tsrange
 
     INTERVAL FILLUP _TSRANGE
     EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE
+    INTERVAL FILLUP DRY_RUN _TSRANGE
+    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _TSRANGE
     INTERVAL SUMMARY _TSRANGE
     EMPLOYEE_SPEC INTERVAL SUMMARY _TSRANGE
     INTERVAL REPORT _TSRANGE
@@ -376,8 +380,8 @@ sub interval_num_num1 {
 
 =cut
 
-sub interval_fillup_tsrange {
-    print "Entering " . __PACKAGE__ . "::interval_fillup_tsrange\n" if $debug_mode;
+sub interval_tsrange {
+    print "Entering " . __PACKAGE__ . "::interval_tsrange\n" if $debug_mode;
     my ( $ts, $th ) = @_;
 
     # parse test
@@ -393,6 +397,47 @@ sub interval_fillup_tsrange {
     return _interval_fillup_delete_print( $th, $emp, $th->{_TSRANGE} );
 }
 
+=head3 interval_datelist
+
+    INTERVAL FILLUP _DATELIST
+    EMPLOYEE_SPEC INTERVAL FILLUP _DATELIST
+    INTERVAL FILLUP DRY_RUN _DATELIST
+    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _DATELIST
+    INTERVAL FILLUP _MONTH _DATELIST
+    EMPLOYEE_SPEC INTERVAL FILLUP _MONTH _DATELIST
+    INTERVAL FILLUP DRY_RUN _MONTH _DATELIST
+    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _MONTH _DATELIST
+
+=cut
+
+sub interval_datelist {
+    print "Entering " . __PACKAGE__ . "::interval_datelist\n" if $debug_mode;
+    my ( $ts, $th ) = @_;
+
+    # parse test
+    return parse_test( $ts, $th ) if $ts eq 'PARSE_TEST';
+
+    print Dumper( $th ) if $debug_mode;
+
+    # determine employee
+    my $status = determine_employee( $th->{'EMPLOYEE_SPEC'} );
+    return $status unless $status->ok;
+    my $emp = $status->payload;
+
+    # determine dry_run
+    my $dry_run = exists( $th->{'DRY_RUN'} ) ? 1 : 0;
+
+    # if _MONTH given, use it; otherwise use $prompt_month
+    my $month = $prompt_month;
+    if ( $th->{_MONTH} ) {
+        $month = _month_alpha_to_numeric( $th->{_MONTH} );
+    }
+
+    # convert _DATELIST token into reference to array of dates
+    my $dl = datelist_from_token( $month,  $th->{_DATELIST} );
+    
+    return _fillup( eid => $emp->eid, date_list => $dl, dry_run => $dry_run );
+}
 
 =head3 interval_promptdate
 
@@ -429,21 +474,23 @@ sub interval_promptdate {
 }
 
 sub _interval_fillup_delete_print {
-    my ( $th, $emp, $tsr ) = @_;
+    my ( $th, $emp, $dlts ) = @_;
 
     if ( $th->{'FILLUP'} ) {
-        my $dry = exists( $th->{'COMMIT'} )
-            ? 0
-            : 1;
-        return _fillup( emp_obj => $emp, tsrange => $tsr, dry_run => $dry );
+        my %ARGS;
+        $ARGS{emp} = $emp->eid;
+        $ARGS{date_list} = $dlts if ref( $dlts ) eq 'ARRAY';
+        $ARGS{tsrange} = $dlts if ref( $dlts ) eq '';
+        $ARGS{dry_run} = exists( $th->{'DRY_RUN'} ) ? 1 : 0;
+        return _fillup( %ARGS );
     } elsif ( $th->{'DELETE'} ) {
-        return _delete_intervals_tsrange( $emp->eid, $tsr );
+        return _delete_intervals_tsrange( $emp->eid, $dlts );
     } elsif ( $th->{'SUMMARY'} ) {
-        return _interval_summary( $emp->eid, $tsr );
+        return _interval_summary( $emp->eid, $dlts );
     } elsif ( $th->{'REPORT'} ) {
-        return _interval_report( $emp, $tsr );
+        return _interval_report( $emp, $dlts );
     } else {
-        return _print_intervals_tsrange( $emp, $tsr );
+        return _print_intervals_tsrange( $emp, $dlts );
     }
 }
 
@@ -707,42 +754,13 @@ EOS
 
 sub _fillup {
     my ( %ARGS ) = validate( @_, {
-        emp_obj => { can => [ 'eid', 'nick' ] },
-        tsrange => { type => SCALAR },
+        eid => { type => SCALAR },
+        date_list => { type => ARRAYREF, optional => 1 },
+        tsrange => { type => SCALAR, optional => 1 },
         dry_run => { type => SCALAR },
     } );
-    my $eid = $ARGS{emp_obj}->eid;
-    my $nick = $ARGS{emp_obj}->nick;
-    my $heading1 = "INTERVAL FILLUP " . ( $ARGS{dry_run} ? '(dry run)' : '' ) . " for $nick (EID $eid)";
-    my $heading2 = "tsrange $ARGS{tsrange}";
-    my $method = $ARGS{dry_run}
-        ? 'GET'
-        : 'POST';
 
-    my $status = send_req( $method, "interval/fillup/eid/$eid/$ARGS{tsrange}" );
-    return rest_error( $status, "$heading1 $heading2" ) unless $status->ok;
-
-    return $status unless $ARGS{dry_run};
-
-    my $pl = '';
-    $pl .= "$heading1\n";
-    $pl .= "$heading2\n\n";
-
-    my $t;
-    if ( ref( $status->payload ) eq 'ARRAY' ) {
-        $t = Text::Table->new( 'IID', 'Tsrange' );
-        for my $int ( @{ $status->payload } ) {
-            $t->add( 
-                '',
-                $int,
-            );
-        }
-    } else {
-        $t = "No scheduled intervals in range";
-    }
-    $pl .= $t;
-
-    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
+    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
 }
 
 

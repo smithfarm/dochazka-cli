@@ -70,7 +70,8 @@ use App::Dochazka::CLI::Commands::History qw(
 use App::Dochazka::CLI::Commands::Interval qw(
     interval_date
     interval_date_date1
-    interval_fillup_tsrange
+    interval_datelist
+    interval_tsrange
     interval_month
     interval_num_num1
     interval_promptdate
@@ -757,19 +758,23 @@ our $dispatch_map = {
     "INTERVAL DELETE _NUM _NUM1" => \&interval_num_num1,
     "EMPLOYEE_SPEC INTERVAL DELETE _NUM _NUM1" => \&interval_num_num1,
 
-    "INTERVAL FILLUP _TSRANGE" => \&interval_fillup_tsrange,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE" => \&interval_fillup_tsrange,
-    "INTERVAL FILLUP DRY_RUN _TSRANGE" => \&interval_fillup_tsrange,
-    "EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _TSRANGE" => \&interval_fillup_tsrange,
-    "INTERVAL SUMMARY _TSRANGE" => \&interval_fillup_tsrange,
-    "EMPLOYEE_SPEC INTERVAL SUMMARY _TSRANGE" => \&interval_fillup_tsrange,
-    "INTERVAL REPORT _TSRANGE" => \&interval_fillup_tsrange,
-    "EMPLOYEE_SPEC INTERVAL REPORT _TSRANGE" => \&interval_fillup_tsrange,
+    "INTERVAL FILLUP _TSRANGE" => \&interval_tsrange,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _TSRANGE" => \&interval_tsrange,
+    "INTERVAL FILLUP DRY_RUN _TSRANGE" => \&interval_tsrange,
+    "EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _TSRANGE" => \&interval_tsrange,
+    "INTERVAL SUMMARY _TSRANGE" => \&interval_tsrange,
+    "EMPLOYEE_SPEC INTERVAL SUMMARY _TSRANGE" => \&interval_tsrange,
+    "INTERVAL REPORT _TSRANGE" => \&interval_tsrange,
+    "EMPLOYEE_SPEC INTERVAL REPORT _TSRANGE" => \&interval_tsrange,
 
-    "INTERVAL FILLUP _DATELIST" => \&interval_fillup_datelist,
-    "EMPLOYEE_SPEC INTERVAL FILLUP _DATELIST" => \&interval_fillup_datelist,
-    "INTERVAL FILLUP DRY_RUN _DATELIST" => \&interval_fillup_datelist,
-    "EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _DATELIST" => \&interval_fillup_datelist,
+    "INTERVAL FILLUP _DATELIST" => \&interval_datelist,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _DATELIST" => \&interval_datelist,
+    "INTERVAL FILLUP DRY_RUN _DATELIST" => \&interval_datelist,
+    "EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _DATELIST" => \&interval_datelist,
+    "INTERVAL FILLUP _MONTH _DATELIST" => \&interval_datelist,
+    "EMPLOYEE_SPEC INTERVAL FILLUP _MONTH _DATELIST" => \&interval_datelist,
+    "INTERVAL FILLUP DRY_RUN _MONTH _DATELIST" => \&interval_datelist,
+    "EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _MONTH _DATELIST" => \&interval_datelist,
 
     # add/insert new intervals
     "INTERVAL _TIME _TIME1 _TERM" => \&interval_new_time_time1,
