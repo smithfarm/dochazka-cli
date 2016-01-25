@@ -37,7 +37,7 @@ use 5.012;
 use strict;
 use warnings;
 
-use App::CELL qw( $CELL );
+use App::CELL qw( $CELL $log );
 use App::Dochazka::CLI qw(
     $current_emp
     $debug_mode
@@ -423,9 +423,11 @@ sub interval_datelist {
     my $status = determine_employee( $th->{'EMPLOYEE_SPEC'} );
     return $status unless $status->ok;
     my $emp = $status->payload;
+    $log->debug( "EID: " . $emp->eid );
 
     # determine dry_run
     my $dry_run = exists( $th->{'DRY_RUN'} ) ? 1 : 0;
+    $log->debug( "dry_run: $dry_run" );
 
     # if _MONTH given, use it; otherwise use $prompt_month
     my $month = $prompt_month;
@@ -435,8 +437,14 @@ sub interval_datelist {
 
     # convert _DATELIST token into reference to array of dates
     my $dl = datelist_from_token( $month,  $th->{_DATELIST} );
+    $log->debug( "datelist: " . Dumper( $dl ) );
     
-    return _fillup( eid => $emp->eid, date_list => $dl, dry_run => $dry_run );
+    return _fillup(
+        eid => $emp->eid,
+        date_list => $dl,
+        dry_run => $dry_run,
+        clobber => 1,
+    );
 }
 
 =head3 interval_promptdate
@@ -474,23 +482,23 @@ sub interval_promptdate {
 }
 
 sub _interval_fillup_delete_print {
-    my ( $th, $emp, $dlts ) = @_;
+    my ( $th, $emp, $tsr ) = @_;
 
     if ( $th->{'FILLUP'} ) {
         my %ARGS;
-        $ARGS{emp} = $emp->eid;
-        $ARGS{date_list} = $dlts if ref( $dlts ) eq 'ARRAY';
-        $ARGS{tsrange} = $dlts if ref( $dlts ) eq '';
+        $ARGS{eid} = $emp->eid;
+        $ARGS{tsrange} = $tsr;
         $ARGS{dry_run} = exists( $th->{'DRY_RUN'} ) ? 1 : 0;
+        $ARGS{clobber} = 0;
         return _fillup( %ARGS );
     } elsif ( $th->{'DELETE'} ) {
-        return _delete_intervals_tsrange( $emp->eid, $dlts );
+        return _delete_intervals_tsrange( $emp->eid, $tsr );
     } elsif ( $th->{'SUMMARY'} ) {
-        return _interval_summary( $emp->eid, $dlts );
+        return _interval_summary( $emp->eid, $tsr );
     } elsif ( $th->{'REPORT'} ) {
-        return _interval_report( $emp, $dlts );
+        return _interval_report( $emp, $tsr );
     } else {
-        return _print_intervals_tsrange( $emp, $dlts );
+        return _print_intervals_tsrange( $emp, $tsr );
     }
 }
 
@@ -758,9 +766,17 @@ sub _fillup {
         date_list => { type => ARRAYREF, optional => 1 },
         tsrange => { type => SCALAR, optional => 1 },
         dry_run => { type => SCALAR },
+        clobber => { type => SCALAR, default => 1 },
     } );
 
-    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
+    my $request_body = encode_json( \%ARGS );
+
+    my $status = send_req( 'POST', "interval/fillup", $request_body );
+    return $status unless $status->ok;
+
+    my $count = $status->{'count'} ? $status->{'count'} : 0;
+    my $pl = "$count intervals added";
+    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
 }
 
 

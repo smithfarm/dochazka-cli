@@ -48,6 +48,12 @@ use Test::Fatal;
 use Test::More;
 use Test::Warnings;
 
+note( "Set log level" );
+$log->init( 
+    ident => "DochazkaCLI",
+    debug_mode => 1,
+); 
+
 # month_alpha_to_numeric()
 my %test_months = (
     'prd' => undef,
