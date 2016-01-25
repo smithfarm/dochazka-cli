@@ -180,25 +180,46 @@ sub authenticate_to_server {
 
 =head2 datelist_from_token
 
-Convert _DATELIST token into reference to array of dates.
+Takes a numeric month and a _DATELIST token - e.g. "5,6,10-13,2".
+
+Convert the token into an array of dates and return a reference. So, upon
+success, the return value will look something like this:
+
+    [ "2015-01-01", "2015-01-06", "2015-01-22" ]
+
+If there's a problem, writes an error message to the log and returns
+undef.
 
 =cut
 
 sub datelist_from_token {
-    my ( $month, $token ) = shift;
+    my ( $month, $token ) = @_;
+    $log->info( "Entering " . __PACKAGE__ . "::datelist_from_token with month $month and token " . Dumper( $token ) );
+
+    if ( $month < 1 or $month > 12 ) {
+        $log->error( "bad numeric month passed to datelist_from_token()" );
+        return;
+    }
 
     my @datelist;
     #
     # loop as long as subtokens are left
-    while ( my ( $subtoken ) = $token =~ m/^((\d{1,2})|(\d{1,2}-\d{1,2}))(?=(,|$))/ ) {
+    while ( defined( $token ) and my ( $subtoken ) = $token =~ m/^((\d{1,2})|(\d{1,2}-\d{1,2}))(?=(,|$))/ ) {
+
         #
-        # 1. chew off a subtoken
-        $token =~ s/^((\d{1,2})|(\d{1,2}-\d{1,2}))(?=(,|$))//;
-        $token =~ s/^,//;
+        # 1. chew off the subtoken
+        if ( $token =~ m/^$subtoken,/ ) {
+            $token =~ s/^$subtoken,//;
+        } elsif ( $token =~ m/^$subtoken$/ ) {
+            $token =~ s/^$subtoken$//;
+        } else {
+            die "AGACDKDFLQERIIeee!";
+        }
+
         #
         # 2. if it's a range, convert it into a list of individual dates
         if ( my ( $begin, $end ) = $subtoken =~ m/^(\d{1,2})-(\d{1,2})$/ ) {
-            if ( $end >= $begin ) {
+            if ( $begin >= $end ) {
                 die "AGHGGHSKSKDQ!!!!! Begin date must be less than end";
             }
             foreach my $n ( $begin..$end ) {
@@ -334,6 +355,7 @@ determined.
 
 sub month_alpha_to_numeric {
     my $alpha = shift;
+    return unless defined( $alpha );
     my ( $month ) = $alpha =~ m/\A(\S\S\S)/;
     $month = lc $month;
     return unless exists( $month_map{ $month } );
