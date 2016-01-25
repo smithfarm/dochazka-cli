@@ -56,6 +56,7 @@ t/parser/possible_words.t
 t/parser/rest_test.t
 t/parser/semantic_tree.t
 t/util/auth.t
+t/util/datelist.t
 t/util/determine_employee.t
 t/util/truncate.t
 t/util/ts.t

@@ -76,16 +76,33 @@ App::Dochazka::CLI::Util - Various reusable components
 
 our @EXPORT_OK = qw( 
     authenticate_to_server 
+    datelist_from_token
     determine_employee
     lookup_employee 
     init_logger
     init_prompt
+    month_alpha_to_numeric
     normalize_date
     normalize_time
     parse_test
     refresh_current_emp 
     rest_error 
     truncate_to
+);
+
+our %month_map = (
+    'jan' => 1,
+    'feb' => 2,
+    'mar' => 3,
+    'apr' => 4,
+    'may' => 5,
+    'jun' => 6,
+    'jul' => 7,
+    'aug' => 8,
+    'sep' => 9,
+    'oct' => 10,
+    'nov' => 11,
+    'dec' => 12,
 );
 
 
@@ -158,6 +175,45 @@ sub authenticate_to_server {
     $current_emp = App::Dochazka::Common::Model::Employee->spawn( %{ $status->payload->{'current_emp'} } );
     $current_priv = $status->payload->{'priv'};
     return $CELL->status_ok( 'DOCHAZKA_CLI_AUTHENTICATION_OK' );
+}
+
+
+=head2 datelist_from_token
+
+Convert _DATELIST token into reference to array of dates.
+
+=cut
+
+sub datelist_from_token {
+    my ( $month, $token ) = shift;
+
+    my @datelist;
+    #
+    # loop as long as subtokens are left
+    while ( my ( $subtoken ) = $token =~ m/^((\d{1,2})|(\d{1,2}-\d{1,2}))(?=(,|$))/ ) {
+        #
+        # 1. chew off a subtoken
+        $token =~ s/^((\d{1,2})|(\d{1,2}-\d{1,2}))(?=(,|$))//;
+        $token =~ s/^,//;
+        #
+        # 2. if it's a range, convert it into a list of individual dates
+        if ( my ( $begin, $end ) = $subtoken =~ m/^(\d{1,2})-(\d{1,2})$/ ) {
+            if ( $end >= $begin ) {
+                die "AGHGGHSKSKDQ!!!!! Begin date must be less than end";
+            }
+            foreach my $n ( $begin..$end ) {
+                my $canonical_date = sprintf( "%04d-%02d-%02d", $prompt_year, $month, $n );
+                push @datelist, $canonical_date;
+            }
+        #
+        # 3. if not, convert it into a date
+        } else { # is a single date
+            my $canonical_date = sprintf( "%04d-%02d-%02d", $prompt_year, $month, $subtoken );
+            push @datelist, $canonical_date;
+        }
+   }
+
+   return \@datelist;
 }
 
 
@@ -265,6 +321,23 @@ sub init_prompt {
     ( $prompt_year, $prompt_month, $prompt_day ) = 
         $prompt_date =~ m/^(\d{4,4})-(\d{1,2})-(\d{1,2})/;
     ( $prompt_century ) = $prompt_year =~ m/^(\d{2,2})/;
+}
+
+
+=head2 month_alpha_to_numeric
+
+Given a month written in English (e.g. "January"), return the ordinal
+number of that month (i.e. 1 for January) or undef if it cannot be
+determined.
+
+=cut
+
+sub month_alpha_to_numeric {
+    my $alpha = shift;
+    my ( $month ) = $alpha =~ m/\A(\S\S\S)/;
+    $month = lc $month;
+    return unless exists( $month_map{ $month } );
+    return $month_map{ $month };
 }
 
 
