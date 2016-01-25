@@ -194,7 +194,7 @@ undef.
 
 sub datelist_from_token {
     my ( $month, $token ) = @_;
-    $log->info( "Entering " . __PACKAGE__ . "::datelist_from_token with month $month and token " . Dumper( $token ) );
+    $log->debug( "Entering " . __PACKAGE__ . "::datelist_from_token with month $month and token " . Dumper( $token ) );
 
     if ( $month < 1 or $month > 12 ) {
         $log->error( "bad numeric month passed to datelist_from_token()" );
