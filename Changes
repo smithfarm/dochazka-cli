@@ -1100,3 +1100,13 @@ Revision history for App-Dochazka-CLI
   - drop a senseless dependency
 - CLI/Testers.pm: clarify PREREQUISITES
 
+0.231 2016-01-25 23:25 CET
+- release.sh: save some typing by automating version number to OBS
+- bin/dochazka-cli: make debug-level log messages visible in log
+- Util.pm: put datelist helper functions in Util.pm
+- Util.pm: stabilize and test datelist_from_token()
+- TokenMap.pm: add _DATELIST (for use with INTERVAL FILLUP)
+- CommandMap.pm: adapt FILLUP commands to redesigned REST resource
+- Refactor INTERVAL FILLUP commands
+- Commands/Interval.pm: basic INTERVAL FILLUP functionality
+
