@@ -41,6 +41,7 @@ use strict;
 use warnings;
 
 #use App::CELL::Test::LogToFile;
+use App::CELL qw( $log );
 use App::Dochazka::CLI qw( $prompt_year );
 use App::Dochazka::CLI::Util qw( datelist_from_token month_alpha_to_numeric );
 use Data::Dumper;
@@ -48,13 +49,10 @@ use Test::Fatal;
 use Test::More;
 use Test::Warnings;
 
-note( "Set log level" );
-$log->init( 
-    ident => "DochazkaCLI",
-    debug_mode => 1,
-); 
+note( 'initialize logger' );
+$log->init( ident => "dochazka-cli", debug_mode => 1 ); 
 
-# month_alpha_to_numeric()
+note( 'month_alpha_to_numeric()' );
 my %test_months = (
     'prd' => undef,
     'Jan' => 1,
@@ -77,7 +75,7 @@ foreach my $test ( keys %test_months ) {
 }
 is( month_alpha_to_numeric(), undef );
 
-# datelist_from_token()
+note( 'datelist_from_token()' );
 $prompt_year = 1960;
 my %tests = (
     0 => [ "5,6,10-13,2", undef ],
