@@ -771,8 +771,18 @@ sub _fillup {
     my $status = send_req( 'POST', "interval/fillup", $request_body );
     return $status unless $status->ok;
 
-    my $count = $status->{'count'} ? $status->{'count'} : 0;
-    my $pl = "$count intervals added";
+    my ( $pl, $count );
+    if ( $status->code eq 'DISPATCH_FILLUP_INTERVALS_CREATED' ) {
+        my $tmp = $status->payload->{'success'}->{'count'};
+        $pl .= "$tmp intervals successfully inserted\n";
+        $tmp = $status->payload->{'failure'}->{'count'};
+        $pl .= "$tmp intervals not inserted due to conflicts\n";
+        if ( exists( $status->payload->{'clobbered'} ) ) {
+            $tmp = $status->payload->{'clobbered'}->{'count'};
+            $pl .= "$tmp existing intervals clobbered\n";
+        }
+    }
+    $count = $status->{'count'};
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
 }
 
