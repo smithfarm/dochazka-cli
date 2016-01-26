@@ -1110,3 +1110,7 @@ Revision history for App-Dochazka-CLI
 - Refactor INTERVAL FILLUP commands
 - Commands/Interval.pm: basic INTERVAL FILLUP functionality
 
+0.232 2016-01-26 07:47 CET
+- Util.pm: use debug log level
+- t/util/datelist.t: cleanup, initialize logger
+
