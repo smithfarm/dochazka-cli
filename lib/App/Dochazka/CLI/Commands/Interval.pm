@@ -399,15 +399,6 @@ sub interval_tsrange {
 
 =head3 interval_datelist
 
-    INTERVAL FILLUP _DATELIST
-    EMPLOYEE_SPEC INTERVAL FILLUP _DATELIST
-    INTERVAL FILLUP DRY_RUN _DATELIST
-    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _DATELIST
-    INTERVAL FILLUP _MONTH _DATELIST
-    EMPLOYEE_SPEC INTERVAL FILLUP _MONTH _DATELIST
-    INTERVAL FILLUP DRY_RUN _MONTH _DATELIST
-    EMPLOYEE_SPEC INTERVAL FILLUP DRY_RUN _MONTH _DATELIST
-
 =cut
 
 sub interval_datelist {
@@ -432,15 +423,20 @@ sub interval_datelist {
     # if _MONTH given, use it; otherwise use $prompt_month
     my $month = $prompt_month;
     if ( $th->{_MONTH} ) {
-        $month = _month_alpha_to_numeric( $th->{_MONTH} );
+        $month = month_alpha_to_numeric( $th->{_MONTH} );
     }
 
-    # convert _DATELIST token into reference to array of dates
-    my $dl = datelist_from_token( $month,  $th->{_DATELIST} );
+    # check datelist for sanity
+    my $regex = qr/^(\d{1,2},|\d{1,2}-\d{1,2},)*(\d{1,2}|\d{1,2}-\d{1,2})$/;
+    return $CELL->status_err( "Invalid datelist" ) unless $th->{"_REST"} =~ $regex;
+
+    # convert datelist into reference to array of dates
+    my $dl = datelist_from_token( $month,  $th->{_REST} );
     $log->debug( "datelist: " . Dumper( $dl ) );
     
     return _fillup(
         eid => $emp->eid,
+        code => $th->{_TERM},
         date_list => $dl,
         dry_run => $dry_run,
         clobber => 1,
@@ -763,6 +759,7 @@ EOS
 sub _fillup {
     my ( %ARGS ) = validate( @_, {
         eid => { type => SCALAR },
+        code => { type => SCALAR, optional => 1 },
         date_list => { type => ARRAYREF, optional => 1 },
         tsrange => { type => SCALAR, optional => 1 },
         dry_run => { type => SCALAR },
@@ -778,6 +775,5 @@ sub _fillup {
     my $pl = "$count intervals added";
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
 }
-
 
 1;

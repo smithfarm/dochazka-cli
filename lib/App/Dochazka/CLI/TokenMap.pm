@@ -90,7 +90,8 @@ our $token_map = {
     CORE      => '(cor\S*)',
     COUNT     => '(cou\S*)',
     CURRENT   => '(cur\S*)',
-    DATE      => '(dat\S*)',
+    DATE      => '(date)',
+    DATELIST  => '(datel\S*)',
     DBSTATUS  => '(dbs\S*)',
 #    DECEMBER  => '(dec\S*)',
     DELETE    => '(del\S*)',
@@ -194,7 +195,6 @@ our $token_map = {
     _TIMESTAMP => '(\"?(\d{2,4}-)?\d{1,2}-\d{1,2}(\s+\d{1,2}:\d{1,2}(:\d{1,2})?)?\"?)',
     _TIMESTAMPDEPR => '(\"?((?<dp>((\d{2,4}-)?\d{1,2}-\d{1,2})|(tod\S*)|(tom\S*)|(yes\S*))\s+)?(?<tp>\d{1,2}:\d{1,2}(:\d{1,2})?)\"?)',
     _TSRANGE  => '([\[\(][^\[\(\]\)]*,[^\[\(]*[\]\)])',
-    _DATELIST => '((\d{1,2},|\d{1,2}-\d{1,2},)+(\d{1,2}|\d{1,2}-\d{1,2}))',
 };
 
 our $completion_map = {
@@ -216,6 +216,7 @@ our $completion_map = {
     count => 'COUNT',
     current => 'CURRENT',
     date => 'DATE',
+    datelist => 'DATELIST',
     dbstatus => 'DBSTATUS',
     december => '_MONTH',
     delete => 'DELETE',
