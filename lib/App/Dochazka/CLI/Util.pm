@@ -193,12 +193,11 @@ undef.
 =cut
 
 sub datelist_from_token {
-    my ( $month, $token ) = @_;
-    $log->debug( "Entering " . __PACKAGE__ . "::datelist_from_token with month $month and token " . Dumper( $token ) );
+    my ( $token ) = @_;
+    $log->debug( "Entering " . __PACKAGE__ . "::datelist_from_token with token " . Dumper( $token ) );
 
-    if ( $month < 1 or $month > 12 ) {
-        $log->error( "bad numeric month passed to datelist_from_token()" );
-        return;
+    if ( $prompt_month < 1 or $prompt_month > 12 ) {
+        die "ASSERT ohayoa9I \$prompt_month set to illegal value";
     }
 
     my @datelist;
@@ -223,13 +222,13 @@ sub datelist_from_token {
                 die "AGHGGHSKSKDQ!!!!! Begin date must be less than end";
             }
             foreach my $n ( $begin..$end ) {
-                my $canonical_date = sprintf( "%04d-%02d-%02d", $prompt_year, $month, $n );
+                my $canonical_date = sprintf( "%04d-%02d-%02d", $prompt_year, $prompt_month, $n );
                 push @datelist, $canonical_date;
             }
         #
         # 3. if not, convert it into a date
         } else { # is a single date
-            my $canonical_date = sprintf( "%04d-%02d-%02d", $prompt_year, $month, $subtoken );
+            my $canonical_date = sprintf( "%04d-%02d-%02d", $prompt_year, $prompt_month, $subtoken );
             push @datelist, $canonical_date;
         }
    }

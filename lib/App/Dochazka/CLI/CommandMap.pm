@@ -771,10 +771,6 @@ our $dispatch_map = {
     "EMPLOYEE_SPEC INTERVAL FILLUP DATELIST _TERM" => \&interval_datelist,
     "INTERVAL FILLUP DATELIST DRY_RUN _TERM" => \&interval_datelist,
     "EMPLOYEE_SPEC INTERVAL FILLUP DATELIST DRY_RUN _TERM" => \&interval_datelist,
-    "INTERVAL FILLUP DATELIST _MONTH _TERM" => \&interval_datelist,
-    "EMPLOYEE_SPEC INTERVAL FILLUP DATELIST _MONTH _TERM" => \&interval_datelist,
-    "INTERVAL FILLUP DATELIST DRY_RUN _MONTH _TERM" => \&interval_datelist,
-    "EMPLOYEE_SPEC INTERVAL FILLUP DATELIST DRY_RUN _MONTH _TERM" => \&interval_datelist,
 
     # add/insert new intervals
     "INTERVAL _TIME _TIME1 _TERM" => \&interval_new_time_time1,

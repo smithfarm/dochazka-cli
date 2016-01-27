@@ -42,7 +42,7 @@ use warnings;
 
 #use App::CELL::Test::LogToFile;
 use App::CELL qw( $log );
-use App::Dochazka::CLI qw( $prompt_year );
+use App::Dochazka::CLI qw( $prompt_year $prompt_month );
 use App::Dochazka::CLI::Util qw( datelist_from_token month_alpha_to_numeric );
 use Data::Dumper;
 use Test::Fatal;
@@ -75,21 +75,31 @@ foreach my $test ( keys %test_months ) {
 }
 is( month_alpha_to_numeric(), undef );
 
-note( 'datelist_from_token()' );
+note( 'datelist_from_token() - legal prompt_month' );
 $prompt_year = 1960;
 my %tests = (
-    0 => [ "5,6,10-13,2", undef ],
     1 => [ "5", [ "1960-01-05" ] ],
     2 => [ "5-6", [ "1960-02-05", "1960-02-06" ] ],
     3 => [ "10", [ "1960-03-10" ] ],
     4 => [ "9-10", [ "1960-04-09", "1960-04-10" ] ],
     5 => [ "10-13,5,5", [ "1960-05-10", "1960-05-11", "1960-05-12", "1960-05-13", "1960-05-05", "1960-05-05" ] ],
     6 => [ "5,6,10-13,2", [ "1960-06-05", "1960-06-06", "1960-06-10", "1960-06-11", "1960-06-12", "1960-06-13", "1960-06-02" ] ],
+);
+foreach my $test ( keys %tests ) {
+    $prompt_month = $test;
+    my $result = datelist_from_token( $tests{$test}->[0] );
+    is_deeply( $tests{$test}->[1], $result );
+}
+
+note( 'datelist_from_token() - illegal prompt_month' );
+%tests = (
+    0 => [ "5,6,10-13,2", undef ],
     13 => [ "5,6,10-13,2", undef ],
 );
 foreach my $test ( keys %tests ) {
-    my $result = datelist_from_token( $test, $tests{$test}->[0] );
-    is_deeply( $tests{$test}->[1], $result );
+    $prompt_month = $test;
+    like( exception { datelist_from_token( $tests{$test}->[0] ); },
+          qr/ASSERT ohayoa9I/ );
 }
 
 done_testing;

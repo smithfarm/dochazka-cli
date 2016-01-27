@@ -420,18 +420,12 @@ sub interval_datelist {
     my $dry_run = exists( $th->{'DRY_RUN'} ) ? 1 : 0;
     $log->debug( "dry_run: $dry_run" );
 
-    # if _MONTH given, use it; otherwise use $prompt_month
-    my $month = $prompt_month;
-    if ( $th->{_MONTH} ) {
-        $month = month_alpha_to_numeric( $th->{_MONTH} );
-    }
-
     # check datelist for sanity
     my $regex = qr/^(\d{1,2},|\d{1,2}-\d{1,2},)*(\d{1,2}|\d{1,2}-\d{1,2})$/;
     return $CELL->status_err( "Invalid datelist" ) unless $th->{"_REST"} =~ $regex;
 
     # convert datelist into reference to array of dates
-    my $dl = datelist_from_token( $month,  $th->{_REST} );
+    my $dl = datelist_from_token( $prompt_month,  $th->{_REST} );
     $log->debug( "datelist: " . Dumper( $dl ) );
     
     return _fillup(
