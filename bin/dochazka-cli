@@ -286,13 +286,15 @@ COMMAND: while ( defined ( $cmd = $readline->() ) ) {
         }
         if ( $rv->ok ) {
             my $pl = $rv->payload;
-            if ( $pl and ref( $pl ) eq '' ) {
+            if ( defined( $pl ) and ref( $pl ) eq '' ) {
                 print "$pl\n";
             } else {
-                print( ( ( $rv->text )
-                    ? $rv->text
-                    : Dumper( $rv ) ), "\n" );
-                print "Payload: " . Dumper( $pl ) . "\n";
+                if ( $rv->text ) {
+                    print $rv->text, "\n";
+                    print "Payload: $pl\n" if defined $pl;
+                } else {
+                    print Dumper( $rv ), "\n";
+                }
             }
         } else {
             print "*** Anomaly detected ***\n";
