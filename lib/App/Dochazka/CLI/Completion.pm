@@ -101,7 +101,12 @@ sub dochazka_cli_completion {
     #$log->debug( "Permissibles: " . Dumper( $permissibles ) );
     
     # construct list of regexes
-    my @regexes_of_permissibles = map { qr/^$token_map->{$_}$/ } ( @$permissibles );
+    my @regexes_of_permissibles = ();
+    foreach my $permissible ( @$permissibles ) {
+        if ( exists( $token_map->{$permissible} ) ) {
+            push @regexes_of_permissibles, $token_map->{$permissible};
+        }
+    }
     #$log->debug( "Regexes of permissibles: " . Dumper( \@regexes_of_permissibles ) );
 
     # return only those words that match 
