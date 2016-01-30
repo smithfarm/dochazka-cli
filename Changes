@@ -1114,3 +1114,11 @@ Revision history for App-Dochazka-CLI
 - Util.pm: use debug log level
 - t/util/datelist.t: cleanup, initialize logger
 
+0.233 2016-01-30 23:45 CET
+- Remove INTERVAL FILLUP DATELIST ambiguity
+- Commands/Interval.pm: expand statistics reported by INTERVAL FILLUP
+- simplify INTERVAL FILLUP command syntax by removing _MONTH
+- bin/dochazka-cli: drop annoying "Payload: undef" from output of certain commands
+- Completion.pm: eliminate tab completion warning
+- pod (Testers.pm): add sessions 2, 3, 4, and 5
+
