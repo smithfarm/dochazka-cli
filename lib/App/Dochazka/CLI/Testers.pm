@@ -339,4 +339,537 @@ information about the new employee you just created:
 
 =cut
 
+
+=head1 SESSION 2: EMPLOYEE PRIVILEGES AND PASSWORD
+
+
+=head2 Verify state
+
+If you are continuing from Session 1, you can skip this step.
+
+If you are starting over (or from scratch), run the following script to
+bring your database into the proper state:
+
+    #!/bin/sh
+    cat <<EOF | dochazka-cli -u root -p immutable
+    PUT employee nick george { "fullname" : "King George III" }
+    EOF
+
+
+=head2 View employee profile
+
+Let us see the state of a freshly created employee:
+
+    Dochazka(2016-01-27) root ADMIN> emp=george profile
+
+    Full name:    King George III
+    Nick:         george
+    Email:        (not set)
+    Secondary ID: (not set)
+    Dochazka EID: 5
+    Reports to:   (not set)
+
+This only tells us the state of the employee object. Most objects in the
+Dochazka database are associated with an employee via the Dochazka EID
+value (5 in this example). We can get the same information by typing:
+
+    Dochazka(2016-01-27) root ADMIN> eid=5 profile
+
+    Full name:    King George III
+    Nick:         george
+    Email:        (not set)
+    Secondary ID: (not set)
+    Dochazka EID: 5
+    Reports to:   (not set)
+
+
+=head2 Log in as george
+
+Now, exit the CLI and run it again as C<george>, our new employee.
+
+    $ dochazka-cli 
+    ...
+    Username: george
+    Authenticating to server at http://localhost:5000 as user george
+    Password: 
+    MREST_CLI_UNAUTHORIZED (ERR) MREST_CLI_UNAUTHORIZED
+    Response: '401 Unauthorized'
+
+This happens because there is no password set for C<george>.
+
+
+=head2 Assign george a password
+
+Fortunately, Dochazka admins can assign any password to any user. This
+capability may or may not be useful, depending on whether LDAP
+authentication is active at the site. In our current testing scenario, LDAP
+authentication is disabled, so the password is taken from the Dochazka
+database. So, let's give george a password:
+
+    $ dochazka-cli -u root -p immutable
+    ...
+    Dochazka(2016-01-27) root ADMIN> emp=george password
+    It is important that the new password really be what you intended.
+    Therefore, we are going to ask you to enter the desired password
+    twice, so you have a chance to double-check. 
+
+    New password      : <type george>
+    New password again: <type george again>
+    Password changed
+
+Now you can log in with credentials C<george/george>:
+
+    $ dochazka-cli -u george -p george
+    ...
+    Authenticating to server at http://localhost:5000 as user george
+    Server is alive
+    Dochazka(2016-01-27) george PASSERBY>
+
+
+
+
+=head1 SESSION 3: EMPLOYEE PRIVILEGE HISTORY
+
+
+=head2 Verify state
+
+If you are continuing from Session 2, you can skip this step.
+
+If you are starting over (or from scratch), run the following script to
+bring your database into the proper state:
+
+    #!/bin/sh
+    cat <<EOF | dochazka-cli -u root -p immutable
+    PUT employee nick george { "fullname" : "King George III", "salt" : "a054d158a23c3a07ad0163107ad72a8649597d71", "passhash" : "5cf2c3a23de9db43d2d846172966150e9197717ecd0304bafef3f23fc159df942021dd3aec7b4dbcde87d8a44c1bd905bbba3862989065d012bb46a1e2b9ac5c" }
+    EOF
+
+
+=head2 Log in as the test employee
+
+This just demonstrates that the test employee can log in.
+
+    $ dochazka-cli -u george -p george
+    ...
+    Authenticating to server at http://localhost:5000 as user george
+    Server is alive
+    Dochazka(2016-01-27) george PASSERBY>
+
+
+=head2 Concepts (Dochazka prompt, employee priv levels)
+
+Let's review the information presented in the prompt:
+
+=over
+
+=item Prompt date in parentheses (defaults to current date)
+
+=item Logged-in employee (george)
+
+=item Privilege level of logged-in employee (passerby)
+
+=back
+
+The privilege level deserves closer attention. Dochazka has four privilege
+levels:
+
+=over
+
+=item passerby
+
+=item inactive
+
+=item active
+
+=item admin
+
+=back
+
+
+=head2 George the passerby
+
+The current privilege level is determined by consulting the employee's
+privilege history, which is a database table containing records for each
+change in the employee's status. Employee status changes, for example, when
+the employee is hired, leaves the company, goes on parental leave, etc.
+
+Now, our test employee "george" has a password and can log in. However, he
+has no privilege history so his priv level defaults to "passerby" - the
+lowest possible level.
+
+In this section, we see that passers-by cannot do much at all in Dochazka:
+
+    $ dochazka-cli -u george -p george
+    Dochazka(2016-01-29) george PASSERBY> emp=root profile
+    *** REST ERROR ***
+
+    Error encountered on attempted operation "Employee lookup"
+    REST operation: GET employee/nick/root/minimal
+    HTTP status: 403 Forbidden
+    Explanation: DISPATCH_KEEP_TO_YOURSELF: Detected attempt by
+    insufficiently privileged user to meddle in another user's affairs
+    Permanent? YES
+
+    Dochazka(2016-01-29) george PASSERBY> interval
+    *** REST ERROR ***
+
+    Error encountered on attempted operation "Get intervals for employee
+    george (EID 3) in range [ 2016-01-29 00:00, 2016-01-29 24:00 )"
+    REST operation: GET interval/eid/3/[ 2016-01-29 00:00, 2016-01-29 24:00
+    )
+    HTTP status: 403 Forbidden
+    Explanation: DISPATCH_ACL_CHECK_FAILED: ACL check failed for resource
+    interval/eid/:eid/:tsrange
+    Permanent? YES
+
+    Dochazka(2016-01-29) george PASSERBY> priv history
+    *** Anomaly detected ***
+    Status:      403 Forbidden
+    Explanation: ACL check failed for resource priv/history/eid/:eid (ERR)
+
+There are some things passers-by can do, but it is quite limited.
+
+
+=head2 Make george an employee
+
+Employees can be either "active" or "inactive". An employee is considered
+inactive, for example, when she is on parental leave. The typical employee
+in Dochazka will have priv level "active", so let's give george this level
+of privilege.
+
+Log in as root:
+
+    $ dochazka-cli -u root -p immutable
+
+Confirm the current priv level using the C<EMP=george PRIV> command:
+
+    Dochazka(2016-01-27) root ADMIN> emp=george priv
+    Privilege level of george (EID 5) as of now: passerby
+
+Display george's priv history (which is still empty at this point):
+
+    Dochazka(2016-01-27) root ADMIN> emp=george priv history
+    *** Anomaly detected ***
+    Status:      404 Not Found
+    Explanation: No history for EID 5  (ERR)
+
+Add a priv history record:
+
+    Dochazka(2016-01-28) root ADMIN> emp=george active 2015-01-02
+    Privilege history record (PHID 3) added
+
+Display george's priv history again:
+
+    Dochazka(2016-01-29) root ADMIN> emp=george priv history
+    Privilege history of george (EID 3):
+
+    PHID Effective date Privlevel Remark
+    2    2015-01-02     active          
+
+Log out and log back in as george, try commands that didn't work before,
+when the priv level was "passerby":
+
+    Dochazka(2016-01-29) george ACTIVE> priv history
+    Privilege history of george (EID 3):
+
+    PHID Effective date Privlevel Remark
+    2    2015-01-02     active          
+
+
+
+=head1 SESSION 4: SCHEDULES
+
+If you are continuing from Session 3, you can skip this step.
+
+If you are starting over (or from scratch), run the following script to
+bring your database into the proper state:
+
+    #!/bin/sh
+    cat <<EOF | dochazka-cli -u root -p immutable
+    PUT employee nick george { "fullname" : "King George III", "salt" : "a054d158a23c3a07ad0163107ad72a8649597d71", "passhash" : "5cf2c3a23de9db43d2d846172966150e9197717ecd0304bafef3f23fc159df942021dd3aec7b4dbcde87d8a44c1bd905bbba3862989065d012bb46a1e2b9ac5c" }
+    emp=george active 2015-01-02
+    EOF
+
+
+=head2 Try to enter an attendance interval
+
+At this point, one might be tempted to start entering attendance intervals,
+so let's give it a try:
+
+    Dochazka(2016-01-29) george ACTIVE> interval 8:00-9:00 work Pushing pencils
+    *** REST ERROR ***
+
+    Error encountered on attempted operation "Insert new attendance
+    interval"
+    REST operation: POST interval/new
+    HTTP status: 500 Internal Server Error
+    Explanation: DOCHAZKA_DBI_ERR: DBI reports DBD::Pg::st execute failed:
+    ERROR:  employee schedule for this interval cannot be determined at
+    /usr/lib/perl5/site_perl/5.20.1/App/Dochazka/REST/Model/Shared.pm line
+    247.
+
+    Permanent? YES
+
+The command C<interval 8:00-9:00 work Pushing pencils> means to add an
+attendance interval from 8:00 to 9:00 a.m. on the prompmt date, with
+activity WORK and description "Pushing pencils". The error indicates that
+the employee has no schedule defined for that date.
+
+
+=head2 Concepts (schedules, schedule history)
+
+As we saw before, employees can and will have different statuses during
+their careers with the company. An employee may be hired, then leave for
+some reason, and then come back.
+
+Similarly, employee schedules may change, and Dochazka has a mechanism
+(schedule history) for tracking and reflecting those changes. At this point
+in our testing, our employee (george) not have any schedule history
+records. More importantly, there are no schedules defined. Before we can
+assign george a schedule, we will need to add one.
+
+Verify that there are no schedules:
+
+    Dochazka(2016-01-29) george ACTIVE> schedule fetch all
+    *** Anomaly detected ***
+    Status:      404 Not Found
+    Explanation: There are no active schedules in the database (ERR)
+
+And that there is no schedule history:
+
+    Dochazka(2016-01-29) george ACTIVE> schedule history
+    *** Anomaly detected ***
+    Status:      404 Not Found
+    Explanation: No history for EID 3  (ERR)
+
+
+=head2 Define a schedule
+
+To add a new schedule to the database, we will have to be logged in as an
+administrator. For now, that means "root".
+
+    $ dochazka-cli -u root -p immutable
+    ...
+    Dochazka(2016-01-29) root ADMIN> 
+
+To define a schedule, we first build it up in memory by adding intervals.
+
+    Dochazka(2016-01-29) root ADMIN> schedule mon 8:00-12:00
+    [ MON 08:00, MON 12:00 )
+
+Every time we add an interval, the entire schedule is displayed. Remember,
+this is a temporary, working schedule that exists on the client side only
+(until we commit it to the database).
+ 
+Add more intervals. Let's imagine that george is a part time employee:
+
+    Dochazka(2016-01-29) root ADMIN> schedule tue 13:00-17:00
+    [ MON 08:00, MON 12:00 )
+    [ TUE 13:00, TUE 17:00 )
+
+Now there are two intervals in memory. At any time, we can dump the working
+schedule using the C<SCHEDULE DUMP> command:
+
+    Dochazka(2016-01-29) root ADMIN> schedule dump
+    [ MON 08:00, MON 12:00 )
+    [ TUE 13:00, TUE 17:00 )
+
+Finish up by adding intervals for a full 8-hour day on Wednesday, a
+short on Thursday, and we'll let george have Friday off:
+
+    Dochazka(2016-01-29) root ADMIN> schedule wed 8:00-12:00
+    Dochazka(2016-01-29) root ADMIN> schedule wed 13:00-17:00
+    Dochazka(2016-01-29) root ADMIN> schedule thu 7:00-10:00
+
+What does the schedule look like now?
+
+    Dochazka(2016-01-29) root ADMIN> schedule dump
+    [ MON 08:00, MON 12:00 )
+    [ TUE 13:00, TUE 17:00 )
+    [ WED 08:00, WED 12:00 )
+    [ WED 13:00, WED 17:00 )
+    [ THU 07:00, THU 10:00 )
+
+In the next section, we'll commit this schedule to the database.
+
+
+=head2 Commit in-memory schedule to the server
+
+The command to save the schedule is C<SCHEDULE NEW>, but before we issue
+that command, let's add an "scode" (schedule code) to the schedule to make
+it more easy to refer to. Each schedule has a unique numeric identifier
+(SID) that is assigned by the server, and optionally an scode as well.
+
+    Dochazka(2016-01-29) root ADMIN> schedule scode VPP-1
+    Schedule code: VPP-1
+
+    [ MON 08:00, MON 12:00 )
+    [ TUE 13:00, TUE 17:00 )
+    [ WED 08:00, WED 12:00 )
+    [ WED 13:00, WED 17:00 )
+    [ THU 07:00, THU 10:00 )
+
+And now we can commit:
+
+    Dochazka(2016-01-29) root ADMIN> schedule new
+    HTTP status: 201 Created
+    Schedule ID (SID): 1
+    Schedule code (scode): VPP-1
+    [ MON 08:00, MON 12:00 )
+    [ TUE 13:00, TUE 17:00 )
+    [ WED 08:00, WED 12:00 )
+    [ WED 13:00, WED 17:00 )
+    [ THU 07:00, THU 10:00 )
+
+
+=head1 SESSION 5: SCHEDULE HISTORY
+
+If you are continuing from Session 4, you can skip this step.
+
+If you are starting over (or from scratch), run the following script to
+bring your database into the proper state:
+
+    #!/bin/sh
+    cat <<EOF | dochazka-cli -u root -p immutable
+    PUT employee nick george { "fullname" : "King George III", "salt" :
+    "a054d158a23c3a07ad0163107ad72a8649597d71", "passhash" :
+    "5cf2c3a23de9db43d2d846172966150e9197717ecd0304bafef3f23fc159df942021dd3aec7b4dbcde87d8a44c1bd905bbba3862989065d012bb46a1e2b9ac5c"
+    }
+    emp=george active 2015-01-02
+    schedule mon 8:00-12:00
+    schedule tue 13:00-17:00
+    schedule wed 8:00-12:00
+    schedule wed 13:00-17:00
+    schedule thu 7:00-10:00
+    schedule scode VPP-1
+    schedule new
+    EOF
+
+
+=head2 List schedules
+
+The C<SCHEDULE FETCH ALL> generates a C<GET schedule/all> REST request to
+list all schedules in the database:
+
+    Dochazka(2016-01-30) george ACTIVE> schedule fetch all
+    Schedule ID (SID): 1
+    Schedule code (scode): VPP-1
+    [ MON 08:00, MON 12:00 )
+    [ TUE 13:00, TUE 17:00 )
+    [ WED 08:00, WED 12:00 )
+    [ WED 13:00, WED 17:00 )
+    [ THU 07:00, THU 10:00 )
+
+At a real Dochazka site, this might produce a lot of output. If you know
+the SID or scode of a particular schedule, you can fetch just a single
+schedule. Either of the following commands should produce the same output
+as the one above:
+
+    Dochazka(2016-01-30) george ACTIVE> scode=VPP-1 fetch
+    ...
+    Dochazka(2016-01-30) george ACTIVE> sid=1 fetch
+    ...
+
+These commands use C<GET schedule/...> REST operations whose ACL profile is
+"inactive". This can be verified by logging in as the employee C<demo>
+(password C<demo>):
+
+    $ dochazka-cli -u demo -p demo
+    Dochazka(2016-01-30) demo PASSERBY> schedule fetch all
+    *** Anomaly detected ***
+    Status:      403 Forbidden
+    Explanation: ACL check failed for resource schedule/all (ERR)
+
+    Dochazka(2016-01-30) demo PASSERBY> scode=VPP-1 fetch
+    *** Anomaly detected ***
+    Status:      403 Forbidden
+    Explanation: ACL check failed for resource schedule/scode/:scode (ERR)
+
+    Dochazka(2016-01-30) demo PASSERBY> sid=1 fetch
+    *** Anomaly detected ***
+    Status:      403 Forbidden
+    Explanation: ACL check failed for resource schedule/sid/:sid (ERR)
+
+If we ask to see the schedule history of employee george, we get a slightly
+different error:
+
+    Dochazka(2016-01-30) demo PASSERBY> emp=george schedule history
+    *** REST ERROR ***
+
+    Error encountered on attempted operation "Employee lookup"
+    REST operation: GET employee/nick/george
+    HTTP status: 403 Forbidden
+    Explanation: DISPATCH_KEEP_TO_YOURSELF: Detected attempt by
+    insufficiently privileged user to meddle in another user's affairs
+    Permanent? YES
+
+Though the HTTP status is the same as before, the format of the error
+message indicates that processing got a little further - this is because
+the ACL profile of the C<GET employee/nick/:nick> operation is "passerby".
+
+But this is not a discussion of Dochazka internals - let's get on to
+inserting a schedule history record for george. Log in as root:
+
+    $ dochazka-cli -u root -p immutable
+    Dochazka(2016-01-30) root ADMIN> emp=george schedule history
+    *** Anomaly detected ***
+    Status:      404 Not Found
+    Explanation: No history for EID 3  (ERR)
+
+Schedule histories work analogously to privilege histories:
+
+    Dochazka(2016-01-30) root ADMIN> emp=george scode=VPP-1 2015-01-02
+    Schedule history record (SHID 1) added
+    Dochazka(2016-01-30) root ADMIN> emp=george schedule history
+    Schedule history of george (EID 3):
+
+    SHID Effective date SID scode Remark
+    1    2015-01-02     1   VPP-1       
+
+This completes the setup of employee george as an active employee. He can
+now enter attendance intervals, do fillup, generate monthly reports, etc.
+
+
+=head1 SESSION 6: WIP
+
+If you are continuing from Session 5, you can skip this step.
+
+If you are starting over (or from scratch), run the following script to
+bring your database into the proper state:
+
+    #!/bin/sh
+    cat <<EOF | dochazka-cli -u root -p immutable
+    PUT employee nick george { "fullname" : "King George III", "salt" : "a054d158a23c3a07ad0163107ad72a8649597d71", "passhash" : "5cf2c3a23de9db43d2d846172966150e9197717ecd0304bafef3f23fc159df942021dd3aec7b4dbcde87d8a44c1bd905bbba3862989065d012bb46a1e2b9ac5c" }
+    emp=george active 2015-01-02
+    schedule mon 8:00-12:00
+    schedule tue 13:00-17:00
+    schedule wed 8:00-12:00
+    schedule wed 13:00-17:00
+    schedule thu 7:00-10:00
+    schedule scode VPP-1
+    schedule new
+    emp=george scode=VPP-1 2015-01-02
+    EOF
+
+
+=head2 Prompt date
+
+The prompt gives us the following important pieces of information:
+
+=over
+
+=item Prompt date (defaults to current date)
+
+=item Logged-in employee (george in this case)
+
+=item Privilege level of logged-in employee (passerby)
+
+=back
+
+The prompt date can be set by the user:
+
+    Dochazka(2016-01-29) root ADMIN> prompt 2016-01-18
+    Prompt date changed to 2016-01-18
+    Dochazka(2016-01-18) root ADMIN>
+
+
 1;
