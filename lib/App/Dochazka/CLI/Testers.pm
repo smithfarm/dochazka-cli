@@ -745,7 +745,7 @@ bring your database into the proper state:
     EOF
 
 
-=head2 List schedules
+=head2 List schedules as active employee
 
 The C<SCHEDULE FETCH ALL> generates a C<GET schedule/all> REST request to
 list all schedules in the database:
@@ -769,6 +769,9 @@ as the one above:
     Dochazka(2016-01-30) george ACTIVE> sid=1 fetch
     ...
 
+
+=head2 List schedules as passerby
+
 These commands use C<GET schedule/...> REST operations whose ACL profile is
 "inactive". This can be verified by logging in as the employee C<demo>
 (password C<demo>):
@@ -789,6 +792,9 @@ These commands use C<GET schedule/...> REST operations whose ACL profile is
     Status:      403 Forbidden
     Explanation: ACL check failed for resource schedule/sid/:sid (ERR)
 
+
+=head2 View schedule history as passerby
+
 If we ask to see the schedule history of employee george, we get a slightly
 different error:
 
@@ -807,7 +813,12 @@ message indicates that processing got a little further - this is because
 the ACL profile of the C<GET employee/nick/:nick> operation is "passerby".
 
 But this is not a discussion of Dochazka internals - let's get on to
-inserting a schedule history record for george. Log in as root:
+inserting a schedule history record for george. 
+
+
+=head2 Create schedule history record
+
+Log in as root:
 
     $ dochazka-cli -u root -p immutable
     Dochazka(2016-01-30) root ADMIN> emp=george schedule history
