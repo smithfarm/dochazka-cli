@@ -1122,3 +1122,7 @@ Revision history for App-Dochazka-CLI
 - Completion.pm: eliminate tab completion warning
 - pod (Testers.pm): add sessions 2, 3, 4, and 5
 
+0.234 2016-02-01 00:42 CET
+- Testers.pm: add subsection headings in session 5
+- bin/dochazka-cli: use Dumper to display non-scalar payloads
+
