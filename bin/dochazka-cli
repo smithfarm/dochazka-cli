@@ -291,7 +291,7 @@ COMMAND: while ( defined ( $cmd = $readline->() ) ) {
             } else {
                 if ( $rv->text ) {
                     print $rv->text, "\n";
-                    print "Payload: $pl\n" if defined $pl;
+                    print "Payload: " . Dumper( $pl ) . "\n" if defined $pl;
                 } else {
                     print Dumper( $rv ), "\n";
                 }

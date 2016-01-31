@@ -712,8 +712,8 @@ sub _interval_summary {
     my ( $eid, $tsr ) = @_;
     my $status = send_req( 'GET', "interval/summary/eid/$eid/$tsr" );
     return $status unless $status->ok;
-    return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', 
-        payload => $status->payload );
+    $status->code( 'DOCHAZKA_CLI_NORMAL_COMPLETION' );
+    return $status;
 }
 
 =head3 _interval_report
