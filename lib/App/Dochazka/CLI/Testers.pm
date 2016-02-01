@@ -144,8 +144,10 @@ L<https://metacpan.org/pod/App::Dochazka::REST::Guide#Site-configuration>.
 
 =item Database initialization
 
-Follow the instructions at
-L<https://metacpan.org/pod/App::Dochazka::REST::Guide#Database-initialization>.
+This step is very simple. Just run the C<dochazka-dbinit> command:
+
+    # dochazka-dbinit
+    Dochazka database reset to pristine state
 
 =item Web browser test
 
