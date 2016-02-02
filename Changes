@@ -1126,3 +1126,7 @@ Revision history for App-Dochazka-CLI
 - Testers.pm: add subsection headings in session 5
 - bin/dochazka-cli: use Dumper to display non-scalar payloads
 
+0.235 2016-02-02 10:39 CET
+- Testers.pm: rewrite database initialization step
+- Testers.pm: tell users to start the server; work on session 6
+
