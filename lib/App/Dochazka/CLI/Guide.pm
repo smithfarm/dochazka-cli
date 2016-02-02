@@ -170,15 +170,15 @@ Optionally, a "remark" property can be included as well.
 
 To accomplish this, we can use a REST test command:
 
-    POST activity aid $AID { "disabled" : "t" }
-    POST activity code $CODE { "disabled" : "t" }
+    PUT activity aid $AID { "disabled" : "t" }
+    PUT activity code $CODE { "disabled" : "t" }
 
 =head3 Re-enable an activity
 
 To accomplish this, we can use a REST test command:
 
-    POST activity aid $AID { "disabled" : "f" }
-    POST activity code $CODE { "disabled" : "f" }
+    PUT activity aid $AID { "disabled" : "f" }
+    PUT activity code $CODE { "disabled" : "f" }
 
 =head3 Delete an activity
 
