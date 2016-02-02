@@ -922,9 +922,9 @@ with one, and only one, activity.
 
 =head2 List all activities
 
-The command for listing all activites is, simply, C<ACTIVITY>:
+The command for listing all activites is C<ACTIVITY ALL>:
 
-    Dochazka(2016-02-02) george ACTIVE> activity
+    Dochazka(2016-02-02) george ACTIVE> activity all
 
     1 WORK               Work
     2 OVERTIME_WORK      Overtime work
@@ -964,11 +964,233 @@ When the database is initialized for the first time, the initialization
 routine reads this site parameter and creates an initial set of activities.
 That is what you are seeing.
 
+This can be confirmed by peeking at the C<GET param/site/DOCHAZKA_ACTIVITY_DEFINITIONS> 
+resource:
+
+    Dochazka(2016-02-02) root ADMIN> get param site DOCHAZKA_ACTIVITY_DEFINITIONS
+    ...
 
 
-=head2 Prompt date
+=head2 Create a new activity
 
-The prompt gives us the following important pieces of information:
+Since this is not expected to be a frequent operation, no special command
+has been implemented. We use the REST resource directly:
+
+    Dochazka(2016-02-02) root ADMIN> PUT activity code TESTACT { "long_desc" : "testing" }
+    HTTP status: 200 OK
+    ...
+    Response:
+    {  
+       "payload" : {
+          "disabled" : 0,
+          "code" : "TESTACT",
+          "aid" : 9,
+          "remark" : null,
+          "long_desc" : "testing"
+       },
+       "code" : "DOCHAZKA_CUD_OK",
+       "DBI_return_value" : 1,
+       "level" : "OK",
+       "count" : 1,
+       "text" : "DOCHAZKA_CUD_OK"
+    }
+
+And confirm that TESTACT is now present:
+
+    Dochazka(2016-02-02) root ADMIN> activity all
+    ...
+
+
+=head2 Disable an activity
+
+In the course of events, it might happen that an activity becomes obsolete or
+deprecated. If there are no attendance intervals associated with it, it can be
+deleted outright. This is probably not the case, but we can still cause the 
+activity to disappear from the listing by disabling it:
+
+    Dochazka(2016-02-02) root ADMIN> PUT activity code TESTACT { "disabled" : "t" }
+    HTTP status: 200 OK
+    ...
+
+Now, it's gone from the list:
+
+    Dochazka(2016-02-02) root ADMIN> activity all
+    ...
+
+List all activites B<including> disabled ones:
+
+    Dochazka(2016-02-02) root ADMIN> activity all disabled
+    ...
+
+Now, re-enable TESTACT:
+
+    Dochazka(2016-02-02) root ADMIN> PUT activity code TESTACT { "disabled" : "f" }
+    HTTP status: 200 OK
+    ...
+
+It's back:
+
+    Dochazka(2016-02-02) root ADMIN> activity all
+    ...
+
+
+=head2 Modify an activity
+
+Activities can be modified. 
+
+    Dochazka(2016-02-02) root ADMIN> PUT activity aid 9 { "remark" : "Bike shed" }
+    ...
+
+See the effects:
+
+    Dochazka(2016-02-02) root ADMIN> GET activity aid 9
+    ...
+
+For fun, try out various silly ideas:
+
+    Dochazka(2016-02-02) root ADMIN> PUT activity aid 9 { "code" : "Bikeshed" }
+    ...
+    Dochazka(2016-02-02) root ADMIN> PUT activity aid 9 { "code" : "Bike shed" }
+    ...
+    Dochazka(2016-02-02) root ADMIN> PUT activity aid 9 { "aid" : 100 }
+    ...
+    Dochazka(2016-02-02) root ADMIN> PUT activity aid 9 { "aid" : null }
+    ...
+    Dochazka(2016-02-02) root ADMIN> PUT activity aid 9 { "remark" : null }
+    ...
+
+
+=head2 Delete an activity
+
+OK, now we've had our fun. Delete this fiasco and get back to work!
+
+    Dochazka(2016-02-02) root ADMIN> DELETE activity aid 9
+    ... 
+
+The activity can be deleted because no attendance intervals point to it.
+
+
+
+=head1 SESSION 7: ATTENDANCE INTERVALS
+
+Before you do anything, L<make sure the server is running|"Start the server">.
+
+
+=head2 Verify state
+
+If you are continuing from Session 6, you can skip this step.
+
+If you are starting over (or from scratch), run the following script to
+bring your database into the proper state:
+
+    #!/bin/sh
+    cat <<EOF | dochazka-cli -u root -p immutable
+    PUT employee nick george { "fullname" : "King George III", "salt" : "a054d158a23c3a07ad0163107ad72a8649597d71", "passhash" : "5cf2c3a23de9db43d2d846172966150e9197717ecd0304bafef3f23fc159df942021dd3aec7b4dbcde87d8a44c1bd905bbba3862989065d012bb46a1e2b9ac5c" }
+    emp=george active 2015-01-02
+    schedule mon 8:00-12:00
+    schedule tue 13:00-17:00
+    schedule wed 8:00-12:00
+    schedule wed 13:00-17:00
+    schedule thu 7:00-10:00
+    schedule scode VPP-1
+    schedule new
+    emp=george scode=VPP-1 2015-01-02
+    EOF
+
+
+=head2 Add a single attendance interval
+
+Finally, we have completed all the administrative setup work necessary for
+employees (or their private secretaries) to be able to start entering
+attendance data.
+
+Let's say that George spent the whole morning pushing pencils. This can be
+entered into the database like so:
+
+    $ dochazka-cli -u george -p george
+    ...
+    Dochazka(2016-02-03) george ACTIVE> interval 8:00-12:00 work Push pencils
+    Interval IID 1
+    ["2016-02-03 08:00:00+01","2016-02-03 12:00:00+01") WORK Push pencils
+
+The server response includes the Interval ID (IID), the full canonical
+"tsrange with time zone" (see PostgreSQL documentation for details), the
+activity (WORK), and the description ("Push pencils") entered by the user.
+
+The first interval object is now in the database. Let's examine it:
+
+    Dochazka(2016-02-03) george ACTIVE> GET interval iid 1
+    HTTP status: 200 OK
+    Response:
+    {  
+       "level" : "OK",
+       "code" : "DISPATCH_INTERVAL_FOUND",
+       "payload" : {
+          "long_desc" : "Push pencils",
+          "partial" : null,
+          "intvl" : "[\"2016-02-03 08:00:00+01\",\"2016-02-03 12:00:00+01\")",
+          "iid" : 1,
+          "aid" : 1,
+          "remark" : null,
+          "eid" : 3,
+          "code" : null
+       },
+       "text" : "Found an interval"
+    }
+
+The attributes under the "payload" are from the interval object. The "code"
+attribute is null in this case because it is not stored in the database. It is
+populated on an as-needed basis.
+
+
+=head2 Modify an interval
+
+We can modify intervals in the same way that we modified the "bike shed"
+activity:
+
+    Dochazka(2016-02-03) george ACTIVE> PUT interval iid 1 { "remark" : "BIKESHED" }
+    ...
+
+We can even set the "code" attribute to a bogus value in this way:
+
+    Dochazka(2016-02-03) george ACTIVE> PUT interval iid 1 { "code" : "BIKESHED" }
+    ...
+
+It does not get stored in the database, however:
+
+    Dochazka(2016-02-03) george ACTIVE> GET interval iid 1 { "code" : "BIKESHED" }
+    HTTP status: 200 OK
+    Response:
+    ...
+          "code" : null,
+    ...
+
+
+=head2 Add another interval
+
+Very good, and enough fiddling. In the meantime, George went to lunch, and then
+spent the afternoon looking out the window:
+
+    Dochazka(2016-02-03) george ACTIVE> interval 12:30-16:30 work Look out window
+    ...
+    Interval IID 2
+    ["2016-02-03 12:30:00+01","2016-02-03 16:30:00+01") WORK Look out window
+
+Now let's admire George's work. The command INTERVAL should list all
+existing intervals for the prompt date:
+
+    Dochazka(2016-02-03) george ACTIVE> interval
+    Attendance intervals of george (EID 3)
+    in the range [ 2016-02-03 00:00, 2016-02-03 24:00 )
+
+    IID Begin            End              Code Description
+    1   2016-02-03 08:00 2016-02-03 12:00 WORK Push pencils
+    2   2016-02-03 12:30 2016-02-03 16:30 WORK Look out window
+
+
+=head2 Concepts (Prompt date)
+
+Let's review once again the information provided by the Dochazka prompt:
 
 =over
 
@@ -980,11 +1202,23 @@ The prompt gives us the following important pieces of information:
 
 =back
 
-The prompt date can be set by the user:
+The prompt date defaults to today's date.
 
-    Dochazka(2016-01-29) root ADMIN> prompt 2016-01-18
+
+=head2 Set the prompt date
+
+The prompt date can be set by the user to any valid date:
+
+    Dochazka(2016-02-03) george ACTIVE> prompt 2016-01-18
     Prompt date changed to 2016-01-18
-    Dochazka(2016-01-18) root ADMIN>
+    Dochazka(2016-01-18) george ACTIVE> prompt 203-12-31
+    *** Anomaly detected ***
+    Explanation: Encountered invalid date or time ->203-12-31<- (ERR)
+    Dochazka(2016-02-03) george ACTIVE> prompt 2016-01-33
+    Prompt date changed to 2016-01-33
 
+Oops! (This is a bug.)
+
+=cut
 
 1;
