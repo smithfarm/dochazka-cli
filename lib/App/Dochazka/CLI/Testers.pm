@@ -149,6 +149,23 @@ This step is very simple. Just run the C<dochazka-dbinit> command:
     # dochazka-dbinit
     Dochazka database reset to pristine state
 
+=item Start the server
+
+To actually do anything, the server needs to be running:
+
+    # dochazka-rest
+    Starting Web::MREST ver. 0.283
+    App distro is App-Dochazka-REST
+    App module is App::Dochazka::REST::Dispatch
+    Distro sharedir is /usr/lib/perl5/site_perl/5.20.1/auto/share/dist/App-Dochazka-REST
+    Local site configuration directory is /etc/dochazka-rest
+    Loading configuration parameters from /etc/dochazka-rest
+    Setting up logging
+    Logging to /home/smithfarm/mrest.log
+    Calling App::Dochazka::REST::Dispatch::init()
+    Starting server
+    HTTP::Server::PSGI: Accepting connections at http://0:5000/
+
 =item Web browser test
 
 After completing the above, you should be able to access the REST server by
@@ -185,6 +202,9 @@ Congratulations! You have passed the first test.
 
 
 =head1 SESSION 1: CREATE AN EMPLOYEE
+
+Before you do anything, L<make sure the server is running|"Start the server">.
+
 
 =head2 Try with insufficient privileges
 
@@ -344,6 +364,8 @@ information about the new employee you just created:
 
 =head1 SESSION 2: EMPLOYEE PRIVILEGES AND PASSWORD
 
+Before you do anything, L<make sure the server is running|"Start the server">.
+
 
 =head2 Verify state
 
@@ -431,6 +453,8 @@ Now you can log in with credentials C<george/george>:
 
 
 =head1 SESSION 3: EMPLOYEE PRIVILEGE HISTORY
+
+Before you do anything, L<make sure the server is running|"Start the server">.
 
 
 =head2 Verify state
@@ -580,6 +604,11 @@ when the priv level was "passerby":
 
 =head1 SESSION 4: SCHEDULES
 
+Before you do anything, L<make sure the server is running|"Start the server">.
+
+
+=head2 Verify state
+
 If you are continuing from Session 3, you can skip this step.
 
 If you are starting over (or from scratch), run the following script to
@@ -725,6 +754,11 @@ And now we can commit:
 
 =head1 SESSION 5: SCHEDULE HISTORY
 
+Before you do anything, L<make sure the server is running|"Start the server">.
+
+
+=head2 Verify state
+
 If you are continuing from Session 4, you can skip this step.
 
 If you are starting over (or from scratch), run the following script to
@@ -842,7 +876,12 @@ This completes the setup of employee george as an active employee. He can
 now enter attendance intervals, do fillup, generate monthly reports, etc.
 
 
-=head1 SESSION 6: WIP
+=head1 SESSION 6: ACTIVITIES AND SITE PARAMETERS
+
+Before you do anything, L<make sure the server is running|"Start the server">.
+
+
+=head2 Verify state
 
 If you are continuing from Session 5, you can skip this step.
 
@@ -862,6 +901,69 @@ bring your database into the proper state:
     schedule new
     emp=george scode=VPP-1 2015-01-02
     EOF
+
+
+=head2 Concepts (activities and attendance intervals)
+
+The purpose of Dochazka is to keep records of how work time is spent -
+typically for payroll purposes (i.e. calculation of wages). 
+
+Employees are paid not only for time spent at work, but also (according to
+their contract and governing legislation) for time B<not> spent at work.
+For example, if an employee is not feeling well, she can stay home and the
+employer will tolerate this (and even pay wages in some cases). This time
+needs to be distinguished as "sick leave".
+
+Thus, sites typically have different categories for tracking time - e.g. "work",
+"vacation", "sick leave", etc. In Dochazka, these categories are called
+"activities", and every attendance interval in the database is connected
+with one, and only one, activity.
+
+
+=head2 List all activities
+
+The command for listing all activites is, simply, C<ACTIVITY>:
+
+    Dochazka(2016-02-02) george ACTIVE> activity
+
+    1 WORK               Work
+    2 OVERTIME_WORK      Overtime work
+    3 PAID_VACATION      Paid vacation
+    4 UNPAID_LEAVE       Unpaid leave
+    5 DOCTOR_APPOINTMENT Doctor appointment
+    6 CTO                Compensation Time Off
+    7 SICK_DAY           Discretionary sick leave
+    8 MEDICAL_LEAVE      Statutory medical leave
+
+
+=head2 Concepts (database initialization, site parameters)
+
+In the previous section we listed some activities, but where do they come
+from? We started from a pristine database and only entered an employee, a
+priv history record, a schedule, and a schedule history record.
+
+Indeed. Dochazka has a mechanism called "site parameters", and there is a
+site parameter called C<DOCHAZKA_ACTIVITY_DEFINITIONS> which defaults to
+the following:
+
+    # DOCHAZKA_ACTIVITY_DEFINITIONS
+    #    Initial set of activity definitions - sample only - override this 
+    #    with _your_ site's activities in Dochazka_SiteConfig.pm
+    set( 'DOCHAZKA_ACTIVITY_DEFINITIONS', [
+        { code => 'WORK', long_desc => 'Work' },
+        { code => 'OVERTIME_WORK', long_desc => 'Overtime work' },
+        { code => 'PAID_VACATION', long_desc => 'Paid vacation' },
+        { code => 'UNPAID_LEAVE', long_desc => 'Unpaid leave' },
+        { code => 'DOCTOR_APPOINTMENT', long_desc => 'Doctor appointment' },
+        { code => 'CTO', long_desc => 'Compensation Time Off' },
+        { code => 'SICK_DAY', long_desc => 'Discretionary sick leave' },
+        { code => 'MEDICAL_LEAVE', long_desc => 'Statutory medical leave' },
+    ] );   
+
+When the database is initialized for the first time, the initialization
+routine reads this site parameter and creates an initial set of activities.
+That is what you are seeing.
+
 
 
 =head2 Prompt date
