@@ -462,7 +462,7 @@ sub normalize_date {
             );
             $nd = "$year-$month-$day";
         } else {
-            return undef;
+            die "AAAAAAJAJAJAJADDEEEEE!!! Invalid prompt date $prompt_date";
         }
     } else {
         # anything else - invalid timestamp
@@ -473,6 +473,10 @@ sub normalize_date {
     $nd =~ m/\A(?<yyyy>\d{4,4})-(?<mm>\d{1,2})-(?<dd>\d{1,2})\z/;
     return undef unless $+{yyyy} and $+{mm} and $+{dd};
     $nd = sprintf( "%d-%02d-%02d", $+{yyyy}, $+{mm}, $+{dd} );
+
+    # sanity check to ensure no weird dates slip by
+    my ( $year, $month, $day ) = $nd =~ m/\A(\d{4,4})-(\d{2,2})-(\d{2,2})\z/;
+    return undef unless check_date( $year, $month, $day );
 
     return "$nd";
 }

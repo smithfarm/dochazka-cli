@@ -111,7 +111,7 @@ is( $nd, $prompt_year . '-02-12', "month gets leading zero 2" );
 
 $rd = '2-00';
 $nd = normalize_date( $rd );
-is( $nd, $prompt_year . '-02-00', "month gets leading zero 3" );
+is( $nd, undef );
 
 $rd = '1955-12-2';
 $nd = normalize_date( $rd );
@@ -142,7 +142,7 @@ is( $nd, undef, "three-digit day does not fly" );
 note( 'If only YY is given, it is converted into YYYY by appending two digits corresponding to the current century' ); 
 $rd = '22-22-22';
 $nd = normalize_date( $rd );
-is( $nd, '2022-22-22', '(e.g. 22 becomes 2022 during 2000-2099)' );
+is( $nd, undef );
 
 note( 'special date forms' );
 note( 'The special date forms "TODAY", "TOMORROW", and "YESTERDAY" are recognized' );
