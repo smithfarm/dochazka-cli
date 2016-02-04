@@ -63,15 +63,23 @@ sub _method {
 sub _method_bugreport {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'bugreport', $th->{_REST} ];
+}
+
+# $METHOD CONFIGINFO
+sub _method_configinfo {
+    my ( $ts, $th ) = @_;
+    my $method = $ts->[0];
+
+    return [ $method, 'configinfo', $th->{_REST} ];
 }
 
 # $METHOD COOKIEJAR
 sub _method_cookiejar {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     my $cookie_jar = Web::MREST::CLI::cookie_jar() || "No cookies in jar";
 
     return $CELL->status_ok( 'COOKIE_JAR', payload => $cookie_jar );
@@ -81,7 +89,7 @@ sub _method_cookiejar {
 sub _method_dbstatus {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'dbstatus', $th->{_REST} ];
 }
 
@@ -89,7 +97,7 @@ sub _method_dbstatus {
 sub _method_docu {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'docu', $th->{_REST} ];
 }
 
@@ -97,7 +105,7 @@ sub _method_docu {
 sub _method_docu_pod {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'docu/pod', $th->{_REST} ];
 }
 
@@ -105,7 +113,7 @@ sub _method_docu_pod {
 sub _method_docu_pod_docu {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'docu/pod', $th->{_DOCU} ];
 }
 
@@ -113,7 +121,7 @@ sub _method_docu_pod_docu {
 sub _method_docu_html {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'docu/html', $th->{_REST} ];
 }
 
@@ -121,7 +129,7 @@ sub _method_docu_html {
 sub _method_docu_html_docu {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'docu/html', $th->{_DOCU} ];
 }
 
@@ -129,7 +137,7 @@ sub _method_docu_html_docu {
 sub _method_docu_text {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'docu/text', $th->{_REST} ];
 }
 
@@ -137,7 +145,7 @@ sub _method_docu_text {
 sub _method_docu_text_docu {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'docu/text', $th->{_DOCU} ];
 }
 
@@ -145,7 +153,7 @@ sub _method_docu_text_docu {
 sub _method_echo {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'echo', $th->{_REST} ];
 } 
 
@@ -153,7 +161,7 @@ sub _method_echo {
 sub _method_forbidden {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'forbidden', $th->{_REST} ];
 }
 
@@ -162,7 +170,7 @@ sub _method_holiday_tsrange {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     my $tsrange = $th->{_TSRANGE};
-    
+
     return [ $method, "holiday/$tsrange", $th->{_REST} ];
 }
 
@@ -170,7 +178,7 @@ sub _method_holiday_tsrange {
 sub _method_noop {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'noop', $th->{_REST} ];
 }
 
@@ -178,7 +186,7 @@ sub _method_noop {
 sub _method_param {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'param', $th->{_REST} ];
 }
 
@@ -186,7 +194,7 @@ sub _method_param {
 sub _method_param_core {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, "param/core", $th->{_REST} ];
 }
 
@@ -195,7 +203,7 @@ sub _method_param_meta {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     my $term = $th->{_TERM};
-    
+
     return [ $method, "param/meta", $th->{_REST} ];
 }
 
@@ -204,7 +212,7 @@ sub _method_param_site {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     my $term = $th->{_TERM};
-    
+
     return [ $method, "param/site", $th->{_REST} ];
 }
 
@@ -213,7 +221,7 @@ sub _method_param_core_term {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     my $term = $th->{_TERM};
-    
+
     return [ $method, "param/core/$term", $th->{_REST} ];
 }
 
@@ -222,7 +230,7 @@ sub _method_param_meta_term {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     my $term = $th->{_TERM};
-    
+
     return [ $method, "param/meta/$term", $th->{_REST} ];
 }
 
@@ -231,7 +239,7 @@ sub _method_param_site_term {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
     my $term = $th->{_TERM};
-    
+
     return [ $method, "param/site/$term", $th->{_REST} ];
 }
 
@@ -239,7 +247,7 @@ sub _method_param_site_term {
 sub _method_session {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'session', $th->{_REST} ];
 }
 
@@ -247,7 +255,7 @@ sub _method_session {
 sub _method_version {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'version', $th->{_REST} ];
 }
 
@@ -255,7 +263,7 @@ sub _method_version {
 sub _method_whoami {
     my ( $ts, $th ) = @_;
     my $method = $ts->[0];
-    
+
     return [ $method, 'whoami', $th->{_REST} ];
 }
 
