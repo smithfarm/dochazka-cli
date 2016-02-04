@@ -144,6 +144,8 @@ GetOptions(
 
 pod2usage(1) if $help;
 
+print "Debug mode: parser state dumps will be generated\n" if $debug_mode;
+
 printversion() if $versionparam;
 
 # determine sitedir

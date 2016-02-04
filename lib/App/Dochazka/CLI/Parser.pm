@@ -346,10 +346,14 @@ sub process_command {
     my ( $cmd ) = @_;
    
     my $r = parse( $cmd );                        # parse the command string
+    # if debug mode, dump parser state
+    if ( $debug_mode ) {
+        print "Recognized command: " . $r->{nc} . "\n";
+        print "Token hash: " . Dumper( $r->{th} ) . "\n";
+    }
     if ( not @{ $r->{ts} } ) {
         return $CELL->status_err( 'DOCHAZKA_CLI_PARSE_ERROR' );
     }
-    print "Recognized command " . $r->{nc} . "\n" if $debug_mode;
 
     my $cmdspec = look_up_command( $r->{nc} );   # get the handler coderef
     if ( ref( $cmdspec ) eq 'CODE' ) {
