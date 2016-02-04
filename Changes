@@ -1130,3 +1130,9 @@ Revision history for App-Dochazka-CLI
 - Testers.pm: rewrite database initialization step
 - Testers.pm: tell users to start the server; work on session 6
 
+0.236 2016-02-04 11:17 CET
+- doc: Guide.pm: fix activity disable/re-enable examples
+- Testers.pm: finish session 6, start session 7
+- Util.pm->normalize_date(): check sanity of resulting date
+- Commands/Interval.pm: remove confusing partial interval message
+
