@@ -667,7 +667,7 @@ sub _print_intervals_tsrange {
         );
     }
     $pl .= $t;
-    $pl .= "\nPartial intervals signified by **\n";
+    $pl .= "\nPartial intervals signified by **\n" if $partial_intervals_present;
 
     return $CELL->status_ok( 'DOCHAZKA_CLI_NORMAL_COMPLETION', payload => $pl );
 }
