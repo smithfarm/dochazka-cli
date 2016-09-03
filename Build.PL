@@ -49,7 +49,7 @@ my $build = Module::Build->new(
         'Term::ReadKey'      => 0,
         'Term::ReadLine::Gnu' => 0,
         'Text::Table'        => 0,
-        'Web::MREST::CLI'    => 0.280,
+        'Web::MREST::CLI'    => 0.281,
     },
     meta_merge => {
         resources => {

@@ -148,14 +148,14 @@ print "Debug mode: parser state dumps will be generated\n" if $debug_mode;
 
 printversion() if $versionparam;
 
-# determine sitedir
-if ( $sitedir ) {
-    # if --sitedir or -s specified on command line, do nothing
-} else {
-    if ( -d "$home/.dochazka-cli" ) {
-        $sitedir = "$home/.dochazka-cli";
-    } elsif ( -d '/etc/dochazka-cli' ) {
-        $sitedir = '/etc/dochazka-cli';
+# assemble array of sitedirs
+if ( $sitedir and not -d $sitedir ) {
+    die "sitedir value must be a valid directory";
+}
+my @sitedirs;
+foreach my $target ( '/etc/dochazka-cli', "$home/.dochazka-cli", $sitedir ) {
+    if ( defined( $target ) and -d $target ) {
+        push @sitedirs, $target;
     }
 }
 
@@ -165,7 +165,7 @@ my $pipe = -p STDIN ? 1 : 0;
 # initialize CLI client
 my $status = init_cli_client( 
     distro => 'App-Dochazka-CLI',
-    sitedir => $sitedir,
+    sitedir => [ @sitedirs ],
     early_debug => $early_debug,
 );
 if ( $status->not_ok ) {
