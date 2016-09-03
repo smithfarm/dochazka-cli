@@ -322,6 +322,7 @@ Logger initialization routine
 sub init_logger {
     my $log_file = normalize_filespec( $site->DOCHAZKA_CLI_LOG_FILE );
     unlink $log_file if $site->DOCHAZKA_CLI_LOG_FILE_RESET;
+    print "Logging to $log_file\n";
     Log::Any::Adapter->set('File', $log_file );
     $log->init( ident => 'dochazka-cli', debug_mode => 1 );
     $log->debug( 'Logger initialized' );
