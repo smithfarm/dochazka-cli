@@ -1136,3 +1136,10 @@ Revision history for App-Dochazka-CLI
 - Util.pm->normalize_date(): check sanity of resulting date
 - Commands/Interval.pm: remove confusing partial interval message
 
+0.237 2016-09-04 20:12 CEST
+- Parser.pm: provide better parser state dumps in debug mode
+- RestTest: implement GET configinfo
+- Util.pm: report logfile location to user at startup
+- Saner sitedir handling
+- Travis CI
+

@@ -50,7 +50,7 @@
             "Term::ReadKey" : "0",
             "Term::ReadLine::Gnu" : "0",
             "Text::Table" : "0",
-            "Web::MREST::CLI" : "0.28",
+            "Web::MREST::CLI" : "0.281",
             "perl" : "5.012"
          }
       }
@@ -58,7 +58,7 @@
    "provides" : {
       "App::Dochazka::CLI" : {
          "file" : "lib/App/Dochazka/CLI.pm",
-         "version" : "0.236"
+         "version" : "0.237"
       },
       "App::Dochazka::CLI::CommandMap" : {
          "file" : "lib/App/Dochazka/CLI/CommandMap.pm"
@@ -92,7 +92,7 @@
       },
       "App::Dochazka::CLI::Guide" : {
          "file" : "lib/App/Dochazka/CLI/Guide.pm",
-         "version" : "0.236"
+         "version" : "0.237"
       },
       "App::Dochazka::CLI::Parser" : {
          "file" : "lib/App/Dochazka/CLI/Parser.pm"
@@ -125,6 +125,6 @@
          "url" : "https://github.com/smithfarm/dochazka-cli"
       }
    },
-   "version" : "0.236",
+   "version" : "0.237",
    "x_serialization_backend" : "JSON::PP version 2.27203"
 }
