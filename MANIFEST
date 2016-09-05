@@ -4,7 +4,6 @@ Changes
 config/CLI_Config.pm
 config/CLI_Message_en.conf
 config/CLI_MetaConfig.pm
-ignore.txt
 lib/App/Dochazka/CLI.pm
 lib/App/Dochazka/CLI/CommandMap.pm
 lib/App/Dochazka/CLI/Commands/Activity.pm
