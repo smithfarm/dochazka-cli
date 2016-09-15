@@ -4,6 +4,7 @@ Changes
 config/CLI_Config.pm
 config/CLI_Message_en.conf
 config/CLI_MetaConfig.pm
+ext/CLI_SiteConfig.pm.example
 lib/App/Dochazka/CLI.pm
 lib/App/Dochazka/CLI/CommandMap.pm
 lib/App/Dochazka/CLI/Commands/Activity.pm
