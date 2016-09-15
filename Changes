@@ -1143,3 +1143,7 @@ Revision history for App-Dochazka-CLI
 - Saner sitedir handling
 - Travis CI
 
+0.238 2016-09-15 13:33 CEST
+- cleanup: drop ignore.txt
+- build/ops: new file CLI_SiteConfig.pm.example
+
