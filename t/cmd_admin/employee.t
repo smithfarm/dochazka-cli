@@ -229,7 +229,7 @@ $cmd = 'GET employee self';
 $rv = process_command( $cmd );
 ok( ref( $rv ) eq 'App::CELL::Status' );
 is( $rv->level, 'OK' );
-is( $rv->code, 'DISPATCH_EMPLOYEE_CURRENT' );
+is( $rv->code, 'DISPATCH_EMPLOYEE_SELF' );
 is( $rv->payload->{'fullname'}, 'Mr. Fullneck' );
 
 

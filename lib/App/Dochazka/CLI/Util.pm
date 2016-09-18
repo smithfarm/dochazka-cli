@@ -172,7 +172,7 @@ sub authenticate_to_server {
     return $status unless $status->ok;
 
     # authentication OK, initialize package variables
-    $current_emp = App::Dochazka::Common::Model::Employee->spawn( %{ $status->payload->{'current_emp'} } );
+    $current_emp = App::Dochazka::Common::Model::Employee->spawn( %{ $status->payload->{'emp'} } );
     $current_priv = $status->payload->{'priv'};
     return $CELL->status_ok( 'DOCHAZKA_CLI_AUTHENTICATION_OK' );
 }
