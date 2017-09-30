@@ -568,6 +568,10 @@ our $dispatch_map = {
     "PUT SCHEDULE SID _NUM" => \&_method_schedule_sid_num,
     "POST SCHEDULE SID _NUM" => \&_method_schedule_sid_num,
     "DELETE SCHEDULE SID _NUM" => \&_method_schedule_sid_num,
+    "GET SCHEDULE NEW" => \&_method_schedule_new,
+    "PUT SCHEDULE NEW" => \&_method_schedule_new,
+    "POST SCHEDULE NEW" => \&_method_schedule_new,
+    "DELETE SCHEDULE NEW" => \&_method_schedule_new,
 
     # Activity commands
     "ACTIVITY" => \&activity_all,
