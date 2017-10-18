@@ -1148,11 +1148,12 @@ Revision history for App-Dochazka-CLI
 - build/ops: new file CLI_SiteConfig.pm.example
 
 0.239 2017-10-18 22:54 CEST
-0f31e4b build/ops: set OBS_PROJECT to Application:Dochazka:staging
-a22e01c EMPLOYEE PROFILE: drop Dochazka EID...
-6452d10 Use employee/self/full instead of employee/self/priv
-afdc96b In employee/self/full resource, current_emp prop renamed to "emp"
-2ea3fac doc: indent an example for proper rendering
-30b060e RestTest: add schedule/new RestTest commands
-6e2f958 TokenMap: allow three-letter month abbreviations in timestamp
+- EMPLOYEE PROFILE: drop Dochazka EID...
+- Use employee/self/full instead of employee/self/priv
+- In employee/self/full resource, current_emp prop renamed to "emp"
+- RestTest: add schedule/new RestTest commands
+- TokenMap: allow three-letter month abbreviations in timestamp
+
+0.240 2017-10-18 22:55 CEST
+- build/ops: set OBS_PROJECT to Application:Dochazka
 
