@@ -127,6 +127,15 @@ sub _method_employee_eid_num_json {
     return [ $method, "employee/eid/$eid", $json ];
 }
 
+# $METHOD employee eid $EID full
+sub _method_employee_eid_num_full {
+    my ( $ts, $th ) = @_;
+    my $method = $ts->[0];
+    my $eid = $th->{_NUM};
+
+    return [ $method, "employee/eid/$eid/full", '' ];
+}
+
 # $METHOD employee eid $EID team
 sub _method_employee_eid_num_team {
     my ( $ts, $th ) = @_;
@@ -176,6 +185,15 @@ sub _method_employee_nick_term {
     my $nick = $th->{_TERM};
 
     return [ $method, "employee/nick/$nick", '' ];
+}
+
+# $METHOD employee nick $NICK full
+sub _method_employee_nick_term_full {
+    my ( $ts, $th ) = @_;
+    my $method = $ts->[0];
+    my $nick = $th->{_TERM};
+
+    return [ $method, "employee/nick/$nick/full", '' ];
 }
 
 # $METHOD employee nick $NICK ldap
